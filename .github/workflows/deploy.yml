@@ -2,8 +2,11 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   deploy:
@@ -20,7 +23,7 @@ jobs:
       - name: Build with Hugo
         run: hugo --minify
 
-      - name: Deploy to GitHub Pages repo
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
