@@ -1,0 +1,257 @@
+<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - Back-of-the-Envelope Estimation: The Art of Making Smart Guesses"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - Learn how to estimate QPS, storage, bandwidth, and memory requirements quickly and confidently — a must-have skill for system design interviews and real-world engineering decisions."><title>System Design - Back-of-the-Envelope Estimation: The Art of Making Smart Guesses </title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="Back-of-the-Envelope Estimation: The Art of Making Smart Guesses"><meta property="og:description" content="Learn how to estimate QPS, storage, bandwidth, and memory requirements quickly and confidently — a must-have skill for system design interviews and real-world engineering decisions."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T00:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T00:00:00+00:00"><meta property="article:tag" content="Scalability"><meta property="article:tag" content="Estimation"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Performance"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"Back-of-the-Envelope Estimation: The Art of Making Smart Guesses","headline":"Back-of-the-Envelope Estimation: The Art of Making Smart Guesses","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/","description":"Learn how to estimate QPS, storage, bandwidth, and memory requirements quickly and confidently — a must-have skill for system design interviews and real-world engineering decisions.","wordCount":"2980","keywords":["scalability","estimation","system-design","performance"],"datePublished":"2026-05-30T00:00:00Z","dateModified":"2026-05-30T00:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script type=module>
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
+      document.addEventListener('DOMContentLoaded', () => mermaid.run());
+    </script></head><body class="home blog post-layout-one-column"><button onclick=topFunction() id=scrollTopBtn title="Go to top">
+<i class="fa-solid fa-arrow-up"></i></button><div id=header-top class=header-bar-wrap></div><div id=page class=site><a class="skip-link screen-reader-text" href=#content>Skip to content</a><header id=masthead class="site-header clearfix" role=banner><div class="header-main container clearfix"><div id=logo class="site-branding clearfix"><h1 class=site-title><a href=/ title="System Design" rel=home>System Design</a></h1><p class=site-description>Build Systems That Scale</p></div><button id=dark-mode-toggle title="Toggle dark mode" aria-label="Toggle dark mode">
+<i class="fa-solid fa-moon" id=dm-icon></i></button></div><div id=main-navigation-wrap class=primary-navigation-wrap><nav id=main-navigation class="primary-navigation navigation container clearfix" role=navigation><ul id=menu-home class=main-navigation-menu><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/>Home</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/categories/fundamentals/>Fundamentals</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/categories/case-studies/>Case Studies</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children"><a href=#>Concepts</a><ul class=sub-menu><li class=menu-item><a href=/tags/scalability/>Scalability</a></li><li class=menu-item><a href=/tags/databases/>Databases</a></li><li class=menu-item><a href=/tags/caching/>Caching</a></li><li class=menu-item><a href=/tags/load-balancing/>Load Balancing</a></li><li class=menu-item><a href=/tags/message-queues/>Message Queues</a></li></ul></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/about/>About</a></li><li class="menu-item nav-rss"><a href=/index.xml title="Subscribe via RSS" target=_blank rel=noopener><i class="fa-solid fa-rss"></i> RSS</a></li></ul></nav></div></header><div id=content class="site-content container clearfix"><section id=primary class="content-area post-content-area"><main id=main class=site-main role=main><article class="post type-post"><div class=post-inner-content><header class=entry-header><div class=entry-meta><span class=meta-date><a href=https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/ rel=bookmark><time class="entry-date published" datetime=2026-05-30T00:00:00>May 30, 2026
+</time></a></span><span class=meta-author><span class="author vcard">Abhay</span>
+</span><span class=meta-reading-time>14 min read</span></div><h2 class=entry-title><a href=https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/ rel=bookmark>Back-of-the-Envelope Estimation: The Art of Making Smart Guesses</a></h2><div><span class="tagcloud post-tags"><i class="fa fa-tags"></i>
+<a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/scalability/>scalability</a>
+&nbsp;
+<a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/estimation/>estimation</a>
+&nbsp;
+<a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/system-design/>system-design</a>
+&nbsp;
+<a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/performance/>performance</a></span></div></header><div class=social-share-bar><span class=share-label>Share:</span>
+<a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fback-of-the-envelope-estimation%2f&title=Back-of-the-Envelope&#43;Estimation%3A+The+Art+of+Making+Smart+Guesses" target=_blank rel=noopener class="share-btn share-linkedin" title="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i> LinkedIn
+</a><a href="https://twitter.com/intent/tweet?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fback-of-the-envelope-estimation%2f&text=Back-of-the-Envelope&#43;Estimation%3A+The+Art+of+Making+Smart+Guesses" target=_blank rel=noopener class="share-btn share-twitter" title="Share on Twitter / X"><i class="fa-brands fa-x-twitter"></i> X
+</a><a href="https://www.reddit.com/submit?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fback-of-the-envelope-estimation%2f&title=Back-of-the-Envelope&#43;Estimation%3A+The+Art+of+Making+Smart+Guesses" target=_blank rel=noopener class="share-btn share-reddit" title="Share on Reddit"><i class="fa-brands fa-reddit-alien"></i> Reddit</a></div><nav class=toc-widget><h3 class=toc-title><i class="fa-solid fa-list"></i> Contents</h3><div class=toc-links><nav id=TableOfContents><ul><li><a href=#why-this-skill-matters>Why This Skill Matters</a></li><li><a href=#foundation-1-the-power-of-two--how-big-is-your-data>Foundation 1: The Power of Two — How Big Is Your Data?</a><ul><li><a href=#real-world-anchor-points>Real-world anchor points</a></li></ul></li><li><a href=#foundation-2-latency-numbers--how-fast-is-fast>Foundation 2: Latency Numbers — How Fast Is Fast?</a><ul><li><a href=#visualizing-the-gap--the-zoom-out-perspective>Visualizing the gap — the &ldquo;zoom out&rdquo; perspective</a></li><li><a href=#what-these-numbers-teach-us>What these numbers teach us</a></li></ul></li><li><a href=#foundation-3-availability-numbers--how-reliable-is-your-system>Foundation 3: Availability Numbers — How Reliable Is Your System?</a><ul><li><a href=#a-mental-model-for-availability>A mental model for availability</a></li></ul></li><li><a href=#the-estimation-framework-4-steps>The Estimation Framework: 4 Steps</a><ul><li><a href=#step-1-state-your-assumptions-out-loud>Step 1: State your assumptions out loud</a></li><li><a href=#step-2-calculate-qps-queries-per-second>Step 2: Calculate QPS (Queries Per Second)</a></li><li><a href=#step-3-calculate-storage>Step 3: Calculate Storage</a></li><li><a href=#step-4-calculate-bandwidth>Step 4: Calculate Bandwidth</a></li></ul></li><li><a href=#worked-example-estimate-twitter-scale-qps-and-storage>Worked Example: Estimate Twitter-Scale QPS and Storage</a><ul><li><a href=#problem>Problem</a></li><li><a href=#step-1-state-assumptions>Step 1: State assumptions</a></li><li><a href=#step-2-calculate-qps>Step 2: Calculate QPS</a></li><li><a href=#step-3-calculate-storage-1>Step 3: Calculate Storage</a></li><li><a href=#step-4-calculate-bandwidth-1>Step 4: Calculate bandwidth</a></li></ul></li><li><a href=#common-estimation-scenarios--cheat-sheet>Common Estimation Scenarios — Cheat Sheet</a><ul><li><a href=#qps-estimation>QPS Estimation</a></li><li><a href=#storage-estimation>Storage Estimation</a></li><li><a href=#cache-memory-estimation>Cache Memory Estimation</a></li><li><a href=#number-of-servers-estimation>Number of Servers Estimation</a></li></ul></li><li><a href=#the-memory-hierarchy--where-your-data-lives>The Memory Hierarchy — Where Your Data Lives</a><ul><li><a href=#the-key-design-implication>The key design implication</a></li></ul></li><li><a href=#tips-for-interviews-how-to-not-freeze-up>Tips for Interviews: How to Not Freeze Up</a><ul><li><a href=#the-numbers-to-have-memorized>The numbers to have memorized</a></li><li><a href=#common-mistakes-to-avoid>Common mistakes to avoid</a></li></ul></li><li><a href=#full-estimation-summary-whatsapp-scale-messaging>Full Estimation Summary: WhatsApp-Scale Messaging</a></li><li><a href=#summary>Summary</a></li><li><a href=#whats-next>What&rsquo;s Next</a></li></ul></nav></div></nav><div class=entry-content><p>Imagine your interviewer says: <em>&ldquo;We&rsquo;re designing Instagram Stories. How much storage do we need per year?&rdquo;</em></p><p>Most junior engineers freeze. They don&rsquo;t know where to begin. They feel like they need exact numbers — the real database size, the real compression ratios, the real usage stats.</p><p>Here&rsquo;s the secret: <strong>you are not supposed to be exact. You are supposed to be directionally correct.</strong></p><p>Back-of-the-envelope estimation is the skill of producing a reasonable answer in 2–3 minutes using simple math and a handful of memorized numbers. Google&rsquo;s Jeff Dean calls it:</p><blockquote><p><em>&ldquo;Estimates you create using a combination of thought experiments and common performance numbers to get a good feel for which designs will meet your requirements.&rdquo;</em></p></blockquote><p>This skill separates engineers who <em>guess</em> from engineers who <em>reason from numbers</em>. Let&rsquo;s build it from the ground up.</p><hr><h2 id=why-this-skill-matters>Why This Skill Matters</h2><p>Before any system design, you need to answer three questions:</p><ol><li><strong>How much traffic will hit my servers?</strong> (QPS — queries per second)</li><li><strong>How much data will I store?</strong> (Storage)</li><li><strong>How fast does each component need to be?</strong> (Latency)</li></ol><p>Without answers to these, you&rsquo;re guessing at architecture. With them, you can make decisions like:</p><ul><li>&ldquo;We need a CDN because our image reads are 50,000/sec&rdquo;</li><li>&ldquo;One database can handle this — we don&rsquo;t need sharding yet&rdquo;</li><li>&ldquo;This operation touches disk — it&rsquo;ll be too slow, we need a cache&rdquo;</li></ul><hr><h2 id=foundation-1-the-power-of-two--how-big-is-your-data>Foundation 1: The Power of Two — How Big Is Your Data?</h2><p>All data in computers is stored in bytes. When dealing with large systems, you work with large multiples. These are the numbers to memorize cold:</p><pre tabindex=0><code>1 KB  =  1,000 bytes         (10^3)   ← a short text message
+1 MB  =  1,000,000 bytes     (10^6)   ← a 1-minute MP3 song
+1 GB  =  1,000,000,000 bytes (10^9)   ← a 2-hour HD movie
+1 TB  =  10^12 bytes                  ← 1,000 HD movies
+1 PB  =  10^15 bytes                  ← Netflix&#39;s daily data volume
+</code></pre><pre class=mermaid>graph LR
+    B[1 Byte<br>a single char] -->|×1,000| KB[1 KB<br>a tweet]
+    KB -->|×1,000| MB[1 MB<br>a photo]
+    MB -->|×1,000| GB[1 GB<br>a movie]
+    GB -->|×1,000| TB[1 TB<br>1,000 movies]
+    TB -->|×1,000| PB[1 PB<br>whole Netflix]
+
+    style B fill:#EEF2FF,stroke:#6366F1
+    style KB fill:#EFF6FF,stroke:#3B82F6
+    style MB fill:#F0FDF4,stroke:#10B981
+    style GB fill:#FFFBEB,stroke:#F59E0B
+    style TB fill:#FEF2F2,stroke:#EF4444
+    style PB fill:#F5F3FF,stroke:#8B5CF6
+</pre><h3 id=real-world-anchor-points>Real-world anchor points</h3><table><thead><tr><th>Object</th><th>Size</th></tr></thead><tbody><tr><td>A single character (ASCII)</td><td>1 byte</td></tr><tr><td>An integer (32-bit)</td><td>4 bytes</td></tr><tr><td>A tweet (280 chars)</td><td>~280 bytes</td></tr><tr><td>A profile photo (compressed)</td><td>~300 KB</td></tr><tr><td>A high-res photo</td><td>3–5 MB</td></tr><tr><td>A 4K video minute</td><td>~350 MB</td></tr><tr><td>1 million user rows in a DB</td><td>~1 GB</td></tr></tbody></table><blockquote><p><strong>Tip:</strong> In estimates, treat 1 KB ≈ 1,000 bytes, not 1,024. The 2.4% error is irrelevant for rough estimates. Keep the math simple.</p></blockquote><hr><h2 id=foundation-2-latency-numbers--how-fast-is-fast>Foundation 2: Latency Numbers — How Fast Is Fast?</h2><p>This is the single most important table in system design. Memorize the order of magnitude for each operation. Originally measured by Dr. Jeff Dean at Google in 2010, the relative order still holds.</p><pre tabindex=0><code>Operation                              Time
+───────────────────────────────────────────────────────
+L1 cache reference                     0.5 ns
+Branch mispredict                      5 ns
+L2 cache reference                     7 ns
+Mutex lock/unlock                      100 ns
+Main memory reference (RAM)            100 ns
+─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+Compress 1 KB with Zippy               10,000 ns  = 10 μs
+Send 2 KB over 1 Gbps network          20,000 ns  = 20 μs
+Read 1 MB sequentially from memory    250,000 ns  = 250 μs
+Round trip within same datacenter     500,000 ns  = 500 μs
+─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+Disk seek (HDD)                    10,000,000 ns  = 10 ms
+Read 1 MB sequentially from network 10,000,000 ns = 10 ms
+Read 1 MB sequentially from disk    30,000,000 ns = 30 ms
+─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+Send packet CA → Netherlands → CA  150,000,000 ns = 150 ms
+</code></pre><h3 id=visualizing-the-gap--the-zoom-out-perspective>Visualizing the gap — the &ldquo;zoom out&rdquo; perspective</h3><p>The difference between a cache hit and a disk seek is hard to grasp in nanoseconds. Here&rsquo;s a human-scale analogy:</p><pre tabindex=0><code>If 1 ns = 1 second, then...
+
+L1 Cache          │█│                        0.5 seconds
+RAM               │██████████│               100 seconds (1.6 min)
+SSD read          │████████████████████│     ~150,000 seconds (41 hours)
+HDD disk seek     │                        │ 10,000,000 seconds (116 DAYS!)
+CA→Netherlands    │                        │ 150,000,000 seconds (4.75 YEARS!)
+</code></pre><pre class=mermaid>graph TD
+    subgraph "Speed Tiers — What's Fast vs Slow"
+        A["🚀 L1/L2 Cache\n0.5 – 7 ns\nInstant"]
+        B["⚡ RAM\n100 ns\nVery Fast"]
+        C["🌐 Same Datacenter Network\n500 μs\nFast"]
+        D["💾 SSD Read\n~150 μs\nModerate"]
+        E["🐌 HDD Disk Seek\n10 ms\nSlow — avoid if possible"]
+        F["🌍 Cross-continent Network\n150 ms\nVery Slow"]
+    end
+    A --> B --> C --> D --> E --> F
+
+    style A fill:#F0FDF4,stroke:#10B981,color:#065F46
+    style B fill:#EFF6FF,stroke:#3B82F6,color:#1E40AF
+    style C fill:#EEF2FF,stroke:#6366F1,color:#3730A3
+    style D fill:#FFFBEB,stroke:#F59E0B,color:#92400E
+    style E fill:#FEF2F2,stroke:#EF4444,color:#991B1B
+    style F fill:#F5F3FF,stroke:#8B5CF6,color:#4C1D95
+</pre><h3 id=what-these-numbers-teach-us>What these numbers teach us</h3><ol><li><p><strong>Memory is fast, disk is slow</strong> — A disk seek (10ms) is 20,000× slower than a RAM read (0.5 μs). If your hot path touches disk for every request, your system will be slow regardless of how fast the rest is.</p></li><li><p><strong>Avoid disk seeks</strong> — Sequential reads from disk are far better than random seeks. HDD random I/O is the enemy. SSD is much better but still 1,000× slower than RAM.</p></li><li><p><strong>Simple compression algorithms are fast</strong> — Compressing 1 KB takes only 10 μs, but sending uncompressed over the network takes 20 μs. <strong>Compress before sending over the network.</strong></p></li><li><p><strong>Data centers within the same region are fast</strong> — 500 μs round trip within a DC. Cross-continent adds 150 ms, which is 300× slower. This is why geographic data center placement matters.</p></li><li><p><strong>L1/L2 cache is your friend</strong> — Algorithms and data structures that fit in CPU cache can run 200× faster than those requiring main memory.</p></li></ol><hr><h2 id=foundation-3-availability-numbers--how-reliable-is-your-system>Foundation 3: Availability Numbers — How Reliable Is Your System?</h2><p><strong>High availability</strong> is the ability of a system to be continuously operational for a desirably long period of time. It is measured as a percentage. 100% means zero downtime (impossible in practice). Most services target 99%–99.999%.</p><p>A <strong>Service Level Agreement (SLA)</strong> is a formal agreement between a service provider and a customer defining the level of uptime. Amazon, Google, and Microsoft all set SLAs at 99.9% or above.</p><p>Uptime is measured in <strong>nines</strong>. More nines = more availability = less downtime:</p><table><thead><tr><th style=text-align:center>Availability</th><th style=text-align:center>Downtime per Day</th><th style=text-align:center>Downtime per Year</th><th style=text-align:center>Nines</th></tr></thead><tbody><tr><td style=text-align:center>99%</td><td style=text-align:center>14.4 minutes</td><td style=text-align:center>3.65 days</td><td style=text-align:center>Two nines</td></tr><tr><td style=text-align:center>99.9%</td><td style=text-align:center>1.44 minutes</td><td style=text-align:center>8.77 hours</td><td style=text-align:center>Three nines</td></tr><tr><td style=text-align:center>99.99%</td><td style=text-align:center>8.64 seconds</td><td style=text-align:center>52.6 minutes</td><td style=text-align:center>Four nines</td></tr><tr><td style=text-align:center>99.999%</td><td style=text-align:center>864 ms</td><td style=text-align:center>5.26 minutes</td><td style=text-align:center>Five nines</td></tr><tr><td style=text-align:center>99.9999%</td><td style=text-align:center>86 ms</td><td style=text-align:center>31.5 seconds</td><td style=text-align:center>Six nines</td></tr></tbody></table><pre class=mermaid>graph LR
+    subgraph "What does 99% mean in practice?"
+        A["99%\n3.65 days/year down\n❌ Not acceptable\nfor production"]
+        B["99.9%\n8.77 hours/year down\n⚠️ Minimum bar\nfor most services"]
+        C["99.99%\n52 min/year down\n✅ Good target\nfor user-facing APIs"]
+        D["99.999%\n5 min/year down\n🏆 Five nines\nPayments / Banking"]
+    end
+    A --> B --> C --> D
+
+    style A fill:#FEF2F2,stroke:#EF4444
+    style B fill:#FFFBEB,stroke:#F59E0B
+    style C fill:#F0FDF4,stroke:#10B981
+    style D fill:#EFF6FF,stroke:#3B82F6
+</pre><h3 id=a-mental-model-for-availability>A mental model for availability</h3><p>Think of availability like a chain. If your system has 3 components each at 99.9% availability, the combined availability is:</p><pre tabindex=0><code>0.999 × 0.999 × 0.999 = 0.997 = 99.7%
+</code></pre><p><strong>Every component in the critical path reduces your overall availability.</strong> This is why you add redundancy — running two components in parallel dramatically improves combined availability:</p><pre tabindex=0><code>Parallel availability = 1 - (1 - 0.999) × (1 - 0.999)
+                      = 1 - 0.000001
+                      = 99.9999%  ← Six nines!
+</code></pre><hr><h2 id=the-estimation-framework-4-steps>The Estimation Framework: 4 Steps</h2><p>Every good estimation follows the same structure. Don&rsquo;t skip steps.</p><pre class=mermaid>flowchart LR
+    S1["📋 Step 1\nState Your\nAssumptions"]
+    S2["📐 Step 2\nCalculate\nQPS"]
+    S3["💾 Step 3\nCalculate\nStorage"]
+    S4["🌐 Step 4\nCalculate\nBandwidth\n& Memory"]
+
+    S1 --> S2 --> S3 --> S4
+
+    style S1 fill:#EEF2FF,stroke:#6366F1,color:#3730A3
+    style S2 fill:#EFF6FF,stroke:#3B82F6,color:#1E40AF
+    style S3 fill:#F0FDF4,stroke:#10B981,color:#065F46
+    style S4 fill:#FFFBEB,stroke:#F59E0B,color:#92400E
+</pre><h3 id=step-1-state-your-assumptions-out-loud>Step 1: State your assumptions out loud</h3><p>Never start calculating without stating what you&rsquo;re assuming. This shows systematic thinking and lets the interviewer correct you early rather than after 10 minutes.</p><p>Always define:</p><ul><li>Monthly Active Users (MAU) or Daily Active Users (DAU)</li><li>Read-to-write ratio (most apps are 80:20 or 100:1 read-heavy)</li><li>Average size of each object</li><li>Data retention period (1 year? 5 years? Forever?)</li><li>Replication factor (typically 3 for durability)</li></ul><h3 id=step-2-calculate-qps-queries-per-second>Step 2: Calculate QPS (Queries Per Second)</h3><p>This is the heartbeat of your system. Everything else flows from this number.</p><p><strong>The formula:</strong></p><pre tabindex=0><code>Daily Active Users (DAU) × average requests per user per day
+QPS (average) = ──────────────────────────────────────────────
+                              86,400 seconds/day
+
+Peak QPS = average QPS × 2   (safe rule of thumb)
+</code></pre><blockquote><p>86,400 = 24 hours × 60 minutes × 60 seconds. Memorize this.</p></blockquote><p><strong>Quick mental shortcuts:</strong></p><pre tabindex=0><code>1M  requests/day  →  ~12 QPS
+10M requests/day  →  ~116 QPS ≈ 100 QPS
+100M requests/day →  ~1,160 QPS ≈ 1,000 QPS
+1B  requests/day  →  ~11,600 QPS ≈ 10,000 QPS
+</code></pre><h3 id=step-3-calculate-storage>Step 3: Calculate Storage</h3><pre tabindex=0><code>Daily Storage = writes per day × average object size
+
+Total Storage = daily storage × retention years × replication factor
+</code></pre><p>Replication factor = 3 is the default for distributed systems (you keep 3 copies of every file for durability).</p><h3 id=step-4-calculate-bandwidth>Step 4: Calculate Bandwidth</h3><pre tabindex=0><code>Read bandwidth  = read QPS × average response size
+Write bandwidth = write QPS × average request size
+</code></pre><hr><h2 id=worked-example-estimate-twitter-scale-qps-and-storage>Worked Example: Estimate Twitter-Scale QPS and Storage</h2><p>Let&rsquo;s walk through a real estimation, step by step, the way you&rsquo;d do it in an interview.</p><h3 id=problem>Problem</h3><p><em>&ldquo;We&rsquo;re building a Twitter-like service. Estimate the QPS and storage requirements.&rdquo;</em></p><h3 id=step-1-state-assumptions>Step 1: State assumptions</h3><pre tabindex=0><code>Monthly active users:     300 million
+Daily active users:       50% of MAU = 150 million
+Tweets per user per day:  2 tweets on average
+% of tweets with media:   10%
+Media size per tweet:     1 MB (image or short video)
+Text + metadata per tweet: tweet_id (64 bytes) + text (140 bytes) = ~204 bytes ≈ 200 bytes
+Data retention period:    5 years
+Replication factor:       3
+</code></pre><h3 id=step-2-calculate-qps>Step 2: Calculate QPS</h3><pre tabindex=0><code>Total tweets per day = 150 million users × 2 tweets = 300 million tweets/day
+
+Tweet write QPS (average) = 300,000,000 / 86,400 ≈ 3,500 QPS
+
+Peak tweet write QPS       = 3,500 × 2 = ~7,000 QPS
+</code></pre><pre class=mermaid>flowchart TD
+    MAU["300M Monthly\nActive Users"]
+    DAU["150M Daily\nActive Users\n(50% of MAU)"]
+    TPD["300M Tweets/Day\n(2 per user)"]
+    AQPS["~3,500 QPS\n(average write)"]
+    PQPS["~7,000 QPS\n(peak write = 2×)"]
+
+    MAU --> DAU --> TPD --> AQPS --> PQPS
+
+    style MAU fill:#EEF2FF,stroke:#6366F1
+    style DAU fill:#EFF6FF,stroke:#3B82F6
+    style TPD fill:#F0FDF4,stroke:#10B981
+    style AQPS fill:#FFFBEB,stroke:#F59E0B
+    style PQPS fill:#FEF2F2,stroke:#EF4444
+</pre><h3 id=step-3-calculate-storage-1>Step 3: Calculate Storage</h3><p><strong>Text storage:</strong></p><pre tabindex=0><code>Text bytes per day  = 300M tweets × 200 bytes = 60 GB/day
+5-year text storage = 60 GB × 365 × 5         = ~109 TB
+With replication ×3 = ~327 TB
+</code></pre><p><strong>Media storage (10% of tweets have 1 MB media):</strong></p><pre tabindex=0><code>Media bytes per day  = 300M × 10% × 1 MB = 30 TB/day
+5-year media storage = 30 TB × 365 × 5   = ~54,750 TB = ~55 PB
+With replication ×3  = ~165 PB
+</code></pre><pre class=mermaid>pie title "5-Year Storage Breakdown (before replication)"
+    "Media storage (images/video)" : 54750
+    "Text & metadata" : 109
+</pre><blockquote><p><strong>Key insight:</strong> Media utterly dominates storage. Text is negligible. This is why Instagram, Twitter, and TikTok use dedicated object storage (like Amazon S3) for media — not databases.</p></blockquote><h3 id=step-4-calculate-bandwidth-1>Step 4: Calculate bandwidth</h3><pre tabindex=0><code>Write bandwidth = 7,000 QPS × (200 bytes text + 10% chance × 1 MB)
+               ≈ 7,000 × (200 + 100,000) bytes
+               ≈ 7,000 × ~100 KB
+               ≈ 700 MB/s write bandwidth at peak
+</code></pre><pre class=mermaid>flowchart LR
+    subgraph "Storage Insight"
+        T["📝 Text\n200 bytes/tweet\n~109 TB over 5 years\n(tiny)"]
+        M["📸 Media\n1 MB / 10% of tweets\n~55 PB over 5 years\n(massive)"]
+    end
+    T --- M
+
+    style T fill:#F0FDF4,stroke:#10B981
+    style M fill:#FEF2F2,stroke:#EF4444
+</pre><hr><h2 id=common-estimation-scenarios--cheat-sheet>Common Estimation Scenarios — Cheat Sheet</h2><p>Here are the most frequently asked estimation types in interviews, with formulas:</p><h3 id=qps-estimation>QPS Estimation</h3><pre tabindex=0><code>Given: N million DAU, each makes R requests/day
+
+Average QPS = (N × 1,000,000 × R) / 86,400
+Peak QPS    = Average QPS × 2
+</code></pre><p><strong>Example:</strong> 10M DAU, 10 requests each:</p><pre tabindex=0><code>Average QPS = 10M × 10 / 86,400 ≈ 1,157 ≈ ~1,000 QPS
+Peak QPS    ≈ 2,000 QPS
+</code></pre><h3 id=storage-estimation>Storage Estimation</h3><pre tabindex=0><code>Given: W writes/day, S bytes per write, Y years retention, RF replication factor
+
+Total Storage = W × S × 365 × Y × RF
+</code></pre><p><strong>Example:</strong> 1M uploads/day, 500 KB each, 3 years, replicated 3×:</p><pre tabindex=0><code>= 1,000,000 × 500,000 × 365 × 3 × 3
+= 500 GB/day × 365 × 9
+≈ 1.6 PB
+</code></pre><h3 id=cache-memory-estimation>Cache Memory Estimation</h3><p>A common rule of thumb: <strong>cache 20% of daily read requests</strong> (the 80/20 rule — 20% of data accounts for 80% of reads).</p><pre tabindex=0><code>Daily reads  = read QPS × 86,400
+Cache memory = daily reads × average response size × 20%
+</code></pre><p><strong>Example:</strong> 10,000 read QPS, 1 KB avg response:</p><pre tabindex=0><code>Daily reads  = 10,000 × 86,400 = 864,000,000 reads
+Cache memory = 864M × 1 KB × 20% = ~172 GB
+</code></pre><p>Two Redis servers with 96 GB RAM each would handle this comfortably.</p><h3 id=number-of-servers-estimation>Number of Servers Estimation</h3><pre tabindex=0><code>Servers needed = QPS / queries_per_server_per_second
+
+A typical web server handles: ~1,000–5,000 QPS
+A typical DB server handles:  ~1,000 QPS (reads), ~500 QPS (writes)
+</code></pre><p><strong>Example:</strong> 50,000 peak QPS:</p><pre tabindex=0><code>Web servers = 50,000 / 5,000 = 10 servers minimum
+(Add 2–3× headroom for spikes → 20–30 servers)
+</code></pre><hr><h2 id=the-memory-hierarchy--where-your-data-lives>The Memory Hierarchy — Where Your Data Lives</h2><p>Understanding where data lives is critical for latency decisions. Here&rsquo;s the full picture:</p><pre class=mermaid>graph TD
+    subgraph "Fastest → Slowest"
+        L1["L1 Cache\n~32 KB per core\n0.5 ns\nInside the CPU chip"]
+        L2["L2 Cache\n~256 KB per core\n7 ns\nStill on the chip"]
+        L3["L3 Cache\n~8–32 MB shared\n~30 ns\nShared across cores"]
+        RAM["RAM / Main Memory\n16 GB – 1 TB\n100 ns\nDIMM sticks"]
+        SSD["NVMe SSD\n1–8 TB\n~150 μs\nPCIe attached"]
+        HDD["Spinning HDD\n4–20 TB\n10 ms\nMagnetic platters"]
+        NET["Remote Storage\nUnlimited\n1–150 ms\nNetwork attached"]
+    end
+    L1 --> L2 --> L3 --> RAM --> SSD --> HDD --> NET
+
+    style L1 fill:#F0FDF4,stroke:#10B981,color:#065F46
+    style L2 fill:#ECFDF5,stroke:#34D399,color:#065F46
+    style L3 fill:#EFF6FF,stroke:#60A5FA,color:#1E40AF
+    style RAM fill:#EEF2FF,stroke:#6366F1,color:#3730A3
+    style SSD fill:#FFFBEB,stroke:#F59E0B,color:#92400E
+    style HDD fill:#FEF2F2,stroke:#EF4444,color:#991B1B
+    style NET fill:#F5F3FF,stroke:#8B5CF6,color:#4C1D95
+</pre><h3 id=the-key-design-implication>The key design implication</h3><p><strong>Every cache layer in a real system maps to this hierarchy:</strong></p><table><thead><tr><th>System Layer</th><th>Maps to</th></tr></thead><tbody><tr><td>In-process memory (application cache)</td><td>L3 / RAM</td></tr><tr><td>Redis / Memcached (in-memory cache)</td><td>RAM on a remote server</td></tr><tr><td>CDN edge cache</td><td>RAM on a geographically close server</td></tr><tr><td>Database with SSD storage</td><td>SSD reads</td></tr><tr><td>Cold storage (S3 Glacier, archival)</td><td>Slow HDD / tape</td></tr></tbody></table><p>When you design a cache, you&rsquo;re choosing which layer of this hierarchy to promote your &ldquo;hot&rdquo; data into. Promoting from HDD → RAM makes operations 100,000× faster.</p><hr><h2 id=tips-for-interviews-how-to-not-freeze-up>Tips for Interviews: How to Not Freeze Up</h2><p>Back-of-the-envelope estimation is <strong>all about the process</strong>. Solving the problem is more important than getting the exact right number. Here are the rules:</p><pre class=mermaid>flowchart TD
+    T1["✅ Round generously\n99,987 → 100,000\n86,400 seconds/day → just say 10^5"]
+    T2["✅ State assumptions first\nWrite them down.\n'I'll assume 150M DAU...'"]
+    T3["✅ Label your units\nDon't write '5' — write '5 MB'\nUnit confusion kills estimates"]
+    T4["✅ Use scientific notation\n300,000,000 = 3 × 10^8\nMuch easier to multiply"]
+    T5["✅ Check your answer\nDoes this make intuitive sense?\nIs Twitter really 55 PB? Yes — plausible."]
+
+    style T1 fill:#F0FDF4,stroke:#10B981
+    style T2 fill:#EFF6FF,stroke:#3B82F6
+    style T3 fill:#EEF2FF,stroke:#6366F1
+    style T4 fill:#FFFBEB,stroke:#F59E0B
+    style T5 fill:#FEF2F2,stroke:#EF4444
+</pre><h3 id=the-numbers-to-have-memorized>The numbers to have memorized</h3><table><thead><tr><th>Fact</th><th>Value</th></tr></thead><tbody><tr><td>Seconds in a day</td><td>86,400 (~10^5)</td></tr><tr><td>Seconds in a year</td><td>~31.5 million (~3 × 10^7)</td></tr><tr><td>1 million</td><td>10^6</td></tr><tr><td>1 billion</td><td>10^9</td></tr><tr><td>Average web response</td><td>1–10 KB</td></tr><tr><td>Average image</td><td>300 KB – 3 MB</td></tr><tr><td>Average video (per minute)</td><td>50–350 MB</td></tr><tr><td>Redis throughput</td><td>~100,000 QPS</td></tr><tr><td>MySQL throughput</td><td>~1,000–5,000 QPS</td></tr><tr><td>CDN cache hit ratio</td><td>~95%</td></tr><tr><td>Typical read:write ratio</td><td>80:20 to 100:1</td></tr></tbody></table><h3 id=common-mistakes-to-avoid>Common mistakes to avoid</h3><p><strong>❌ &ldquo;I don&rsquo;t know the exact numbers&rdquo;</strong> — You don&rsquo;t need them. Make a reasonable assumption and state it.</p><p><strong>❌ Jumping straight to the answer</strong> — Always walk through your assumptions. An interviewer who sees your reasoning can guide you even if you&rsquo;re off-track.</p><p><strong>❌ Confusing MB and GB</strong> — Being off by 1,000× breaks your estimate. Write units. Always.</p><p><strong>❌ Forgetting replication</strong> — If you calculate raw storage and forget to multiply by 3 for replication, you underestimate by 3×.</p><p><strong>❌ Using average QPS as peak QPS</strong> — Systems must handle peaks, not just averages. Traffic spikes 2–10× above average during events (product launches, sports finals, etc.).</p><hr><h2 id=full-estimation-summary-whatsapp-scale-messaging>Full Estimation Summary: WhatsApp-Scale Messaging</h2><p>Let&rsquo;s run through one more example end-to-end to solidify the process.</p><p><strong>Problem:</strong> <em>&ldquo;Estimate the infrastructure needs for a WhatsApp-like messaging service.&rdquo;</em></p><pre class=mermaid>flowchart TD
+    A1["Assumptions\n────────────────\n2B registered users\n500M DAU\n40 messages/user/day\n10% contain media (100 KB avg)\nText: 100 bytes/message\nRetention: forever\nReplication: 3×"]
+
+    B1["QPS Calculation\n────────────────\nMessages/day = 500M × 40 = 20B\nWrite QPS avg = 20B / 86,400 ≈ 231,000\nPeak write QPS ≈ 460,000\n\nRead QPS ≈ 10× write = ~4.6M QPS\n(messages are read multiple times)"]
+
+    C1["Storage Calculation\n────────────────\nText/day = 20B × 100 bytes = 2 TB/day\nMedia/day = 20B × 10% × 100 KB = 200 TB/day\nTotal/day ≈ 202 TB\n\n10-year total = 202 TB × 3,650 ≈ 737 PB\nWith replication = ~2.2 EB"]
+
+    D1["Infrastructure Needs\n────────────────\nWeb servers: ~460,000 / 5,000 = ~100 servers\nDB servers (sharded): ~460 write shards\nCache (20% of reads): ~200 TB Redis\nMedia: Object storage (S3-like)"]
+
+    A1 --> B1 --> C1 --> D1
+
+    style A1 fill:#EEF2FF,stroke:#6366F1
+    style B1 fill:#EFF6FF,stroke:#3B82F6
+    style C1 fill:#F0FDF4,stroke:#10B981
+    style D1 fill:#FFFBEB,stroke:#F59E0B
+</pre><p>This is how you&rsquo;d arrive at the same conclusion WhatsApp engineers reach when deciding to use Erlang (for concurrency), Mnesia (for in-memory storage), and horizontal sharding across hundreds of database nodes.</p><hr><h2 id=summary>Summary</h2><p>Back-of-the-envelope estimation is a learnable skill. Practice these numbers until they&rsquo;re automatic:</p><table><thead><tr><th>Concept</th><th>Key numbers</th></tr></thead><tbody><tr><td>Data sizes</td><td>KB → MB → GB → TB → PB (each ×1,000)</td></tr><tr><td>L1 cache</td><td>0.5 ns</td></tr><tr><td>RAM</td><td>100 ns</td></tr><tr><td>Datacenter round trip</td><td>500 μs</td></tr><tr><td>HDD seek</td><td>10 ms</td></tr><tr><td>Cross-continent</td><td>150 ms</td></tr><tr><td>Seconds per day</td><td>86,400</td></tr><tr><td>Availability nines</td><td>99.9% = 8.77 hrs/yr downtime</td></tr><tr><td>Peak vs average QPS</td><td>Peak = 2× average</td></tr><tr><td>Storage replication</td><td>Always ×3</td></tr></tbody></table><p>The more you practice, the faster and more confident you become. In interviews, interviewers aren&rsquo;t testing whether you get 54 PB or 60 PB — they&rsquo;re testing whether you <em>think like an engineer</em> who reasons systematically from numbers to architecture decisions.</p><hr><h2 id=whats-next>What&rsquo;s Next</h2><p>In the next post, we cover <strong>A Framework for System Design Interviews</strong> — the exact 4-step process for approaching any open-ended system design question, from clarifying requirements to doing a deep dive, without freezing up or going in circles.</p></div><div class=social-share-bar><span class=share-label>Share:</span>
+<a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fback-of-the-envelope-estimation%2f&title=Back-of-the-Envelope&#43;Estimation%3A+The+Art+of+Making+Smart+Guesses" target=_blank rel=noopener class="share-btn share-linkedin" title="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i> LinkedIn
+</a><a href="https://twitter.com/intent/tweet?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fback-of-the-envelope-estimation%2f&text=Back-of-the-Envelope&#43;Estimation%3A+The+Art+of+Making+Smart+Guesses" target=_blank rel=noopener class="share-btn share-twitter" title="Share on Twitter / X"><i class="fa-brands fa-x-twitter"></i> X
+</a><a href="https://www.reddit.com/submit?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fback-of-the-envelope-estimation%2f&title=Back-of-the-Envelope&#43;Estimation%3A+The+Art+of+Making+Smart+Guesses" target=_blank rel=noopener class="share-btn share-reddit" title="Share on Reddit"><i class="fa-brands fa-reddit-alien"></i> Reddit</a></div></div></article><div class=author-bio><img src=/images/abhay.jpeg alt=Abhay class=author-bio-avatar><div class=author-bio-content><h3 class=author-bio-name>Abhay Pratap Singh</h3><p class=author-bio-desc>Principal Software Engineer writing about system design, distributed systems, and how large-scale software actually works. Covering the concepts you need for interviews and production.</p><div class=author-bio-links><a href=https://github.com/abhi15sep target=_blank rel=noopener><i class="fa-brands fa-github"></i> GitHub</a>
+<a href=https://www.linkedin.com/in/abhay-singh-831997b5/ target=_blank rel=noopener><i class="fa-brands fa-linkedin-in"></i> LinkedIn</a>
+<a href=/index.xml target=_blank rel=noopener><i class="fa-solid fa-rss"></i> RSS</a></div></div></div><div class=newsletter-box><div class=newsletter-icon><i class="fa-solid fa-envelope-open-text"></i></div><h3 class=newsletter-title>Enjoyed this post?</h3><p class=newsletter-desc>Get new system design articles — scalability, databases, caching, and real-world architectures — delivered straight to your inbox. No spam, unsubscribe any time.</p><a href="mailto:abhaypratap3537@gmail.com?subject=Subscribe to System Design by Abhay" class=newsletter-btn><i class="fa-solid fa-paper-plane"></i> Subscribe via Email</a></div><nav class="navigation post-navigation" role=navigation><h2 class=screen-reader-text>Post navigation</h2><div class=nav-links><div class=nav-next><a href=/2026/05/scale-from-zero-to-millions/ rel=prev><span class=post-title>Scale From Zero to Millions of Users: A Complete System Design Walkthrough
+<i class="fa fa-chevron-right"></i></span></a></div></div></nav><div class=related-posts><h3 class=related-title><i class="fa-solid fa-layer-group"></i> You might also like</h3><div class=related-grid><a class=related-card href=/2026/05/scale-from-zero-to-millions/><span class=related-card-meta>May 2026 · 26 min read</span>
+<span class=related-card-title>Scale From Zero to Millions of Users: A Complete System Design Walkthrough</span>
+<span class=related-card-cat>Fundamentals</span></a></div></div></main></section><section id=secondary class="sidebar widget-area clearfix" role=complementary><aside id=search class="widget clearfix"><div class=widget-header><h3 class=widget-title>Search</h3></div><form onsubmit=return!1><input id=search-query type=text placeholder="Search posts..." autocomplete=off>
+<button id=search-btn type=button><i class="fa-solid fa-magnifying-glass"></i></button></form><div id=search-results></div></aside><aside id=rss-subscribe class="widget clearfix"><div class=widget-header><h3 class=widget-title>Subscribe</h3></div><a href=/index.xml class=rss-subscribe-btn target=_blank rel=noopener><i class="fa-solid fa-rss"></i> Subscribe via RSS</a></aside><aside id=recent-posts class="widget clearfix"><div class=widget-header><h3 class=widget-title>Recent Posts</h3></div><ul><li class=widget__item><a class=widget__link href=/2026/05/back-of-the-envelope-estimation/>Back-of-the-Envelope Estimation: The Art of Making Smart Guesses</a></li><li class=widget__item><a class=widget__link href=/2026/05/scale-from-zero-to-millions/>Scale From Zero to Millions of Users: A Complete System Design Walkthrough</a></li></ul></aside><aside id=categories class="widget clearfix"><div class=widget-header><h3 class=widget-title>Categories</h3></div><ul><li><a href=/categories/fundamentals/ title=fundamentals>fundamentals</a></li></ul></aside><aside id=tag_cloud class="widget widget_tag_cloud clearfix"><div class=widget-header><h3 class=widget-title>Tags</h3></div><div class=tagcloud><div class=widget__content><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/caching/ title=caching>caching
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/databases/ title=databases>databases
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/estimation/ title=estimation>estimation
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/load-balancing/ title=load-balancing>load-balancing
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/message-queues/ title=message-queues>message-queues
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/performance/ title=performance>performance
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/scalability/ title=scalability>scalability
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/system-design/ title=system-design>system-design</a></div></div></aside></section></div><div id=footer class=footer-wrap><footer id=colophon class="site-footer container clearfix" role=contentinfo><div id=footer-text class=site-info><span class=credit-link><a href=/>System Design by Abhay</a>
+Copyright © 2026
+</span><span class=footer-rss><a href=/index.xml title="RSS Feed" target=_blank rel=noopener><i class="fa-solid fa-rss"></i> RSS Feed</a></span></div></footer></div></div><script type=text/javascript src=/assets/js/custom.js></script></body></html>
