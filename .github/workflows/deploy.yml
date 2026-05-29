@@ -21,7 +21,7 @@ jobs:
           hugo-version: "0.128.0"
 
       - name: Build with Hugo
-        run: hugo --minify
+        run: hugo --minify --buildFuture
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

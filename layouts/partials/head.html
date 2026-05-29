@@ -1,28 +1,25 @@
 <head>
+    {{ if (not (eq .Site.GoogleAnalytics "")) }}
     {{ if not (in (printf "%#v" .Site.BaseURL) "localhost") }}
-    {{ template "_internal/google_analytics.html" . }}
+    <div class="analytics">
+        {{ template "_internal/google_analytics_async.html" . }}
+    </div>
+    {{ end }}
     {{ end }}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
-    {{ if .IsHome }}
-    <title>{{ .Site.Title }} - {{ .Site.Params.Subtitle }}</title>
-    {{ else }}
-    <title>{{ with .Params.Title }}{{ . }} | {{ end }}{{ .Site.Title }}</title>
-    {{ end }}
+    <meta name="title" property="title" content="{{ $isHomePage := eq .Title .Site.Title }}{{ .Site.Title }}{{ if eq $isHomePage false }} - {{ .Title }}{{ end }}{{ if eq $isHomePage true }} - {{ .Site.Params.Subtitle}}{{ end }}">
+    <meta name="description" property="description" content="{{ $isHomePage := eq .Title .Site.Title }}{{ .Site.Params.description }}{{ if eq $isHomePage false }} - {{ .Description }}{{ end }}" >
+    <title>{{ $isHomePage := eq .Title .Site.Title }}{{ .Site.Title }}{{ if eq $isHomePage false }} - {{ .Title }}{{ end }} {{ if eq $isHomePage true }} - {{ .Site.Params.Subtitle}}{{ end }}</title>
     {{ template "_internal/twitter_cards.html" . }}
-    {{ with .Site.Params.twitter -}}
+    {{ with .Site.Social.twitter -}}
     <meta name="twitter:creator" content="@{{ . }}"/>
     {{ end -}}
     {{ template "_internal/opengraph.html" . }}
     {{ template "_internal/schema.html" . }}
-    {{ $ogImage := "images/og-default.png" | absURL }}
-    {{ if .IsPage }}{{ with .Params.image }}{{ $ogImage = . | absURL }}{{ end }}{{ end }}
-    <meta property="og:image" content="{{ $ogImage }}" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="{{ $ogImage }}" />
 
     <link rel='stylesheet' href="{{"assets/css/custom-fonts.css" | relURL }}" type='text/css' media='all'/>
+
     <link rel='stylesheet' href="{{"assets/css/style.css" | relURL }}" type='text/css' media='all'/>
     <link rel='stylesheet' href="{{"assets/css/genericons.css" | relURL }}" type='text/css' media='all'/>
     <link rel='stylesheet' href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" media='all'/>
@@ -35,33 +32,12 @@
     <script type='text/javascript' src="{{"assets/js/html5shiv.min.js" | relURL }}"></script>
     <script type='text/javascript' src="{{"assets/js/navigation.js" | relURL }}"></script>
 
-    <link rel="icon" type="image/x-icon" href="{{ "favicon.ico" | relURL }}" />
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ "favicon-96x96.png" | relURL }}" />
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ "favicon.png" | relURL }}" />
-    <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}" />
-    {{ with .OutputFormats.Get "RSS" }}
-    <link href="{{ .RelPermalink }}" rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" />
-    <link href="{{ .RelPermalink }}" rel="feed" type="application/rss+xml" title="{{ $.Site.Title }}" />
+    <link rel="shortcut icon" href="{{ "favicon.png" | relURL }}" type="image/x-icon" />
+    {{ if .RSSLink }}
+    <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
+    <link href="{{ .RSSLink }}" rel="feed" type="application/rss+xml" title="{{ .Site.Title }}" />
     {{ end }}
     {{ partial "site-schema.html" . }}
-    {{ if .IsPage }}
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": {{ .Title | jsonify }},
-      "datePublished": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
-      "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}",
-      "author": { "@type": "Person", "name": "Abhay Pratap Singh", "url": "{{ absURL "/about/" }}" },
-      "publisher": { "@type": "Organization", "name": "System Design by Abhay", "url": "{{ .Site.BaseURL }}" },
-      "image": "{{ absURL "images/og-default.png" }}",
-      "url": "{{ .Permalink }}"
-    }
-    </script>
-    {{ end }}
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js" defer></script>
-    <script src="{{ "assets/js/search.js" | relURL }}" defer></script>
-    <script src="{{ "assets/js/enhancements.js" | relURL }}" defer></script>
     {{ if .IsPage }}
     <script type="module">
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
