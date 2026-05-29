@@ -1,26 +1,21 @@
 {{ define "main" }}
-<section id="primary" class="content-area post-content-area">
+<section id="primary" class="content-archive content-area post-content-area">
     <main id="main" class="site-main" role="main">
         <article class="post type-post">
             <div class="post-inner-content">
                 {{ partial "post-meta.html" . }}
                 {{ partial "social-share.html" . }}
                 {{ partial "toc.html" . }}
+                {{ partial "text-to-speech.html" . }}
                 <div class="entry-content">
                     {{ .Content }}
                 </div>
                 {{ partial "social-share.html" . }}
             </div>
         </article>
-        {{ partial "author-bio.html" . }}
-        {{ partial "newsletter.html" . }}
         {{ partial "post_nav.html" . }}
         {{ partial "related.html" . }}
         {{ partial "comments.html" . }}
     </main>
-</section>
-
-<section id="secondary" class="sidebar widget-area clearfix" role="complementary">
-    {{ partial "sidebar.html" . }}
 </section>
 {{ end }}
