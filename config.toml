@@ -1,6 +1,6 @@
 baseURL = "https://system-design.devops-monk.com/"
 languageCode = "en-us"
-title = "System Design by Abhay"
+title = "System Design"
 theme = "wellington"
 paginate=10
 
