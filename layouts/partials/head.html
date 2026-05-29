@@ -1,22 +1,11 @@
 <head>
-    {{ if (not (eq .Site.GoogleAnalytics "")) }}
-    {{ if not (in (printf "%#v" .Site.BaseURL) "localhost") }}
-    <div class="analytics">
-        {{ template "_internal/google_analytics_async.html" . }}
-    </div>
-    {{ end }}
-    {{ end }}
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="title" property="title" content="{{ $isHomePage := eq .Title .Site.Title }}{{ .Site.Title }}{{ if eq $isHomePage false }} - {{ .Title }}{{ end }}{{ if eq $isHomePage true }} - {{ .Site.Params.Subtitle}}{{ end }}">
     <meta name="description" property="description" content="{{ $isHomePage := eq .Title .Site.Title }}{{ .Site.Params.description }}{{ if eq $isHomePage false }} - {{ .Description }}{{ end }}" >
     <title>{{ $isHomePage := eq .Title .Site.Title }}{{ .Site.Title }}{{ if eq $isHomePage false }} - {{ .Title }}{{ end }} {{ if eq $isHomePage true }} - {{ .Site.Params.Subtitle}}{{ end }}</title>
-    {{ template "_internal/twitter_cards.html" . }}
-    {{ with .Site.Social.twitter -}}
-    <meta name="twitter:creator" content="@{{ . }}"/>
-    {{ end -}}
     {{ template "_internal/opengraph.html" . }}
-    {{ template "_internal/schema.html" . }}
 
     <link rel='stylesheet' href="{{"assets/css/custom-fonts.css" | relURL }}" type='text/css' media='all'/>
 
@@ -33,9 +22,9 @@
     <script type='text/javascript' src="{{"assets/js/navigation.js" | relURL }}"></script>
 
     <link rel="shortcut icon" href="{{ "favicon.png" | relURL }}" type="image/x-icon" />
-    {{ if .RSSLink }}
-    <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
-    <link href="{{ .RSSLink }}" rel="feed" type="application/rss+xml" title="{{ .Site.Title }}" />
+    {{ with .OutputFormats.Get "RSS" }}
+    <link href="{{ .Permalink }}" rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" />
+    <link href="{{ .Permalink }}" rel="feed" type="application/rss+xml" title="{{ $.Site.Title }}" />
     {{ end }}
     {{ partial "site-schema.html" . }}
     {{ if .IsPage }}
