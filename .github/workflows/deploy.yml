@@ -23,8 +23,7 @@ jobs:
       - name: Deploy to GitHub Pages repo
         uses: peaceiris/actions-gh-pages@v4
         with:
-          personal_token: ${{ secrets.PAGES_TOKEN }}
-          external_repository: devops-monk/system-design-blog
-          publish_branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
           publish_dir: ./public
           commit_message: "deploy: ${{ github.event.head_commit.message }}"
