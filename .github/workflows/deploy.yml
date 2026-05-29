@@ -25,6 +25,6 @@ jobs:
         with:
           personal_token: ${{ secrets.PAGES_TOKEN }}
           external_repository: devops-monk/system-design-blog
-          publish_branch: master
+          publish_branch: main
           publish_dir: ./public
           commit_message: "deploy: ${{ github.event.head_commit.message }}"
