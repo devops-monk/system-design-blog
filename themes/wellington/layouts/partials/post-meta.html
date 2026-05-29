@@ -1,0 +1,33 @@
+<header class="entry-header">
+    <div class="entry-meta">
+        <span class="meta-date">
+            <a href="{{ .Permalink }}" rel="bookmark">
+                <time class="entry-date published" datetime="{{ .Date.Format "2006-01-02T15:04:05" }}">
+                {{.Date.Format ( .Site.Params.dateformat | default "January 02, 2006")}}
+                </time>
+            </a>
+        </span>
+        <span class="meta-author">
+            <span class="author vcard">{{ .Params.author | default .Site.Params.author}}</span>
+        </span>
+    </div>
+    <h2 class="entry-title">
+        <a href="{{ .Permalink }}" rel="bookmark">
+            {{ .Title }}
+        </a>
+    </h2>
+    <div>
+        {{ if isset .Params "tags" }}
+        {{ $tagsLen := len .Params.tags }}
+        {{ if gt $tagsLen 0 }}
+        <span class="tagcloud post-tags">
+            <i class="fa fa-tags"></i>
+            {{ range $k, $v := .Params.tags }}
+            <a class="tag-cloud-link widget__link widget__link--taglist" href="{{ (print "tags/" (. | urlize | lower) "/") | relURL }}">{{ . }}</a>
+            {{ if lt $k (sub $tagsLen 1) }}&nbsp;{{ end }}
+            {{ end }}
+        </span>
+        {{ end }}
+        {{ end }}
+    </div>
+</header>

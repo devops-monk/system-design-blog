@@ -1,0 +1,72 @@
+<head>
+    {{ if not (in (printf "%#v" .Site.BaseURL) "localhost") }}
+    {{ template "_internal/google_analytics.html" . }}
+    {{ end }}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
+    {{ if .IsHome }}
+    <title>{{ .Site.Title }} - {{ .Site.Params.Subtitle }}</title>
+    {{ else }}
+    <title>{{ with .Params.Title }}{{ . }} | {{ end }}{{ .Site.Title }}</title>
+    {{ end }}
+    {{ template "_internal/twitter_cards.html" . }}
+    {{ with .Site.Params.twitter -}}
+    <meta name="twitter:creator" content="@{{ . }}"/>
+    {{ end -}}
+    {{ template "_internal/opengraph.html" . }}
+    {{ template "_internal/schema.html" . }}
+    {{ $ogImage := "images/og-default.png" | absURL }}
+    {{ if .IsPage }}{{ with .Params.image }}{{ $ogImage = . | absURL }}{{ end }}{{ end }}
+    <meta property="og:image" content="{{ $ogImage }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="{{ $ogImage }}" />
+
+    <link rel='stylesheet' href="{{"assets/css/custom-fonts.css" | relURL }}" type='text/css' media='all'/>
+    <link rel='stylesheet' href="{{"assets/css/style.css" | relURL }}" type='text/css' media='all'/>
+    <link rel='stylesheet' href="{{"assets/css/genericons.css" | relURL }}" type='text/css' media='all'/>
+    <link rel='stylesheet' href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" media='all'/>
+    <link rel='stylesheet' href="{{"assets/css/socicon.css" | relURL }}" type='text/css' media='all'/>
+    <link rel="stylesheet" href="{{"assets/css/social-logos/social-logos.css" | relURL }}" type="text/css" media="all">
+    <link rel='stylesheet' href="{{"assets/css/jetpack.css" | relURL }}" type='text/css' media='all'/>
+    <link rel='stylesheet' href="{{"assets/css/custom-styles.css" | relURL }}" type='text/css' media='all'/>
+
+    <script type='text/javascript' src="{{"assets/js/jquery-1.12.4.min.js" | relURL }}"></script>
+    <script type='text/javascript' src="{{"assets/js/html5shiv.min.js" | relURL }}"></script>
+    <script type='text/javascript' src="{{"assets/js/navigation.js" | relURL }}"></script>
+
+    <link rel="icon" type="image/x-icon" href="{{ "favicon.ico" | relURL }}" />
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ "favicon-96x96.png" | relURL }}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ "favicon.png" | relURL }}" />
+    <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}" />
+    {{ with .OutputFormats.Get "RSS" }}
+    <link href="{{ .RelPermalink }}" rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" />
+    <link href="{{ .RelPermalink }}" rel="feed" type="application/rss+xml" title="{{ $.Site.Title }}" />
+    {{ end }}
+    {{ partial "site-schema.html" . }}
+    {{ if .IsPage }}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": {{ .Title | jsonify }},
+      "datePublished": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
+      "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}",
+      "author": { "@type": "Person", "name": "Abhay Pratap Singh", "url": "{{ absURL "/about/" }}" },
+      "publisher": { "@type": "Organization", "name": "System Design by Abhay", "url": "{{ .Site.BaseURL }}" },
+      "image": "{{ absURL "images/og-default.png" }}",
+      "url": "{{ .Permalink }}"
+    }
+    </script>
+    {{ end }}
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js" defer></script>
+    <script src="{{ "assets/js/search.js" | relURL }}" defer></script>
+    <script src="{{ "assets/js/enhancements.js" | relURL }}" defer></script>
+    {{ if .IsPage }}
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
+      document.addEventListener('DOMContentLoaded', () => mermaid.run());
+    </script>
+    {{ end }}
+</head>

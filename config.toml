@@ -1,0 +1,105 @@
+baseURL = "https://system-design.devops-monk.com/"
+languageCode = "en-us"
+title = "System Design by Abhay"
+theme = "wellington"
+paginate=10
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+disqusShortname = ""
+googleAnalytics = ""
+enableRobotsTXT = true
+preserveTaxonomyNames = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = "nord"
+    codeFences = true
+    lineNos = false
+    noClasses = true
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[Params.widgets]
+    search = true
+    recent_articles = true
+    recent_articles_num = 5
+    categories = true
+    tags = true
+    tags_counter = false
+
+[menu]
+
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+
+  [[menu.main]]
+    name = "Fundamentals"
+    url = "/categories/fundamentals/"
+    weight = 2
+
+  [[menu.main]]
+    name = "Case Studies"
+    url = "/categories/case-studies/"
+    weight = 3
+
+  [[menu.main]]
+    name = "Concepts"
+    identifier = "concepts"
+    weight = 4
+
+  [[menu.main]]
+    name = "Scalability"
+    parent = "concepts"
+    url = "/tags/scalability/"
+    weight = 1
+
+  [[menu.main]]
+    name = "Databases"
+    parent = "concepts"
+    url = "/tags/databases/"
+    weight = 2
+
+  [[menu.main]]
+    name = "Caching"
+    parent = "concepts"
+    url = "/tags/caching/"
+    weight = 3
+
+  [[menu.main]]
+    name = "Load Balancing"
+    parent = "concepts"
+    url = "/tags/load-balancing/"
+    weight = 4
+
+  [[menu.main]]
+    name = "Message Queues"
+    parent = "concepts"
+    url = "/tags/message-queues/"
+    weight = 5
+
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 5
+
+[Params]
+  author = "Abhay"
+  publisher = "System Design by Abhay"
+  subtitle = "Build Systems That Scale"
+  description = "In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work."
+  email = "abhaypratap3537@gmail.com"
+  github = "abhi15sep"
+  linkedin = "abhay-singh-831997b5"
+  twitter = ""

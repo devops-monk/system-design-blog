@@ -1,0 +1,52 @@
+<aside id="zoom-social-icons-widget-2" class="widget zoom-social-icons-widget">
+  <h3 class="widget-title">Follow Me</h3>
+
+  <ul
+    class="zoom-social-icons-list zoom-social-icons-list--with-canvas zoom-social-icons-list--rounded zoom-social-icons-list--no-labels"
+  >
+    {{ if (not (eq .Site.Params.github "")) }}
+    <li class="zoom-social_icons-list__item">
+      <a
+        class="zoom-social_icons-list__link"
+        href="https://github.com/{{.Site.Params.github}}"
+        target="_blank"
+      >
+        <span
+          class="zoom-social_icons-list-span socicon socicon-github"
+          data-hover-rule="background-color"
+          data-hover-color="#221e1b"
+        ></span>
+      </a>
+    </li>
+    {{ end }} {{ if (not (eq .Site.Params.linkedin "")) }}
+    <li class="zoom-social_icons-list__item">
+      <a
+        class="zoom-social_icons-list__link"
+        href="https://in.linkedin.com/in/{{.Site.Params.linkedin}}"
+        target="_blank"
+      >
+        <span
+          class="zoom-social_icons-list-span socicon socicon-linkedin"
+          data-hover-rule="background-color"
+          data-hover-color="#3371b7"
+        ></span>
+      </a>
+    </li>
+
+    {{ end }} {{ if (not (eq .Site.Params.youtube "")) }}
+    <li class="zoom-social_icons-list__item">
+      <a
+        class="zoom-social_icons-list__link"
+        href="http://www.youtube.com/c/{{.Site.Params.youtube}}"
+        target="_blank"
+      >
+        <span
+          class="zoom-social_icons-list-span socicon socicon-youtube"
+          data-hover-rule="background-color"
+          data-hover-color="#e02a20"
+        ></span>
+      </a>
+    </li>
+    {{ end }}
+  </ul>
+</aside>

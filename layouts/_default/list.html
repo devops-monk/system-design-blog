@@ -1,0 +1,20 @@
+{{ define "main" }}
+<section id="primary" class="content-archive content-area">
+    <main id="main" class="site-main" role="main">
+        {{ if eq .Kind "term" }}
+        <div class="archive-header">
+            <h1 class="page-title">
+                {{ if eq .Data.Singular "category" }}<i class="fa-solid fa-folder-open"></i>{{ else }}<i class="fa-solid fa-tag"></i>{{ end }}
+                {{ .Title | title }}
+            </h1>
+            <p class="archive-description">{{ len .Pages }} post{{ if ne (len .Pages) 1 }}s{{ end }} in this section</p>
+        </div>
+        {{ end }}
+        {{ partial "all-posts.html" . }}
+    </main>
+</section>
+
+<section id="secondary" class="sidebar widget-area clearfix" role="complementary">
+    {{ partial "sidebar.html" . }}
+</section>
+{{ end }}

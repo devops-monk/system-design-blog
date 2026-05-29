@@ -1,0 +1,51 @@
+<header id="masthead" class="site-header clearfix" role="banner">
+    <div class="header-main container clearfix">
+        <div id="logo" class="site-branding clearfix">
+            <h1 class="site-title">
+                <a href="{{ "" | relLangURL }}" title="{{ .Site.Title }}" rel="home">{{ .Site.Title }}</a>
+            </h1>
+            <p class="site-description">{{ .Site.Params.Subtitle }}</p>
+        </div>
+        <button id="dark-mode-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+            <i class="fa-solid fa-moon" id="dm-icon"></i>
+        </button>
+    </div>
+    <div id="main-navigation-wrap" class="primary-navigation-wrap">
+        <nav id="main-navigation" class="primary-navigation navigation container clearfix"
+             role="navigation">
+            <ul id="menu-home" class="main-navigation-menu">
+                {{ range .Site.Menus.main }}
+                {{ $active := false }}
+                {{ if eq .URL "/" }}
+                    {{ $active = $.IsHome }}
+                {{ else if ne .URL "" }}
+                    {{ $active = hasPrefix $.RelPermalink .URL }}
+                {{ end }}
+                {{ $count := 0 }}
+                {{ if .HasChildren }}
+                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children{{ if $active }} current-menu-item current_page_item{{ end }}">
+                    <a href="{{ if ne .URL "" }}{{ .URL | relURL }}{{ else }}#{{ end }}">{{ .Name }}</a>
+                    <ul class="sub-menu">
+                        {{ range .Children }}
+                        {{ $childActive := hasPrefix $.RelPermalink .URL }}
+                        <li class="menu-item{{ if $childActive }} current-menu-item{{ end }}">
+                            <a href="{{ .URL | relURL }}">{{ .Name }}</a>
+                        </li>
+                        {{ end }}
+                    </ul>
+                </li>
+                {{ else }}
+                <li class="menu-item menu-item-type-custom menu-item-object-custom{{ if $active }} current-menu-item current_page_item{{ end }}">
+                    <a href="{{ .URL | relURL }}">{{ .Name }}{{ if gt $count 0 }}<span class="nav-count">{{ $count }}</span>{{ end }}</a>
+                </li>
+                {{ end }}
+                {{ end }}
+                <li class="menu-item nav-rss">
+                    <a href="/index.xml" title="Subscribe via RSS" target="_blank" rel="noopener">
+                        <i class="fa-solid fa-rss"></i> RSS
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>

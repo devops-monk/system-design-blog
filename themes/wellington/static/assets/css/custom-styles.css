@@ -1,0 +1,22 @@
+html {
+    margin-top: 5px !important;
+}
+
+* html body {
+    margin-top: 5px !important;
+}
+
+@media screen and ( max-width: 782px ) {
+    html { margin-top: 5px !important; }
+    * html body { margin-top: 5px !important; }
+}
+
+.note {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	background-color: #F5F6CE;
+	border: 1px solid #585858;
+	padding: 15px;
+	border-radius: 5px;
+	color: #2E2E2E;
+}

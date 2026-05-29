@@ -1,0 +1,5 @@
+{{ if (not (eq .Site.Config.Services.Disqus.Shortname "")) }}
+<div class="comments">
+	{{ template "_internal/disqus.html" . }}
+</div>
+{{ end }}

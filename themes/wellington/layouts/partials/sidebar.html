@@ -1,0 +1,58 @@
+{{ if .Site.Params.widgets.search }}
+<aside id="search" class="widget clearfix">
+    <div class="widget-header"><h3 class="widget-title">Search</h3></div>
+    <form onsubmit="return searchSite(event)">
+        <input id="query" type="text" placeholder="Search..." />
+        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
+</aside>
+{{ end }}
+
+<aside id="recent-posts" class="widget clearfix">
+    <div class="widget-header">
+        <h3 class="widget-title">Recent Posts</h3>
+    </div>
+    <ul>
+        {{- $recent_articles_num := (.Site.Params.widgets.recent_articles_num | default 5) }}
+        {{- range first $recent_articles_num (where .Site.RegularPages "Section" "in" (.Site.Params.postSections | default (slice "posts"))) }}
+        <li class="widget__item"><a class="widget__link" href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+        {{- end }}
+    </ul>
+</aside>
+
+<aside id="categories" class="widget clearfix">
+    <div class="widget-header"><h3 class="widget-title">Categories</h3></div>
+    <ul>
+        {{- if isset .Site.Taxonomies "categories" }}
+        {{- if not (eq (len .Site.Taxonomies.categories) 0) }}
+        {{- range $name, $items := .Site.Taxonomies.categories }}
+        <li>
+            <a href="{{ "categories/" | relLangURL }}{{ $name | urlize | lower }}/"
+                title="{{ $name }}">
+            {{ $name | upper }}
+            </a>
+        </li>
+        {{- end }}
+        {{- end }}
+        {{- end }}
+    </ul>
+</aside>
+
+<aside id="tag_cloud" class="widget widget_tag_cloud clearfix">
+    <div class="widget-header"><h3 class="widget-title">Tags</h3></div>
+    <div class="tagcloud">
+        {{- if isset .Site.Taxonomies "tags" }}
+        {{- if not (eq (len .Site.Taxonomies.tags) 0) }}
+        <div class="widget__content">
+            {{- range $name, $items := .Site.Taxonomies.tags }}
+            <a class="tag-cloud-link widget__link widget__link--taglist"
+               href="{{ "tags/" | relLangURL }}{{ $name | urlize | lower }}/"
+               title="{{$name}}">
+                {{ $name | lower }}{{ if $.Site.Params.widgets.tags_counter }} ({{ $items.Count }}){{ end }}
+            </a>
+            {{- end }}
+        </div>
+        {{- end }}
+        {{- end }}
+    </div>
+</aside>

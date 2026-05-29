@@ -1,0 +1,19 @@
+{{ if (eq ($.Param "type") "post") }}
+{{ $related := .Site.RegularPages.Related . | first 3 }}
+{{ with $related }}
+<div class="related-posts">
+    <h3 class="related-title"><i class="fa-solid fa-layer-group"></i> You might also like</h3>
+    <div class="related-grid">
+        {{ range . }}
+        <a class="related-card" href="{{ .RelPermalink }}">
+            <span class="related-card-meta">{{ .Date.Format "Jan 2006" }} · {{ .ReadingTime }} min read</span>
+            <span class="related-card-title">{{ .Title }}</span>
+            {{ with .Params.categories }}
+            <span class="related-card-cat">{{ index . 0 }}</span>
+            {{ end }}
+        </a>
+        {{ end }}
+    </div>
+</div>
+{{ end }}
+{{ end }}

@@ -1,0 +1,30 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "0.128.0"
+
+      - name: Build with Hugo
+        run: hugo --minify
+
+      - name: Deploy to GitHub Pages repo
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.PAGES_TOKEN }}
+          external_repository: devops-monk/system-design-blog
+          publish_branch: master
+          publish_dir: ./public
+          commit_message: "deploy: ${{ github.event.head_commit.message }}"

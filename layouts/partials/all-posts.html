@@ -1,0 +1,34 @@
+<main id="main" class="site-main" role="main">
+    {{ if .IsHome }}
+    <div class="hero-card">
+        <img src="{{ "images/abhay.jpeg" | relURL }}" alt="Abhay" class="hero-avatar" />
+        <div class="hero-content">
+            <h2 class="hero-name">Hey, I'm Abhay 👋</h2>
+            <p class="hero-bio">Principal Software Engineer writing about system design — how to build systems that scale from one user to millions. Deep dives into the concepts behind real-world architecture decisions.</p>
+            <div class="hero-links">
+                <a href="/about/">About Me</a>
+                <a href="https://github.com/abhi15sep" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>
+                <a href="https://blog.devops-monk.com" target="_blank" rel="noopener"><i class="fa-solid fa-blog"></i> DevOps Blog</a>
+            </div>
+        </div>
+    </div>
+    <h3 class="posts-section-title">Latest Posts</h3>
+    {{ end }}
+
+    <div id="post-wrapper" class="post-wrapper clearfix">
+        <div class="post-column clearfix">
+            {{ $sourcePages := cond .IsHome (where .Pages "Type" "post") .Pages }}
+            {{ $paginator := .Paginate $sourcePages }}
+            {{ range $paginator.Pages }}
+            <article class="post type-post hentry">
+                {{ partial "post-meta.html" . }}
+                <div class="entry-content entry-excerpt clearfix">
+                    <p>{{ .Summary }}</p>
+                    <a href="{{ .Permalink }}" class="more-link">Continue reading &raquo;</a>
+                </div>
+            </article>
+            {{ end }}
+        </div>
+    </div>
+    {{ partial "pagination.html" . }}
+</main>

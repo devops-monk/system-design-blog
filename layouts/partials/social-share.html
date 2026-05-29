@@ -1,0 +1,15 @@
+<div class="social-share-bar">
+    <span class="share-label">Share:</span>
+    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ .Permalink }}&title={{ .Title | urlquery }}"
+       target="_blank" rel="noopener" class="share-btn share-linkedin" title="Share on LinkedIn">
+        <i class="fa-brands fa-linkedin-in"></i> LinkedIn
+    </a>
+    <a href="https://twitter.com/intent/tweet?url={{ .Permalink }}&text={{ .Title | urlquery }}"
+       target="_blank" rel="noopener" class="share-btn share-twitter" title="Share on Twitter / X">
+        <i class="fa-brands fa-x-twitter"></i> X
+    </a>
+    <a href="https://www.reddit.com/submit?url={{ .Permalink }}&title={{ .Title | urlquery }}"
+       target="_blank" rel="noopener" class="share-btn share-reddit" title="Share on Reddit">
+        <i class="fa-brands fa-reddit-alien"></i> Reddit
+    </a>
+</div>

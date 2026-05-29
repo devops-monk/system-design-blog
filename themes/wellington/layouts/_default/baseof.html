@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+{{ partial "head.html" . }}
+<body class="home blog post-layout-one-column">
+    <button onclick="topFunction()" id="scrollTopBtn" title="Go to top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+    <div id="header-top" class="header-bar-wrap"></div>
+    <div id="page" class="site">
+        <a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+        {{ partial "header.html" . }}
+        <div id="content" class="site-content container clearfix">
+            {{ block "main" . }} {{ end }}
+        </div>
+        <div id="footer" class="footer-wrap">
+            {{ partial "footer.html" . }}
+        </div>
+    </div>
+    <script type='text/javascript' src="{{"assets/js/custom.js" | relURL }}"></script>
+</body>
+</html>
