@@ -955,5 +955,3 @@ Congratulations on getting this far! Now give yourself a pat on the back. Good j
 In the next post, we cover **Back-of-the-Envelope Estimation** — how to quickly calculate QPS, storage requirements, and bandwidth before designing a system. This skill separates engineers who guess from those who reason from numbers.
 
 ---
-
-*Based on Chapter 1 of "System Design Interview: An Insider's Guide" by Alex Xu, with additional explanations and diagrams.*
