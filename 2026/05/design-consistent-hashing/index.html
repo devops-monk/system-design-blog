@@ -1,4 +1,4 @@
-<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - Design Consistent Hashing"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - A beginner-friendly deep dive into consistent hashing — the algorithm that powers Amazon DynamoDB, Apache Cassandra, Discord, and Akamai CDN. Understand hash rings, virtual nodes, and why this algorithm changed distributed systems forever."><title>System Design - Design Consistent Hashing </title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/design-consistent-hashing/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="Design Consistent Hashing"><meta property="og:description" content="A beginner-friendly deep dive into consistent hashing — the algorithm that powers Amazon DynamoDB, Apache Cassandra, Discord, and Akamai CDN. Understand hash rings, virtual nodes, and why this algorithm changed distributed systems forever."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T18:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T18:00:00+00:00"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Consistent-Hashing"><meta property="article:tag" content="Distributed-Systems"><meta property="article:tag" content="Dynamo"><meta property="article:tag" content="Cassandra"><meta property="article:tag" content="Caching"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"Design Consistent Hashing","headline":"Design Consistent Hashing","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/design-consistent-hashing/","description":"A beginner-friendly deep dive into consistent hashing — the algorithm that powers Amazon DynamoDB, Apache Cassandra, Discord, and Akamai CDN. Understand hash rings, virtual nodes, and why this algorithm changed distributed systems forever.","wordCount":"4078","keywords":["system-design","consistent-hashing","distributed-systems","dynamo","cassandra","caching"],"datePublished":"2026-05-30T18:00:00Z","dateModified":"2026-05-30T18:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/design-consistent-hashing/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/design-consistent-hashing/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script type=module>
+<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - Design Consistent Hashing"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - A beginner-friendly deep dive into consistent hashing — the algorithm that powers Amazon DynamoDB, Apache Cassandra, Discord, and Akamai CDN. Understand hash rings, virtual nodes, and why this algorithm changed distributed systems forever."><title>System Design - Design Consistent Hashing </title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/design-consistent-hashing/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="Design Consistent Hashing"><meta property="og:description" content="A beginner-friendly deep dive into consistent hashing — the algorithm that powers Amazon DynamoDB, Apache Cassandra, Discord, and Akamai CDN. Understand hash rings, virtual nodes, and why this algorithm changed distributed systems forever."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T18:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T18:00:00+00:00"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Consistent-Hashing"><meta property="article:tag" content="Distributed-Systems"><meta property="article:tag" content="Dynamo"><meta property="article:tag" content="Cassandra"><meta property="article:tag" content="Caching"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"Design Consistent Hashing","headline":"Design Consistent Hashing","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/design-consistent-hashing/","description":"A beginner-friendly deep dive into consistent hashing — the algorithm that powers Amazon DynamoDB, Apache Cassandra, Discord, and Akamai CDN. Understand hash rings, virtual nodes, and why this algorithm changed distributed systems forever.","wordCount":"4123","keywords":["system-design","consistent-hashing","distributed-systems","dynamo","cassandra","caching"],"datePublished":"2026-05-30T18:00:00Z","dateModified":"2026-05-30T18:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/design-consistent-hashing/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/design-consistent-hashing/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script type=module>
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
       mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
       document.addEventListener('DOMContentLoaded', () => mermaid.run());
@@ -40,23 +40,26 @@
 </pre><h3 id=the-catastrophe-what-happens-when-n-changes>The Catastrophe: What Happens When N Changes</h3><p>Now server 1 goes down. <code>N</code> changes from 4 to 3. We apply <code>hash(key) % 3</code>:</p><table><thead><tr><th>Key</th><th>hash(key)</th><th>hash(key) % 3</th><th>NEW Server</th><th>OLD Server</th><th>Moved?</th></tr></thead><tbody><tr><td>key0</td><td>18358617</td><td>0</td><td>server 0</td><td>server 1</td><td>✅ YES</td></tr><tr><td>key1</td><td>26143584</td><td>0</td><td>server 0</td><td>server 0</td><td>❌ no</td></tr><tr><td>key2</td><td>18131146</td><td>1</td><td>server 1</td><td>server 2</td><td>✅ YES</td></tr><tr><td>key3</td><td>35863496</td><td>2</td><td>server 2</td><td>server 0</td><td>✅ YES</td></tr><tr><td>key4</td><td>34085809</td><td>1</td><td>server 1</td><td>server 1</td><td>✅ YES</td></tr><tr><td>key5</td><td>27581703</td><td>0</td><td>server 0</td><td>server 3</td><td>✅ YES</td></tr><tr><td>key6</td><td>38164978</td><td>1</td><td>server 1</td><td>server 2</td><td>✅ YES</td></tr><tr><td>key7</td><td>22530351</td><td>0</td><td>server 0</td><td>server 3</td><td>✅ YES</td></tr></tbody></table><p><strong>7 out of 8 keys</strong> moved to a different server. Only key1 stayed put.</p><pre class=mermaid>flowchart LR
     subgraph BEFORE["Before: N=4"]
         direction TB
-        B0["Server 0\nkey1 key3"]
-        B1["Server 1\nkey0 key4"]
-        B2["Server 2\nkey2 key6"]
-        B3["Server 3\nkey5 key7"]
+        B0["Server 0: key1, key3"]
+        B1["Server 1: key0, key4"]
+        B2["Server 2: key2, key6"]
+        B3["Server 3: key5, key7"]
     end
 
-    subgraph AFTER["After: N=3 (server 1 removed)"]
+    subgraph AFTER["After: N=3 — server 1 removed"]
         direction TB
-        A0["Server 0\nkey0 key1 key5 key7"]
-        A1["Server 1\nkey2 key4 key6"]
-        A2["Server 2\nkey3"]
-        A3["❌ Server 1\n(gone)"]
+        A0["Server 0: key0, key1, key5, key7"]
+        A1["Server 1: key2, key4, key6"]
+        A2["Server 2: key3"]
+        A3["❌ Server 1: gone"]
     end
 
-    BEFORE -->|"Resize N"| AFTER
+    subgraph IMPACT["Impact"]
+        NOTE["😱 7 of 8 keys remapped to new servers\nEvery remapped key = cache miss\nEvery cache miss = database query\nDatabase overloaded instantly!"]
+    end
 
-    NOTE["😱 7 of 8 keys remapped!\nEvery cache miss = DB query\nDatabase immediately overloaded"]
+    BEFORE -->|"N changes from 4 to 3"| AFTER
+    AFTER --> IMPACT
 </pre><p>This is devastating in production. Every remapped key is a <strong>cache miss</strong>. Every cache miss is a <strong>database query</strong>. With millions of keys remapping simultaneously, your database gets a thundering herd of requests it was never designed to handle. The very moment you scale — the moment your system is under stress — traditional hashing makes everything worse.</p><p>This is the problem consistent hashing solves.</p><hr><h2 id=part-2--consistent-hashing-the-core-idea>Part 2 — Consistent Hashing: The Core Idea</h2><p>From Wikipedia:</p><blockquote><p><em>&ldquo;Consistent hashing is a special kind of hashing such that when a hash table is re-sized and consistent hashing is used, only <strong>k/n</strong> keys need to be remapped on average, where k is the number of keys, and n is the number of slots.&rdquo;</em></p></blockquote><p>In plain English: instead of remapping nearly all keys when servers change, consistent hashing remaps only the minimum necessary fraction.</p><p>With 4 servers and 100 keys:</p><ul><li><strong>Traditional hashing:</strong> ~75 keys remapped when 1 server removed</li><li><strong>Consistent hashing:</strong> ~25 keys remapped (only the ones that were on that server)</li></ul><p>The ratio <code>k/n</code> means: with <code>k</code> keys and <code>n</code> servers, only <code>k/n</code> keys move — exactly the keys that <em>were</em> on the removed server. Everything else stays put.</p><hr><h2 id=part-3--the-hash-ring-how-it-works>Part 3 — The Hash Ring: How It Works</h2><h3 id=step-1-create-the-hash-space>Step 1: Create the Hash Space</h3><p>Using SHA-1 as our hash function, the output range goes from <code>0</code> to <code>2^160 - 1</code>. That&rsquo;s a number with 48 digits. We represent this as a linear space:</p><pre tabindex=0><code>x0 ←──────────────────────────────────────────────────────────→ xn
 0                                                          2^160-1
 </code></pre><h3 id=step-2-bend-it-into-a-ring>Step 2: Bend It Into a Ring</h3><p>Now the magic: we bend this linear space into a circle by connecting the two ends. <code>x0</code> and <code>xn</code> meet. We call this the <strong>hash ring</strong> (also called the hash circle or token ring).</p><pre class=mermaid>graph LR
@@ -177,32 +180,32 @@ After Server 4: key0 walks clockwise and hits Server 4 first. Server 4 is now re
 
     RESULT["✅ Only key1 moved to Server 2!\nkey0, key2, key3 completely unaffected."]
 </pre><p><strong>Only key1 is affected.</strong> Since Server 1 is gone, key1 now walks clockwise and lands on Server 2 instead. Every other key was never in Server 1&rsquo;s arc — they&rsquo;re untouched.</p><p><strong>The maths:</strong> With <code>n</code> servers and <code>k</code> keys, consistent hashing moves only <code>k/n</code> keys on average when a server joins or leaves. With 4 servers and 100 keys, that&rsquo;s only 25 keys out of 100. Compare that to traditional hashing which would move ~75 keys.</p><hr><h2 id=part-5--two-problems-with-the-basic-approach>Part 5 — Two Problems with the Basic Approach</h2><p>The basic consistent hashing algorithm was introduced by Karger et al. at MIT. It&rsquo;s brilliant, but it has two real-world problems that need solving before production use.</p><h3 id=problem-1-unequal-partition-sizes->Problem 1: Unequal Partition Sizes 📐</h3><p>A <strong>partition</strong> is the arc of hash space between two adjacent servers. In an ideal world, all partitions are the same size — each server owns the same fraction of the ring.</p><p>But in practice, because server positions are determined by hashing their IP addresses, they can land anywhere. If servers cluster together on one side of the ring, the resulting partitions are wildly unequal.</p><pre class=mermaid>graph LR
-    subgraph UNEQUAL["😱 After Server 1 is removed"]
+    subgraph UNEQUAL["After Server 1 is removed — Unequal Partitions"]
         direction LR
-        S0["🟣 Server 0\n(large partition)"]
-        S2["🟠 Server 2\n(small partition)"]
-        S3["🟢 Server 3\n(medium partition)"]
+        S0["🟣 Server 0\nlarge partition"]
+        S2["🟠 Server 2\nsmall partition"]
+        S3["🟢 Server 3\nmedium partition"]
+        WARN["⚠️ Server 0 handles far more traffic\nthan Server 2 or Server 3.\nLoad imbalance!"]
         
-        S0 -->|"Large arc\n(was S0→S1→S2,\nnow S0→S2)"| S2
+        S0 -->|"Large arc — was S0 to S1 to S2"| S2
         S2 -->|"Small arc"| S3
-        S3 -->|"Medium arc\n(wraps to S0)"| S0
+        S3 -->|"Medium arc — wraps to S0"| S0
+        S0 --- WARN
     end
-
-    NOTE["⚠️ Server 0 now handles\nfar more traffic than\nServer 2 or Server 3.\nLoad imbalance!"]
 </pre><p>When Server 1 is removed, Server 2&rsquo;s partition grows to include Server 1&rsquo;s old arc. Server 0&rsquo;s partition is now twice as large as Server 3&rsquo;s. Server 2&rsquo;s partition is tiny. <strong>Unbalanced load, hot servers, slow responses.</strong></p><h3 id=problem-2-non-uniform-key-distribution->Problem 2: Non-Uniform Key Distribution 🎯</h3><p>Even without removing servers, if servers happen to hash to positions that are clustered together, most keys will land on one server while others sit nearly empty.</p><pre class=mermaid>graph LR
-    subgraph CLUSTERED["😱 Servers Clustered Together"]
+    subgraph CLUSTERED["Servers Clustered Together — Key Distribution Skewed"]
         S0["🟣 Server 0"]
         S1["🔵 Server 1"]
-        S2["🟠 Server 2\n(huge partition\nhandles most keys)"]
+        S2["🟠 Server 2\nhugest partition — most keys land here"]
         S3["🟢 Server 3"]
+        WARN["⚠️ Server 2 handles 70% of keys\nServer 1 handles only 5%\nMassively unbalanced system!"]
 
         S3 -->|"tiny arc"| S0
         S0 -->|"tiny arc"| S1
         S1 -->|"tiny arc"| S2
-        S2 -->|"HUGE arc\n(most keys land here)"| S3
+        S2 -->|"HUGE arc"| S3
+        S2 --- WARN
     end
-
-    NOTE["⚠️ Server 2 handles 70% of keys.\nServer 1 handles 5% of keys.\nThe system is massively unbalanced."]
 </pre><p>The book gives a real, relatable example:</p><blockquote><p><em>&ldquo;Imagine data for Katy Perry, Justin Bieber, and Lady Gaga all end up on the same shard. Excessive access to a specific shard could cause server overload.&rdquo;</em></p></blockquote><p>If three of the world&rsquo;s most-followed celebrities happen to hash to the same partition, that one server handles an insane share of traffic while others sit idle. This is called the <strong>hotspot problem</strong>.</p><p>Both of these problems have the same solution: <strong>Virtual Nodes</strong>.</p><hr><h2 id=part-6--virtual-nodes-the-real-world-solution>Part 6 — Virtual Nodes: The Real-World Solution</h2><p>A <strong>virtual node</strong> (also called a replica or vnode) is a phantom copy of a server on the ring. Instead of each physical server appearing once, it appears many times at different positions.</p><h3 id=how-virtual-nodes-work>How Virtual Nodes Work</h3><p>Instead of mapping <code>server0</code> to one position, we create multiple virtual nodes:</p><ul><li><code>server0_0</code>, <code>server0_1</code>, <code>server0_2</code> → each hashes to a different position</li><li><code>server1_0</code>, <code>server1_1</code>, <code>server1_2</code> → each hashes to a different position</li></ul><pre class=mermaid>graph LR
     subgraph VNODE_RING["Hash Ring with Virtual Nodes (3 vnodes each)"]
         direction LR
@@ -237,15 +240,15 @@ After Server 4: key0 walks clockwise and hits Server 4 first. Server 4 is now re
         D["With many vnodes, they land on\ndifferent physical servers\n\nKaty Perry → Server 2\nJustin Bieber → Server 0\nLady Gaga → Server 3"]
         C --> D
     end
-</pre><p><strong>With more virtual nodes, the load distribution gets mathematically better:</strong></p><table><thead><tr><th>Virtual Nodes per Server</th><th>Standard Deviation of Load</th></tr></thead><tbody><tr><td>1 (no virtual nodes)</td><td>Very high (unpredictable)</td></tr><tr><td>100 virtual nodes</td><td>~10% of mean</td></tr><tr><td>200 virtual nodes</td><td>~5% of mean</td></tr><tr><td>500+ virtual nodes</td><td>~2% of mean</td></tr></tbody></table><p>This comes from research cited in the book. With 100–200 virtual nodes per server, the load distribution is so balanced that the variation is negligible in practice.</p><p><strong>Apache Cassandra defaults to 256 virtual nodes per physical node.</strong> That&rsquo;s why Cassandra can add or remove nodes with almost zero impact on cluster performance.</p><h3 id=heterogeneous-servers-proportional-allocation>Heterogeneous Servers: Proportional Allocation</h3><p>Virtual nodes give you a powerful bonus: you can allocate proportionally based on server capacity.</p><pre class=mermaid>graph LR
-    subgraph HETERO["Heterogeneous Cluster with Virtual Nodes"]
-        direction TB
-        STRONG["💪 Strong Server\n32 CPU cores, 256GB RAM\n→ 300 virtual nodes\n(handles 3× the traffic)"]
-        MEDIUM["🖥️ Medium Server\n16 cores, 128GB RAM\n→ 150 virtual nodes\n(handles 1.5× the traffic)"]
-        WEAK["📟 Weak Server\n8 cores, 32GB RAM\n→ 50 virtual nodes\n(handles less traffic)"]
+</pre><p><strong>With more virtual nodes, the load distribution gets mathematically better:</strong></p><table><thead><tr><th>Virtual Nodes per Server</th><th>Standard Deviation of Load</th></tr></thead><tbody><tr><td>1 (no virtual nodes)</td><td>Very high (unpredictable)</td></tr><tr><td>100 virtual nodes</td><td>~10% of mean</td></tr><tr><td>200 virtual nodes</td><td>~5% of mean</td></tr><tr><td>500+ virtual nodes</td><td>~2% of mean</td></tr></tbody></table><p>This comes from research cited in the book. With 100–200 virtual nodes per server, the load distribution is so balanced that the variation is negligible in practice.</p><p><strong>Apache Cassandra defaults to 256 virtual nodes per physical node.</strong> That&rsquo;s why Cassandra can add or remove nodes with almost zero impact on cluster performance.</p><h3 id=heterogeneous-servers-proportional-allocation>Heterogeneous Servers: Proportional Allocation</h3><p>Virtual nodes give you a powerful bonus: you can allocate proportionally based on server capacity.</p><pre class=mermaid>graph TD
+    subgraph HETERO["Heterogeneous Cluster — Proportional Virtual Nodes"]
+        direction LR
+        STRONG["💪 Strong Server\n32 cores / 256GB RAM\n300 virtual nodes\nhandles 3x traffic"]
+        MEDIUM["🖥️ Medium Server\n16 cores / 128GB RAM\n150 virtual nodes\nhandles 1.5x traffic"]
+        WEAK["📟 Weak Server\n8 cores / 32GB RAM\n50 virtual nodes\nhandles baseline traffic"]
+        RULE["✅ No special routing logic.\nMore virtual nodes on ring\n= more keys assigned\n= proportional load automatically."]
+        STRONG --- MEDIUM --- WEAK --- RULE
     end
-
-    NOTE["No special routing logic needed.\nThe ring naturally routes more\nkeys to the stronger server\nbecause it has more virtual nodes."]
 </pre><p>No custom routing logic. No configuration files. The ring handles it automatically. More virtual nodes = more arcs = more keys = more load. It&rsquo;s proportional by construction.</p><hr><h2 id=part-7--finding-affected-keys-when-servers-change>Part 7 — Finding Affected Keys When Servers Change</h2><p>When a server joins or leaves, which specific keys need to be moved? The answer comes from a simple anticlockwise scan rule.</p><h3 id=when-a-server-is-added>When a Server is Added</h3><p>To find which keys move to the new server, start at the <strong>new server&rsquo;s position</strong> and scan <strong>anticlockwise</strong> until you hit another server. All keys in that anticlockwise arc belong to the new server.</p><pre class=mermaid>sequenceDiagram
     participant Admin as "👤 Admin"
     participant Ring as "Hash Ring"
@@ -285,10 +288,10 @@ After Server 4: key0 walks clockwise and hits Server 4 first. Server 4 is now re
         S3["🟣 Server 3 ← 3rd replica"]
         S4["🟠 Server 4"]
 
-        K0 -->|walk clockwise| S0 -->|skip\n(look for unique servers)| S1 -->|clockwise| S2 -->|clockwise| S3
+        K0 -->|"walk clockwise"| S0 -->|"skip same-physical"| S1 -->|"replica 1"| S2 -->|"replica 2"| S3
+        STORED["✅ key0 stored on Server 1, Server 2, Server 3\nIf Server 1 goes down, Server 2 and 3 still have the data!"]
+        S3 --- STORED
     end
-
-    NOTE["key0 is stored on\nServer 1, Server 2, AND Server 3.\n\nIf Server 1 goes down,\nServer 2 and Server 3\nstill have the data. No data loss!"]
 </pre><p><strong>Important:</strong> With virtual nodes, you must skip virtual nodes that belong to the same physical server. If <code>s1_0</code> and <code>s1_1</code> are both for Server 1, you skip the second one — otherwise the same physical machine stores two &ldquo;replicas,&rdquo; which defeats the purpose.</p><p><strong>For maximum resilience</strong>, replicas are placed in <strong>different data centers</strong> — so a power outage, network failure, or natural disaster doesn&rsquo;t take down all copies of your data simultaneously.</p><hr><h2 id=part-9--where-consistent-hashing-lives-in-production>Part 9 — Where Consistent Hashing Lives in Production</h2><p>Consistent hashing is not an academic exercise. It&rsquo;s running in systems you use every single day.</p><pre class=mermaid>mindmap
   root(("Consistent\nHashing\nin Production"))
     Amazon DynamoDB
