@@ -1,4 +1,4 @@
-<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - Design a Rate Limiter"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - A deep dive into how rate limiters work — from token buckets to distributed Redis, with real-world examples from AWS, Stripe, and Cloudflare. Chapter 4 of System Design Interview."><title>System Design - Design a Rate Limiter </title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/design-a-rate-limiter/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="Design a Rate Limiter"><meta property="og:description" content="A deep dive into how rate limiters work — from token buckets to distributed Redis, with real-world examples from AWS, Stripe, and Cloudflare. Chapter 4 of System Design Interview."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T12:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T12:00:00+00:00"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Rate-Limiter"><meta property="article:tag" content="Redis"><meta property="article:tag" content="Distributed-Systems"><meta property="article:tag" content="Api"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"Design a Rate Limiter","headline":"Design a Rate Limiter","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/design-a-rate-limiter/","description":"A deep dive into how rate limiters work — from token buckets to distributed Redis, with real-world examples from AWS, Stripe, and Cloudflare. Chapter 4 of System Design Interview.","wordCount":"4074","keywords":["system-design","rate-limiter","redis","distributed-systems","api"],"datePublished":"2026-05-30T12:00:00Z","dateModified":"2026-05-30T12:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/design-a-rate-limiter/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/design-a-rate-limiter/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script type=module>
+<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - Design a Rate Limiter"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - A complete, beginner-friendly deep dive into designing a rate limiter — covering all 5 algorithms, Redis architecture, distributed challenges, and real patterns from AWS, Stripe, Shopify & Cloudflare."><title>System Design - Design a Rate Limiter </title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/design-a-rate-limiter/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="Design a Rate Limiter"><meta property="og:description" content="A complete, beginner-friendly deep dive into designing a rate limiter — covering all 5 algorithms, Redis architecture, distributed challenges, and real patterns from AWS, Stripe, Shopify & Cloudflare."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T12:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T12:00:00+00:00"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Rate-Limiter"><meta property="article:tag" content="Redis"><meta property="article:tag" content="Distributed-Systems"><meta property="article:tag" content="Api"><meta property="article:tag" content="Algorithms"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"Design a Rate Limiter","headline":"Design a Rate Limiter","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/design-a-rate-limiter/","description":"A complete, beginner-friendly deep dive into designing a rate limiter — covering all 5 algorithms, Redis architecture, distributed challenges, and real patterns from AWS, Stripe, Shopify \u0026 Cloudflare.","wordCount":"5459","keywords":["system-design","rate-limiter","redis","distributed-systems","api","algorithms"],"datePublished":"2026-05-30T12:00:00Z","dateModified":"2026-05-30T12:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/design-a-rate-limiter/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/design-a-rate-limiter/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script type=module>
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
       mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
       document.addEventListener('DOMContentLoaded', () => mermaid.run());
@@ -6,7 +6,7 @@
 <i class="fa-solid fa-arrow-up"></i></button><div id=header-top class=header-bar-wrap></div><div id=page class=site><a class="skip-link screen-reader-text" href=#content>Skip to content</a><header id=masthead class="site-header clearfix" role=banner><div class="header-main container clearfix"><div id=logo class="site-branding clearfix"><h1 class=site-title><a href=/ title="System Design" rel=home>System Design</a></h1><p class=site-description>Build Systems That Scale</p></div><button id=dark-mode-toggle title="Toggle dark mode" aria-label="Toggle dark mode">
 <i class="fa-solid fa-moon" id=dm-icon></i></button></div><div id=main-navigation-wrap class=primary-navigation-wrap><nav id=main-navigation class="primary-navigation navigation container clearfix" role=navigation><ul id=menu-home class=main-navigation-menu><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/>Home</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/categories/fundamentals/>Fundamentals</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/categories/case-studies/>Case Studies</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children"><a href=#>Concepts</a><ul class=sub-menu><li class=menu-item><a href=/tags/scalability/>Scalability</a></li><li class=menu-item><a href=/tags/databases/>Databases</a></li><li class=menu-item><a href=/tags/caching/>Caching</a></li><li class=menu-item><a href=/tags/load-balancing/>Load Balancing</a></li><li class=menu-item><a href=/tags/message-queues/>Message Queues</a></li></ul></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/about/>About</a></li><li class="menu-item nav-rss"><a href=/index.xml title="Subscribe via RSS" target=_blank rel=noopener><i class="fa-solid fa-rss"></i> RSS</a></li></ul></nav></div></header><div id=content class="site-content container clearfix"><section id=primary class="content-archive content-area post-content-area"><main id=main class=site-main role=main><article class="post type-post"><div class=post-inner-content><header class=entry-header><div class=entry-meta><span class=meta-date><a href=https://system-design.devops-monk.com/2026/05/design-a-rate-limiter/ rel=bookmark><time class="entry-date published" datetime=2026-05-30T12:00:00>May 30, 2026
 </time></a></span><span class=meta-author><span class="author vcard">Abhay</span>
-</span><span class=meta-reading-time>20 min read</span></div><h2 class=entry-title><a href=https://system-design.devops-monk.com/2026/05/design-a-rate-limiter/ rel=bookmark>Design a Rate Limiter</a></h2><div><span class="tagcloud post-tags"><i class="fa fa-tags"></i>
+</span><span class=meta-reading-time>26 min read</span></div><h2 class=entry-title><a href=https://system-design.devops-monk.com/2026/05/design-a-rate-limiter/ rel=bookmark>Design a Rate Limiter</a></h2><div><span class="tagcloud post-tags"><i class="fa fa-tags"></i>
 <a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/system-design/>system-design</a>
 &nbsp;
 <a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/rate-limiter/>rate-limiter</a>
@@ -15,7 +15,9 @@
 &nbsp;
 <a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/distributed-systems/>distributed-systems</a>
 &nbsp;
-<a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/api/>api</a></span></div></header><div class=social-share-bar><span class=share-label>Share:</span>
+<a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/api/>api</a>
+&nbsp;
+<a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/algorithms/>algorithms</a></span></div></header><div class=social-share-bar><span class=share-label>Share:</span>
 <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fdesign-a-rate-limiter%2f&title=Design&#43;a+Rate+Limiter" target=_blank rel=noopener class="share-btn share-linkedin" title="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i> LinkedIn
 </a><a href="https://twitter.com/intent/tweet?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fdesign-a-rate-limiter%2f&text=Design&#43;a+Rate+Limiter" target=_blank rel=noopener class="share-btn share-twitter" title="Share on Twitter / X"><i class="fa-brands fa-x-twitter"></i> X
 </a><a href="https://www.reddit.com/submit?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fdesign-a-rate-limiter%2f&title=Design&#43;a+Rate+Limiter" target=_blank rel=noopener class="share-btn share-reddit" title="Share on Reddit"><i class="fa-brands fa-reddit-alien"></i> Reddit</a></div><div id=tts-player class=tts-player role=region aria-label="Article audio player"><div class=tts-inner><div class=tts-meta><span class=tts-headphone aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" width="22" height="22" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3z"/><path d="M3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span><div><div class=tts-title>Listen to this article</div><div class=tts-status id=tts-status>Click ▶ to start</div></div></div><div class=tts-controls><button class=tts-icon-btn id=tts-stop title="Stop & reset" aria-label=Stop>
@@ -25,549 +27,560 @@
 <span id=tts-play-label><svg id="tts-play-icon" viewBox="0 0 24 24" fill="currentcolor" width="20" height="20"><path d="M6 4l14 8-14 8z"/></svg>
 <svg id="tts-pause-icon" viewBox="0 0 24 24" fill="currentcolor" width="20" height="20" style="display:none"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
 </span><span class=tts-play-text id=tts-play-text>Play</span></button><div class=tts-speed><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" width="14" height="14" aria-hidden="true"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/></svg>
-<select id=tts-speed-select class=tts-speed-select aria-label="Playback speed"><option value=0.75>0.75×</option><option value=1 selected>1×</option><option value=1.25>1.25×</option><option value=1.5>1.5×</option><option value=2>2×</option></select></div></div><div class=tts-counter id=tts-counter aria-live=polite>0%</div></div><div class=tts-track><div class=tts-fill id=tts-progress-bar></div></div></div><style>.tts-player{position:sticky;top:0;z-index:200;background:#0f172a;border-bottom:2px solid #6366f1;box-shadow:0 2px 16px rgba(0,0,0,.4);margin-bottom:2rem;font-family:-apple-system,BlinkMacSystemFont,segoe ui,sans-serif}.tts-inner{display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap}.tts-meta{display:flex;align-items:center;gap:10px;flex:1;min-width:160px}.tts-headphone{color:#818cf8;flex-shrink:0}.tts-title{font-size:13px;font-weight:700;color:#f1f5f9;letter-spacing:.02em;line-height:1.2}.tts-status{font-size:11px;color:#64748b;margin-top:2px;line-height:1}.tts-controls{display:flex;align-items:center;gap:10px}.tts-icon-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:none;background:#1e293b;color:#64748b;cursor:pointer;transition:background .15s,color .15s;flex-shrink:0}.tts-icon-btn:hover{background:#ef4444;color:#fff}.tts-play-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:999px;border:none;background:#6366f1;color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,transform .1s;flex-shrink:0}.tts-play-btn:hover{background:#4f46e5;transform:scale(1.03)}.tts-play-btn.active{background:#10b981}.tts-play-text{white-space:nowrap}.tts-speed{display:flex;align-items:center;gap:5px;color:#475569}.tts-speed-select{background:#1e293b;color:#cbd5e1;border:1px solid #334155;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer;outline:none}.tts-speed-select:focus{border-color:#6366f1}.tts-counter{font-size:12px;font-weight:600;color:#475569;min-width:36px;text-align:right;white-space:nowrap}.tts-track{height:3px;background:#1e293b;width:100%}.tts-fill{height:3px;width:0%;background:linear-gradient(90deg,#6366f1 0%,#10b981 100%);transition:width .35s linear}.tts-reading{background:rgba(99,102,241,7%)!important;border-left:3px solid #6366f1!important;padding-left:10px!important;border-radius:0 4px 4px 0!important;transition:background .3s!important}@media(max-width:520px){.tts-inner{gap:8px;padding:8px 12px}.tts-speed{display:none}.tts-counter{display:none}}</style><script>document.addEventListener("DOMContentLoaded",function(){var e,t,s,i,r,c,l,d,u,h,m,g,v,n=window.speechSynthesis,p=document.getElementById("tts-player");if(!n||!p)return;s=document.getElementById("tts-play"),r=document.getElementById("tts-play-text"),v=document.getElementById("tts-stop"),c=document.getElementById("tts-play-icon"),l=document.getElementById("tts-pause-icon"),g=document.getElementById("tts-status"),m=document.getElementById("tts-progress-bar"),h=document.getElementById("tts-counter"),d=document.getElementById("tts-speed-select"),u=document.querySelector(".entry-content")||document.querySelector(".post-content")||document.querySelector("article .content")||document.querySelector("article")||document.querySelector("main"),t=[],i=0,e=!1;function _(){if(!u){p.style.display="none";return}var e=u.querySelectorAll("p, h1, h2, h3, h4, li, blockquote");t=Array.from(e).filter(function(e){return e.textContent.trim().length>15&&!e.closest("#tts-player")}),t.length||(p.style.display="none")}function o(e){g.textContent=e}function b(e){if(!t.length)return;var n=Math.round(e/t.length*100);m.style.width=n+"%",h.textContent=n+"%"}function f(){document.querySelectorAll(".tts-reading").forEach(function(e){e.classList.remove("tts-reading")})}function a(s){if(n.cancel(),f(),s>=t.length){y(),o("Finished ✓"),b(t.length);return}i=s;var r,c=t[s],l=c.textContent.trim().replace(/\s+/g," ");c.classList.add("tts-reading"),c.scrollIntoView({behavior:"smooth",block:"center"}),r=new SpeechSynthesisUtterance(l),r.rate=parseFloat(d.value),r.pitch=1,r.lang="en-US",b(s+1),o(s+1+" of "+t.length+" sections"),r.onend=function(){c.classList.remove("tts-reading"),e&&a(s+1)},r.onerror=function(){c.classList.remove("tts-reading"),e&&a(s+1)},n.speak(r)}function w(){e=!0,s.classList.add("active"),c.style.display="none",l.style.display="block",r.textContent="Pause",o("Playing…"),a(i)}function j(){e=!1,s.classList.remove("active"),c.style.display="block",l.style.display="none",r.textContent="Play",n.cancel(),f(),o("Paused — click Play to resume")}function y(){e=!1,i=0,s.classList.remove("active"),c.style.display="block",l.style.display="none",r.textContent="Play",n.cancel(),f(),m.style.width="0%",h.textContent="0%",o("Click ▶ to start")}s.addEventListener("click",function(){e?j():w()}),v.addEventListener("click",y),d.addEventListener("change",function(){e&&a(i)}),window.addEventListener("beforeunload",function(){n.cancel()}),document.addEventListener("visibilitychange",function(){document.hidden&&e&&j()}),_()})</script><div class=entry-content><p>Picture this: it&rsquo;s Black Friday. Millions of shoppers hammer your checkout API at the same moment. Without a rate limiter, your servers buckle, legitimate customers get errors, and your database melts. A rate limiter is the bouncer at the door — it decides who gets in and how fast.</p><p>In this article, we&rsquo;ll build a rate limiter from scratch — understanding every algorithm, every tradeoff, and every subtle distributed-systems problem you&rsquo;ll hit in real life. By the end, you&rsquo;ll know exactly how companies like <strong>AWS</strong>, <strong>Stripe</strong>, <strong>Shopify</strong>, and <strong>Cloudflare</strong> throttle billions of requests per day.</p><hr><h2 id=why-do-we-need-a-rate-limiter>Why Do We Need a Rate Limiter?</h2><p>Before diving into <em>how</em>, let&rsquo;s be crystal clear about <em>why</em>.</p><pre class=mermaid>mindmap
-  root((Rate Limiter))
-    Security
-      Block brute-force attacks
-      Prevent credential stuffing
-      DDoS protection
-    Reliability
-      Protect servers from overload
-      Ensure fair usage
-      Prevent cascading failures
-    Business
-      Enforce API pricing tiers
-      Control infrastructure costs
-      SLA compliance
-    UX
-      Consistent performance
-      No one user hogs resources
-      Graceful degradation
-</pre><p><strong>Real-world examples of what happens without rate limiting:</strong></p><ul><li>A malicious bot tries 10,000 password combinations against your login endpoint in 30 seconds → account takeover</li><li>A poorly written client SDK has a bug and fires 500 requests/second per user → your database crashes for everyone</li><li>A competitor scrapes your entire product catalogue in one hour → massive AWS bill, site slowdown</li><li>A flash sale sends 100× normal traffic to <code>/checkout</code> → revenue-generating traffic gets dropped</li></ul><p>A rate limiter prevents all of these. It&rsquo;s not optional for any serious API.</p><hr><h2 id=step-1--understand-the-requirements>Step 1 — Understand the Requirements</h2><p>In a system design interview (and in real life), you always start by clarifying what you&rsquo;re building. Here are the key questions:</p><pre class=mermaid>flowchart TD
-    A[Start: Design a Rate Limiter] --> B{Client-side or\nServer-side?}
-    B -->|Server-side| C{What to throttle?}
-    C --> D[Per User ID?]
-    C --> E[Per IP Address?]
-    C --> F[Per API Key?]
-    C --> G[Global across all users?]
-    D & E & F & G --> H{What happens when\nlimit is exceeded?}
-    H --> I[Drop the request\nHTTP 429]
-    H --> J[Queue for later\nprocessing]
-    I & J --> K{Distributed or\nsingle server?}
-    K -->|Distributed| L[Need shared state\nacross servers]
-    K -->|Single| M[Simpler — in-memory only]
-    L --> N[Final Requirements Locked]
-    M --> N
-</pre><p>For our design, we&rsquo;ll assume:</p><ul><li><strong>Server-side</strong> rate limiter (never trust clients to rate-limit themselves)</li><li>Throttle on <strong>User ID</strong>, <strong>IP Address</strong>, and <strong>API Key</strong> depending on the rule</li><li>Return <strong>HTTP 429</strong> with helpful headers when throttled</li><li>Must work in a <strong>distributed environment</strong> with multiple rate limiter servers</li><li><strong>Highly available</strong> — the rate limiter itself must not be a single point of failure</li><li><strong>Low latency</strong> — adding &lt; 1ms overhead per request</li></ul><hr><h2 id=step-2--the-five-rate-limiting-algorithms>Step 2 — The Five Rate Limiting Algorithms</h2><p>This is the heart of the chapter. There are five main algorithms, each with different tradeoffs. Let&rsquo;s understand all of them deeply.</p><hr><h3 id=algorithm-1-token-bucket->Algorithm 1: Token Bucket 🪣</h3><p><strong>Used by: AWS API Gateway, Stripe, most REST APIs</strong></p><p>Imagine a bucket that holds tokens. Every second, new tokens drip in. Every request spends one token. No tokens left? Request denied.</p><pre class=mermaid>flowchart LR
-    R[Token Refiller\n2 tokens/sec] -->|fills| B["🪣 Bucket\nCapacity: 4\nCurrent: 3 tokens"]
-    REQ[Incoming\nRequest] --> CHECK{Enough\ntokens?}
-    B -->|token count| CHECK
-    CHECK -->|✅ Yes: take 1 token| SERVER[API Server\n✅ Request Allowed]
-    CHECK -->|❌ No tokens left| DROP[❌ Request Dropped\nHTTP 429]
-</pre><p><strong>How it works step by step:</strong></p><pre class=mermaid>sequenceDiagram
-    participant Client
-    participant RateLimiter
-    participant Bucket
-    participant APIServer
+<select id=tts-speed-select class=tts-speed-select aria-label="Playback speed"><option value=0.75>0.75×</option><option value=1 selected>1×</option><option value=1.25>1.25×</option><option value=1.5>1.5×</option><option value=2>2×</option></select></div></div><div class=tts-counter id=tts-counter aria-live=polite>0%</div></div><div class=tts-track><div class=tts-fill id=tts-progress-bar></div></div></div><style>.tts-player{position:sticky;top:0;z-index:200;background:#0f172a;border-bottom:2px solid #6366f1;box-shadow:0 2px 16px rgba(0,0,0,.4);margin-bottom:2rem;font-family:-apple-system,BlinkMacSystemFont,segoe ui,sans-serif}.tts-inner{display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap}.tts-meta{display:flex;align-items:center;gap:10px;flex:1;min-width:160px}.tts-headphone{color:#818cf8;flex-shrink:0}.tts-title{font-size:13px;font-weight:700;color:#f1f5f9;letter-spacing:.02em;line-height:1.2}.tts-status{font-size:11px;color:#64748b;margin-top:2px;line-height:1}.tts-controls{display:flex;align-items:center;gap:10px}.tts-icon-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:none;background:#1e293b;color:#64748b;cursor:pointer;transition:background .15s,color .15s;flex-shrink:0}.tts-icon-btn:hover{background:#ef4444;color:#fff}.tts-play-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:999px;border:none;background:#6366f1;color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,transform .1s;flex-shrink:0}.tts-play-btn:hover{background:#4f46e5;transform:scale(1.03)}.tts-play-btn.active{background:#10b981}.tts-play-text{white-space:nowrap}.tts-speed{display:flex;align-items:center;gap:5px;color:#475569}.tts-speed-select{background:#1e293b;color:#cbd5e1;border:1px solid #334155;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer;outline:none}.tts-speed-select:focus{border-color:#6366f1}.tts-counter{font-size:12px;font-weight:600;color:#475569;min-width:36px;text-align:right;white-space:nowrap}.tts-track{height:3px;background:#1e293b;width:100%}.tts-fill{height:3px;width:0%;background:linear-gradient(90deg,#6366f1 0%,#10b981 100%);transition:width .35s linear}.tts-reading{background:rgba(99,102,241,7%)!important;border-left:3px solid #6366f1!important;padding-left:10px!important;border-radius:0 4px 4px 0!important;transition:background .3s!important}@media(max-width:520px){.tts-inner{gap:8px;padding:8px 12px}.tts-speed{display:none}.tts-counter{display:none}}</style><script>document.addEventListener("DOMContentLoaded",function(){var e,t,s,i,r,c,l,d,u,h,m,g,v,n=window.speechSynthesis,p=document.getElementById("tts-player");if(!n||!p)return;s=document.getElementById("tts-play"),r=document.getElementById("tts-play-text"),v=document.getElementById("tts-stop"),c=document.getElementById("tts-play-icon"),l=document.getElementById("tts-pause-icon"),g=document.getElementById("tts-status"),m=document.getElementById("tts-progress-bar"),h=document.getElementById("tts-counter"),d=document.getElementById("tts-speed-select"),u=document.querySelector(".entry-content")||document.querySelector(".post-content")||document.querySelector("article .content")||document.querySelector("article")||document.querySelector("main"),t=[],i=0,e=!1;function _(){if(!u){p.style.display="none";return}var e=u.querySelectorAll("p, h1, h2, h3, h4, li, blockquote");t=Array.from(e).filter(function(e){return e.textContent.trim().length>15&&!e.closest("#tts-player")}),t.length||(p.style.display="none")}function o(e){g.textContent=e}function b(e){if(!t.length)return;var n=Math.round(e/t.length*100);m.style.width=n+"%",h.textContent=n+"%"}function f(){document.querySelectorAll(".tts-reading").forEach(function(e){e.classList.remove("tts-reading")})}function a(s){if(n.cancel(),f(),s>=t.length){y(),o("Finished ✓"),b(t.length);return}i=s;var r,c=t[s],l=c.textContent.trim().replace(/\s+/g," ");c.classList.add("tts-reading"),c.scrollIntoView({behavior:"smooth",block:"center"}),r=new SpeechSynthesisUtterance(l),r.rate=parseFloat(d.value),r.pitch=1,r.lang="en-US",b(s+1),o(s+1+" of "+t.length+" sections"),r.onend=function(){c.classList.remove("tts-reading"),e&&a(s+1)},r.onerror=function(){c.classList.remove("tts-reading"),e&&a(s+1)},n.speak(r)}function w(){e=!0,s.classList.add("active"),c.style.display="none",l.style.display="block",r.textContent="Pause",o("Playing…"),a(i)}function j(){e=!1,s.classList.remove("active"),c.style.display="block",l.style.display="none",r.textContent="Play",n.cancel(),f(),o("Paused — click Play to resume")}function y(){e=!1,i=0,s.classList.remove("active"),c.style.display="block",l.style.display="none",r.textContent="Play",n.cancel(),f(),m.style.width="0%",h.textContent="0%",o("Click ▶ to start")}s.addEventListener("click",function(){e?j():w()}),v.addEventListener("click",y),d.addEventListener("change",function(){e&&a(i)}),window.addEventListener("beforeunload",function(){n.cancel()}),document.addEventListener("visibilitychange",function(){document.hidden&&e&&j()}),_()})</script><div class=entry-content><p>It&rsquo;s 11:59 PM on Black Friday. Your e-commerce platform has been running smoothly all day. Then at midnight, 500,000 shoppers simultaneously hammer your <code>/checkout</code> API. Your servers start queuing requests. Then they start dropping requests. Then they crash. Every second of downtime costs thousands of dollars in lost sales.</p><p>Meanwhile, a competitor&rsquo;s site — running the exact same infrastructure — handles the load just fine. The difference? They had a <strong>rate limiter</strong>.</p><p>A rate limiter is like the bouncer at an exclusive club. It doesn&rsquo;t care who you are. It enforces one rule: you can only enter at a certain pace. Too fast? You wait outside. This single mechanism protects your entire system from overload, abuse, and runaway costs.</p><p>In this article, we&rsquo;re going to build one — from scratch — understanding every algorithm, every architectural decision, and every subtle problem that bites teams in production. By the end, you&rsquo;ll understand exactly how <strong>Amazon</strong>, <strong>Stripe</strong>, <strong>Shopify</strong>, and <strong>Cloudflare</strong> throttle billions of API calls every single day.</p><hr><h2 id=what-exactly-is-a-rate-limiter>What Exactly Is a Rate Limiter?</h2><p>In plain English: a rate limiter controls how many requests a client can make to your system within a given time window.</p><p>Here are concrete examples straight from real systems:</p><ul><li>Twitter limits each user to <strong>300 tweets per 3 hours</strong></li><li>Google Docs APIs allow <strong>300 requests per user per 60 seconds</strong></li><li>GitHub API allows <strong>60 unauthenticated requests per hour</strong> per IP</li><li>Stripe allows <strong>100 API requests per second</strong> per API key</li><li>You can create a maximum of <strong>10 accounts per day</strong> from the same IP address</li><li>A user can write no more than <strong>2 posts per second</strong> on a social platform</li></ul><p>When a client exceeds these limits, the server returns an <strong>HTTP 429 Too Many Requests</strong> response and the excess calls are blocked.</p><hr><h2 id=why-does-every-serious-api-need-one>Why Does Every Serious API Need One?</h2><p>There are three core reasons, and they&rsquo;re all compelling:</p><pre class=mermaid>graph TD
+    RL["🛡️ Rate Limiter"]
 
-    Note over Bucket: Capacity=4, Tokens=4
-    Client->>RateLimiter: Request at 1:00:00
-    RateLimiter->>Bucket: Check tokens
-    Bucket-->>RateLimiter: 4 tokens available
-    RateLimiter->>Bucket: Consume 1 token (now 3)
-    RateLimiter->>APIServer: Forward request ✅
+    RL --> R1["🔴 Prevent DoS Attacks\n\nAlmost all APIs at large tech companies\nenforce rate limiting. Even an unintentional\nbug in a client that fires 500 req/sec\ncan take down your entire system."]
+    RL --> R2["💰 Reduce Cost\n\nIf you call a paid third-party API\nlike Stripe, Twilio, or AWS Rekognition,\neach call costs money.\nRate limiting prevents runaway bills."]
+    RL --> R3["⚡ Prevent Server Overload\n\nFilter out excess requests from bots,\nscrapers, and badly-written clients.\nProtect your database and keep the\nexperience fast for legitimate users."]
 
-    Note over Bucket: 3 requests burst at 1:00:05
-    Client->>RateLimiter: 3 simultaneous requests
-    RateLimiter->>Bucket: Check tokens
-    Bucket-->>RateLimiter: 3 tokens available
-    RateLimiter->>Bucket: Consume 3 tokens (now 0)
-    RateLimiter->>APIServer: Forward 3 requests ✅
+    style RL fill:#6366f1,color:#fff
+    style R1 fill:#fee2e2
+    style R2 fill:#fef9c3
+    style R3 fill:#dcfce7
+</pre><p><strong>The DoS angle is especially important.</strong> DoS (Denial of Service) attacks don&rsquo;t have to be malicious. A junior developer at a client company accidentally puts their API call inside a <code>while(true)</code> loop. Without a rate limiter, they&rsquo;ll take your system down just as effectively as an attacker would.</p><hr><h2 id=step-1--understand-the-problem-first>Step 1 — Understand the Problem First</h2><p>In a real system design interview (and in real life), you never jump straight to the solution. You ask questions. Here&rsquo;s how a great interview conversation about this problem looks:</p><pre class=mermaid>sequenceDiagram
+    participant C as Candidate
+    participant I as Interviewer
 
-    Note over Bucket: Bucket empty!
-    Client->>RateLimiter: Request at 1:00:20
-    RateLimiter->>Bucket: Check tokens
-    Bucket-->>RateLimiter: 0 tokens available
-    RateLimiter-->>Client: HTTP 429 Too Many Requests ❌
+    C->>I: What kind of rate limiter? Client-side or server-side?
+    I-->>C: Server-side API rate limiter.
 
-    Note over Bucket: Refiller adds 4 tokens at 1:01:00
-    Bucket->>Bucket: Refill to 4 tokens
-</pre><p><strong>Two key parameters:</strong></p><ul><li><strong>Bucket size</strong> — maximum tokens the bucket can hold (caps burst size)</li><li><strong>Refill rate</strong> — how many tokens per second are added</li></ul><p><strong>How many buckets do you need?</strong></p><pre class=mermaid>graph TD
-    A[One bucket per user per endpoint] --> B["POST /post → bucket A\nGET /friends → bucket B\nPOST /like → bucket C"]
-    C[One bucket per IP address] --> D["192.168.1.1 → its own bucket\n10.0.0.5 → its own bucket"]
-    E[One global bucket] --> F["All users share\n10,000 req/sec limit"]
-</pre><p><strong>Pros and Cons:</strong></p><table><thead><tr><th>Pros</th><th>Cons</th></tr></thead><tbody><tr><td>Easy to implement</td><td>Tuning two parameters is tricky</td></tr><tr><td>Memory efficient</td><td>A burst can still be large at bucket boundary</td></tr><tr><td>Allows short bursts</td><td>—</td></tr><tr><td>Used in production everywhere</td><td>—</td></tr></tbody></table><hr><h3 id=algorithm-2-leaky-bucket->Algorithm 2: Leaky Bucket 🚿</h3><p><strong>Used by: Shopify</strong></p><p>Instead of tokens, imagine requests flowing into a bucket that has a small hole at the bottom. Requests <em>drip out</em> at a fixed, constant rate. If the bucket overflows, requests are dropped.</p><pre class=mermaid>flowchart TD
-    REQ1[Request 1] --> BUCKET
-    REQ2[Request 2] --> BUCKET
-    REQ3[Request 3] --> BUCKET
-    REQ4[Request 4] --> FULL{Bucket Full?}
-    FULL -->|No| BUCKET
-    FULL -->|Yes ❌| DROP[Drop Request]
+    C->>I: Should it throttle by IP, user ID, or something else?
+    I-->>C: Flexible enough to support different throttle rules.
 
-    subgraph BUCKET["🪣 FIFO Queue (size=4)"]
-        direction LR
-        Q1[Req 1] --> Q2[Req 2] --> Q3[Req 3]
+    C->>I: What's the scale? Startup or a large user base?
+    I-->>C: Must handle a large number of requests.
+
+    C->>I: Will the system work in a distributed environment?
+    I-->>C: Yes.
+
+    C->>I: Separate service or embedded in application code?
+    I-->>C: That's a design decision — up to you.
+
+    C->>I: Do we need to inform users when they're throttled?
+    I-->>C: Yes.
+
+    Note over C,I: Requirements now locked ✅
+</pre><p>After clarifying, here&rsquo;s the requirements summary we&rsquo;re designing for:</p><table><thead><tr><th>Requirement</th><th>Detail</th></tr></thead><tbody><tr><td>Accuracy</td><td>Accurately limit excessive requests</td></tr><tr><td>Low latency</td><td>Must not slow down HTTP response time</td></tr><tr><td>Memory</td><td>Use as little memory as possible</td></tr><tr><td>Distributed</td><td>Shared across multiple servers or processes</td></tr><tr><td>Exception handling</td><td>Show clear error when requests are throttled</td></tr><tr><td>Fault tolerance</td><td>If cache server goes offline, system still works</td></tr></tbody></table><hr><h2 id=step-2--where-should-the-rate-limiter-live>Step 2 — Where Should the Rate Limiter Live?</h2><p>This is the first real architectural decision, and it has more nuance than most people realise.</p><pre class=mermaid>flowchart TD
+    USER["👤 Client\nMobile / Web / API consumer"]
+
+    USER -->|Option A| CLIENT_RL["❌ Client-side Rate Limiter\n\nUnreliable! Clients can be forged.\nA malicious actor can simply\nbypass or spoof the client.\nNEVER depend on this alone."]
+
+    USER -->|Option B| SERVER_RL["✅ Server-side Rate Limiter\n\nThe rate limiter sits inside\nyour API server code.\nFull control, but adds complexity\nto each individual service."]
+
+    USER -->|Option C| MIDDLEWARE["✅✅ Rate Limiter Middleware\n\nActs as a wall between clients\nand your API servers.\nBest choice for most architectures.\nRequests pass through only if allowed."]
+
+    USER -->|Option D| GATEWAY["✅✅✅ API Gateway\n\nFully managed service.\nSupports rate limiting, SSL termination,\nauthentication, IP whitelisting.\nBest if you're already using microservices.\nExamples: AWS API Gateway, Kong, Apigee"]
+
+    style CLIENT_RL fill:#fee2e2
+    style SERVER_RL fill:#fef9c3
+    style MIDDLEWARE fill:#dcfce7
+    style GATEWAY fill:#dbeafe
+</pre><p><strong>The practical guidance from the book:</strong></p><ul><li>If you already use an <strong>API gateway</strong> for authentication and SSL termination, add rate limiting there — it&rsquo;s already in the request path</li><li>If you need <strong>fine-grained algorithm control</strong> that third-party gateways don&rsquo;t support, implement it in your server-side code</li><li>If your team <strong>doesn&rsquo;t have bandwidth</strong> to build a custom rate limiter, use a commercial gateway — it&rsquo;s better to have imperfect rate limiting than none</li></ul><p>The rest of this article focuses on designing the rate limiting logic itself, which applies regardless of <em>where</em> you deploy it.</p><hr><h2 id=step-3--the-five-algorithms-a-deep-dive>Step 3 — The Five Algorithms: A Deep Dive</h2><p>This is the most important section. There are five well-known rate limiting algorithms. Each has different properties, tradeoffs, and ideal use cases. Understanding all five is what separates a junior engineer from a senior one.</p><hr><h3 id=algorithm-1-token-bucket->Algorithm 1: Token Bucket 🪣</h3><blockquote><p><strong>Used by: Amazon AWS, Stripe, most REST APIs in production</strong></p></blockquote><p><strong>The everyday analogy:</strong> Imagine you have a bucket that holds coins. Every second, the refiller drops 2 coins in. You need 1 coin to make an API call. If the bucket is full and more coins arrive, they spill over (overflow). If you want to make a call but the bucket is empty — sorry, your request is dropped.</p><p>Here&rsquo;s the visual of the bucket itself:</p><pre class=mermaid>flowchart TD
+    subgraph REFILLER["🔄 Refiller: 4 tokens/minute"]
+        T1["🪙"] 
+        T2["🪙"]
     end
 
-    BUCKET -->|Fixed rate: 1 req/sec| SERVER[API Server]
-</pre><p><strong>The key difference from Token Bucket:</strong> Token bucket allows bursting (many requests at once, as long as tokens exist). Leaky bucket forces a <em>constant output rate</em> — no matter how many requests come in, only N go out per second.</p><p><strong>Two parameters:</strong></p><ul><li><strong>Bucket size</strong> — queue capacity (how many requests can wait)</li><li><strong>Outflow rate</strong> — requests processed per second (the &ldquo;leak&rdquo; rate)</li></ul><p><strong>Pros and Cons:</strong></p><table><thead><tr><th>Pros</th><th>Cons</th></tr></thead><tbody><tr><td>Smooths out bursty traffic</td><td>A burst fills the queue with OLD requests</td></tr><tr><td>Stable, predictable outflow rate</td><td>Recent requests may be delayed unnecessarily</td></tr><tr><td>Memory efficient</td><td>Hard to tune for bursty workloads</td></tr></tbody></table><p><strong>Best for:</strong> Payment processors, downstream services that need a steady, predictable flow. Shopify uses it to protect their backend from merchant bursts.</p><hr><h3 id=algorithm-3-fixed-window-counter->Algorithm 3: Fixed Window Counter 🪟</h3><p>This algorithm divides time into fixed-size windows (e.g., 1-minute buckets) and counts requests per window.</p><pre class=mermaid>gantt
-    title Fixed Window — 3 requests/second limit
-    dateFormat  ss
-    axisFormat  %S
+    REFILLER -->|adds tokens| BUCKET
 
-    section Window 1 (1:00:00)
-    ✅ Request 1 :done, 00, 1s
-    ✅ Request 2 :done, 01, 1s
-    ✅ Request 3 :done, 02, 1s
+    subgraph BUCKET["🪣 Token Bucket\nCapacity: 4"]
+        direction LR
+        TOK1["🪙"] 
+        TOK2["🪙"]
+        TOK3["🪙"]
+        TOK4["🪙"]
+    end
 
-    section Window 2 (1:00:01)
-    ✅ Request 4 :done, 03, 1s
-    ✅ Request 5 :done, 04, 1s
-    ❌ Request 6 (dropped) :crit, 05, 1s
-    ❌ Request 7 (dropped) :crit, 06, 1s
+    OVERFLOW["Overflow: extra tokens\nare discarded 🗑️"]
+    BUCKET -.->|if full| OVERFLOW
+</pre><p><strong>How a request is processed:</strong></p><pre class=mermaid>flowchart LR
+    REQ["📨 Request arrives"] --> CHECK{"🔍 Enough\ntokens\nin bucket?"}
+    CHECK -->|"✅ Yes: take 1 token"| FORWARD["Forward to\nAPI Server ✅"]
+    CHECK -->|"❌ No tokens left"| DROP["Drop request\nHTTP 429 ❌"]
+    FORWARD --> PROCESS["API processes\nand responds"]
+</pre><p><strong>Let&rsquo;s walk through a concrete example step by step:</strong></p><p>The bucket size is 4. Refill rate is 4 tokens per minute.</p><pre class=mermaid>sequenceDiagram
+    participant Client
+    participant Bucket as "🪣 Bucket (capacity=4)"
+    participant API
 
-    section Window 3 (1:00:02)
-    ✅ Request 8 :done, 07, 1s
-    ✅ Request 9 :done, 08, 1s
-</pre><p><strong>The critical bug — boundary burst problem:</strong></p><p>Here&rsquo;s a subtle but dangerous flaw. If your limit is 5 requests/minute:</p><pre class=mermaid>xychart-beta
-    title "Boundary Burst: 10 requests slip through in 1 minute window"
-    x-axis ["2:00:00", "2:00:30", "2:01:00", "2:01:30", "2:02:00"]
+    Note over Bucket: 🕐 1:00:00 — Start with 4 tokens
+    Client->>Bucket: Request arrives
+    Bucket->>Bucket: tokens=4 ≥ 1 ✅ → take 1 token → tokens=3
+    Bucket->>API: Forward request
+    API-->>Client: 200 OK ✅
+
+    Note over Bucket: 🕐 1:00:05 — 3 simultaneous requests
+    Client->>Bucket: 3 requests at once
+    Bucket->>Bucket: tokens=3 ≥ 3 ✅ → take 3 tokens → tokens=0
+    Bucket->>API: Forward all 3
+    API-->>Client: 200 OK × 3 ✅
+
+    Note over Bucket: 🕐 1:00:20 — Bucket is empty!
+    Client->>Bucket: New request arrives
+    Bucket->>Bucket: tokens=0 ❌ Not enough!
+    Bucket-->>Client: HTTP 429 Too Many Requests ❌
+
+    Note over Bucket: 🕐 1:01:00 — Refiller kicks in
+    Bucket->>Bucket: Refill: tokens = 4 (full again)
+    Client->>Bucket: New request
+    Bucket->>Bucket: tokens=4 ≥ 1 ✅ → take 1 → tokens=3
+    Bucket->>API: Forward request
+    API-->>Client: 200 OK ✅
+</pre><p><strong>The two parameters you tune:</strong></p><ul><li><strong>Bucket size</strong> — maximum tokens the bucket can hold (controls max burst)</li><li><strong>Refill rate</strong> — tokens added per second (controls sustained rate)</li></ul><p><strong>How many buckets do you create?</strong></p><p>This depends on your throttle rules. You might need multiple buckets per user:</p><pre class=mermaid>graph LR
+    USER["User: alice@company.com"]
+
+    USER --> B1["Bucket 1\nPOST /posts\nLimit: 1/sec"]
+    USER --> B2["Bucket 2\nPOST /friends/add\nLimit: 150/day"]
+    USER --> B3["Bucket 3\nPOST /likes\nLimit: 5/sec"]
+
+    IP["IP: 203.0.113.42"]
+    IP --> B4["Bucket 4\nAll endpoints\nLimit: 100/min"]
+
+    GLOBAL["Global"]
+    GLOBAL --> B5["Bucket 5\nTotal system\nLimit: 10,000/sec"]
+</pre><p><strong>Pros and Cons:</strong></p><table><thead><tr><th>✅ Pros</th><th>❌ Cons</th></tr></thead><tbody><tr><td>Easy to implement</td><td>Two parameters — can be tricky to tune correctly</td></tr><tr><td>Very memory efficient</td><td>A burst is possible right at refill time</td></tr><tr><td>Allows short bursts (real usage patterns)</td><td>—</td></tr><tr><td>Used everywhere in production</td><td>—</td></tr></tbody></table><hr><h3 id=algorithm-2-leaky-bucket->Algorithm 2: Leaky Bucket 🚿</h3><blockquote><p><strong>Used by: Shopify</strong></p></blockquote><p><strong>The analogy:</strong> Instead of a bucket of tokens, picture a regular bucket with a small hole in the bottom. Water (requests) pours in from the top. It drips out at a constant, fixed pace from the hole. If water pours in faster than it drips out, the bucket overflows and excess water is lost.</p><p>The key difference from Token Bucket: requests are processed at a <strong>fixed, constant rate</strong> regardless of how many come in.</p><pre class=mermaid>flowchart TD
+    REQUESTS["📨 Incoming Requests\n(can be bursty)"]
+    
+    REQUESTS --> CHECK{"Bucket\nfull?"}
+    CHECK -->|"No — add to queue"| QUEUE
+
+    subgraph QUEUE["🪣 FIFO Queue (size = 4)\nRequests wait here in order"]
+        direction LR
+        R1["Req 1"] --> R2["Req 2"] --> R3["Req 3"] --> R4["Req 4"]
+    end
+
+    CHECK -->|"Yes — overflow ❌"| DROP["Drop request\nHTTP 429 ❌"]
+
+    QUEUE -->|"Drips out at fixed rate\n e.g. 1 request/second"| API["🖥️ API Server\nProcesses at steady pace"]
+</pre><p><strong>The crucial difference, illustrated:</strong></p><pre class=mermaid>graph LR
+    subgraph TOKEN["Token Bucket behaviour"]
+        direction TB
+        T_IN["5 requests arrive\nat once"]
+        T_PROCESS["All 5 processed\nimmediately\n(burst allowed ✅)"]
+        T_IN --> T_PROCESS
+    end
+
+    subgraph LEAKY["Leaky Bucket behaviour"]
+        direction TB
+        L_IN["5 requests arrive\nat once"]
+        L_Q["5 queue up"]
+        L_P1["1 processed → wait 1s"]
+        L_P2["1 processed → wait 1s"]
+        L_P3["1 processed → wait 1s"]
+        L_IN --> L_Q --> L_P1 --> L_P2 --> L_P3
+    end
+</pre><p><strong>The two parameters:</strong></p><ul><li><strong>Bucket size</strong> = queue size (how many requests can wait)</li><li><strong>Outflow rate</strong> = how many requests processed per second (the &ldquo;leak&rdquo;)</li></ul><p><strong>Pros and Cons:</strong></p><table><thead><tr><th>✅ Pros</th><th>❌ Cons</th></tr></thead><tbody><tr><td>Memory efficient (fixed queue size)</td><td>A burst fills the queue with OLD requests</td></tr><tr><td>Stable, predictable processing rate</td><td>Recent requests get dropped even if the system recovers</td></tr><tr><td>Great for downstream services needing steady input</td><td>Two parameters are hard to tune for bursty workloads</td></tr></tbody></table><p><strong>Best for:</strong> Payment processing pipelines, email sending queues, systems that talk to downstream services with strict rate requirements.</p><hr><h3 id=algorithm-3-fixed-window-counter->Algorithm 3: Fixed Window Counter 🗓️</h3><p><strong>The analogy:</strong> Think of a day planner divided into exact 1-minute slots. Each slot has a counter. Every request in that minute increments the counter. When the counter hits the limit, all remaining requests that minute are rejected. When the next minute starts, the counter resets to zero.</p><pre class=mermaid>gantt
+    title Fixed Window Counter — Limit: 3 requests/second
+    dateFormat  X
+    axisFormat  Second %S
+
+    section Second :00
+    ✅ Request 1  : done, 0, 1
+    ✅ Request 2  : done, 1, 1
+    ✅ Request 3  : done, 2, 1
+
+    section Second :01
+    ✅ Request 4  : done, 3, 1
+    ✅ Request 5  : done, 4, 1
+    ❌ Request 6 (dropped)  : crit, 5, 1
+    ❌ Request 7 (dropped)  : crit, 6, 1
+
+    section Second :02
+    ✅ Request 8  : done, 7, 1
+    ✅ Request 9  : done, 8, 1
+</pre><p>The implementation is dead simple. In Redis: <code>INCR user:123:window:1685484000</code> with an <code>EXPIRE</code> matching the window size.</p><p><strong>BUT — there&rsquo;s a critical bug you must know about.</strong></p><p>The Fixed Window algorithm has a nasty edge-case vulnerability called the <strong>boundary burst problem</strong>. Here&rsquo;s how an attacker (or just unlucky timing) can let <strong>2× the allowed requests</strong> through:</p><p>Assume the limit is <strong>5 requests per minute</strong>, and windows reset at the top of each minute:</p><pre class=mermaid>---
+config:
+  xyChart:
+    width: 700
+    height: 300
+---
+xychart-beta
+    title "Boundary Burst — 10 requests sneak through in 60 seconds (limit is 5/min)"
+    x-axis ["2:00:00", "2:00:30", "2:01:00 (reset!)", "2:01:30", "2:02:00"]
     y-axis "Requests" 0 --> 6
     bar [0, 5, 0, 5, 0]
-</pre><ul><li>At <strong>2:00:30</strong> → 5 requests hit (uses up Window 1&rsquo;s quota)</li><li>At <strong>2:01:00</strong> → Window 2 resets! 5 more requests immediately hit</li><li>In the 60 seconds from <strong>2:00:30 to 2:01:30</strong>, you&rsquo;ve allowed <strong>10 requests</strong> — double the limit!</li></ul><p>This is a known vulnerability. The sliding window algorithms below fix it.</p><p><strong>Pros and Cons:</strong></p><table><thead><tr><th>Pros</th><th>Cons</th></tr></thead><tbody><tr><td>Very easy to understand</td><td>Boundary burst can 2× your limit</td></tr><tr><td>Memory efficient</td><td>Not suitable for strict traffic control</td></tr><tr><td>Counter resets cleanly</td><td>—</td></tr></tbody></table><hr><h3 id=algorithm-4-sliding-window-log->Algorithm 4: Sliding Window Log 📜</h3><p>Instead of counting per window, we store a <strong>log of timestamps</strong> for every request.</p><pre class=mermaid>sequenceDiagram
-    participant Client
-    participant RateLimiter
-    participant Log as "Timestamp Log (max 2)"
-
-    Note over Log: Log = []
-    Client->>RateLimiter: Request at 1:00:01
-    RateLimiter->>Log: Add 1:00:01
-    Note over Log: Log = [1:00:01] ✅ size=1 ≤ 2
-    RateLimiter-->>Client: Allowed ✅
-
-    Client->>RateLimiter: Request at 1:00:30
-    RateLimiter->>Log: Add 1:00:30
-    Note over Log: Log = [1:00:01, 1:00:30] ✅ size=2 ≤ 2
-    RateLimiter-->>Client: Allowed ✅
-
-    Client->>RateLimiter: Request at 1:00:50
-    RateLimiter->>Log: Purge old, add 1:00:50
-    Note over Log: Log = [1:00:01, 1:00:30, 1:00:50] ❌ size=3 > 2
-    RateLimiter-->>Client: Rejected HTTP 429 ❌
-
-    Client->>RateLimiter: Request at 1:01:40
-    RateLimiter->>Log: Purge entries < 1:00:40
-    Note over Log: Removed: 1:00:01, 1:00:30
-    Note over Log: Log = [1:00:50, 1:01:40] ✅ size=2 ≤ 2
-    RateLimiter-->>Client: Allowed ✅
-</pre><p><strong>The algorithm:</strong></p><ol><li>New request arrives</li><li>Remove all timestamps older than <code>now - window_size</code></li><li>Add current timestamp</li><li>If log size ≤ limit → allow. Else → reject (but still keep the timestamp in the log)</li></ol><p><strong>Pros and Cons:</strong></p><table><thead><tr><th>Pros</th><th>Cons</th></tr></thead><tbody><tr><td>Very accurate — no boundary burst</td><td>High memory usage (store every timestamp)</td></tr><tr><td>Any rolling window is accurate</td><td>Even rejected requests consume log space</td></tr></tbody></table><hr><h3 id=algorithm-5-sliding-window-counter->Algorithm 5: Sliding Window Counter 🔄</h3><p><strong>Used by: Cloudflare (processes 400 million requests with only 0.003% error)</strong></p><p>This is the <strong>best of both worlds</strong> — combine fixed window counters with a rolling calculation.</p><pre class=mermaid>flowchart LR
-    subgraph PREV["Previous Window (1:00 - 2:00)\n5 requests"]
-        P1[req] 
-        P2[req]
-        P3[req]
-        P4[req]
-        P5[req]
-    end
-    subgraph CURR["Current Window (2:00 - 3:00)\n3 requests"]
-        direction LR
-        C1[req]
-        C2[req]
-        C3[req]
-        TIMELINE["◀─70%─▶◀─30%─▶\n     ↑ Current time"]
-    end
-    FORMULA["Rolling count = \n3 + 5 × 0.70 = 6.5\nRounded = 6\nLimit = 7 → ✅ Allowed"]
-    CURR --> FORMULA
-    PREV --> FORMULA
-</pre><p><strong>The magic formula:</strong></p><blockquote><p><code>Rolling count = requests_in_current_window + requests_in_previous_window × overlap_percentage</code></p></blockquote><p><strong>Example:</strong> Limit is 7/min. Current time is 30% into the current window.</p><ul><li>Previous window: 5 requests</li><li>Current window: 3 requests</li><li>Overlap = 70% of previous window overlaps rolling window</li><li>Rolling count = 3 + 5 × 0.70 = <strong>6.5 → rounded to 6</strong> → under limit → <strong>allowed!</strong></li></ul><p><strong>Pros and Cons:</strong></p><table><thead><tr><th>Pros</th><th>Cons</th></tr></thead><tbody><tr><td>Smooths spikes from previous window</td><td>Approximate (not 100% accurate)</td></tr><tr><td>Memory efficient — only 2 counters</td><td>Assumes uniform distribution in prev window</td></tr><tr><td>Cloudflare proved 99.997% accuracy at scale</td><td>—</td></tr></tbody></table><hr><h3 id=algorithm-comparison--the-decision-matrix>Algorithm Comparison — The Decision Matrix</h3><pre class=mermaid>quadrantChart
-    title Rate Limiting Algorithm Selection
-    x-axis Low Accuracy --> High Accuracy
-    y-axis High Memory --> Low Memory
-    quadrant-1 Ideal for most APIs
-    quadrant-2 Accurate but expensive
-    quadrant-3 Avoid
-    quadrant-4 Simple but flawed
-
-    Token Bucket: [0.72, 0.85]
-    Leaky Bucket: [0.55, 0.80]
-    Fixed Window: [0.25, 0.90]
-    Sliding Window Log: [0.95, 0.20]
-    Sliding Window Counter: [0.85, 0.88]
-</pre><table><thead><tr><th>Algorithm</th><th>Memory</th><th>Accuracy</th><th>Burst-friendly</th><th>Best for</th></tr></thead><tbody><tr><td>Token Bucket</td><td>Low</td><td>Medium</td><td>✅ Yes</td><td>Most REST APIs (AWS, Stripe)</td></tr><tr><td>Leaky Bucket</td><td>Low</td><td>Medium</td><td>❌ No</td><td>Stable outflow systems</td></tr><tr><td>Fixed Window</td><td>Very Low</td><td>Low</td><td>✅ Yes (exploitable)</td><td>Simple internal services</td></tr><tr><td>Sliding Window Log</td><td>High</td><td>Very High</td><td>❌ No</td><td>Strict compliance APIs</td></tr><tr><td>Sliding Window Counter</td><td>Low</td><td>High</td><td>✅ Yes</td><td>High-scale APIs (Cloudflare)</td></tr></tbody></table><hr><h2 id=step-3--high-level-architecture>Step 3 — High-Level Architecture</h2><p>Now that we know the algorithms, let&rsquo;s design the actual system.</p><h3 id=where-to-put-the-rate-limiter>Where to Put the Rate Limiter?</h3><pre class=mermaid>graph TD
-    CLIENT[📱 Client Apps\nMobile / Web / 3rd party] --> GW
-
-    subgraph YOUR_INFRA["Your Infrastructure"]
-        GW["🚦 API Gateway\n(Rate Limiter lives here)\n\n✅ Best placement for most teams"] --> SVC1[User Service]
-        GW --> SVC2[Order Service]
-        GW --> SVC3[Search Service]
-
-        MW["🔧 Middleware Layer\n(In each microservice)\n\n✅ Fine-grained control"] -.-> SVC1
-        MW -.-> SVC2
-    end
-
-    NOTE1["Option A: API Gateway\n- Single enforcement point\n- No code changes to services\n- AWS API Gateway, Kong, Nginx"] 
-    NOTE2["Option B: Middleware per service\n- More flexible rules\n- More complex to maintain"]
-</pre><p><strong>Recommendation:</strong> For most teams, put it at the <strong>API Gateway layer</strong>. You get one enforcement point with no code changes to individual microservices. AWS API Gateway, Kong, Nginx, and Envoy all have built-in rate limiting.</p><h3 id=the-basic-architecture>The Basic Architecture</h3><pre class=mermaid>graph LR
-    CLIENT[👤 Client] -->|Request| RL["🚦 Rate Limiter\nMiddleware"]
-    RL -->|Check counter| REDIS[("🔴 Redis\nCounter Store")]
-    REDIS -->|Counter value| RL
-    RL -->|✅ Not limited| API[🖥️ API Servers]
-    RL -->|❌ Limited\nHTTP 429| CLIENT
-    API -->|Response| CLIENT
-</pre><p><strong>Why Redis and not a database?</strong></p><p>A traditional database like MySQL or PostgreSQL stores data on disk. A rate limiter check happens on <strong>every single request</strong> — that&rsquo;s potentially millions of checks per second. Disk access at that rate would be catastrophic.</p><p>Redis is an <strong>in-memory</strong> data store. It:</p><ul><li>Responds in under <strong>1 millisecond</strong></li><li>Supports atomic operations (<code>INCR</code>, <code>EXPIRE</code>) that prevent race conditions</li><li>Can handle <strong>100,000+ operations per second</strong> on a single node</li></ul><pre class=mermaid>sequenceDiagram
+</pre><ul><li>At <strong>2:00:30</strong>, attacker fires 5 requests → uses up minute 1&rsquo;s quota. ✅ (5 allowed)</li><li>Window resets at <strong>2:01:00</strong></li><li>At <strong>2:01:00</strong>, attacker fires 5 more requests → uses up minute 2&rsquo;s quota. ✅ (5 allowed)</li><li>Between <strong>2:00:30 and 2:01:30</strong> — a single 60-second span — <strong>10 requests went through</strong>, which is double the intended limit of 5 per minute.</li></ul><p><strong>This is the core flaw</strong> the sliding window algorithms fix.</p><p><strong>Pros and Cons:</strong></p><table><thead><tr><th>✅ Pros</th><th>❌ Cons</th></tr></thead><tbody><tr><td>Very easy to understand and implement</td><td>Boundary burst can allow 2× the intended limit</td></tr><tr><td>Extremely memory efficient (just a counter)</td><td>Strict use cases (auth, billing) should avoid this</td></tr><tr><td>Resetting quota at window boundary is intuitive</td><td>—</td></tr></tbody></table><hr><h3 id=algorithm-4-sliding-window-log->Algorithm 4: Sliding Window Log 📋</h3><p><strong>The core idea:</strong> Instead of counting per fixed window, we log the <strong>exact timestamp</strong> of every request. When a new request arrives, we:</p><ol><li>Remove all timestamps older than <code>now - windowSize</code></li><li>Add the current timestamp</li><li>If the log size ≤ limit → allow. If log size > limit → reject.</li></ol><pre class=mermaid>sequenceDiagram
     participant C as Client
     participant RL as Rate Limiter
-    participant R as Redis
-    participant API as API Server
+    participant LOG as "📋 Timestamp Log\n(limit: 2 req/min)"
 
-    C->>RL: GET /api/users/profile
-    RL->>R: INCR user:123:counter
-    R-->>RL: counter = 47
-    RL->>R: Check if 47 ≤ 100 (limit)
-    
-    alt Under limit
-        RL->>API: Forward request
-        API-->>C: 200 OK ✅
-        RL->>C: Headers: X-RateLimit-Remaining: 53
-    else Over limit
-        RL-->>C: 429 Too Many Requests ❌
-        RL->>C: Headers: X-RateLimit-Retry-After: 30
+    Note over LOG: Log = [ ]
+
+    C->>RL: Request at 1:00:01
+    RL->>LOG: Purge old entries (none to purge)
+    RL->>LOG: Add timestamp 1:00:01
+    Note over LOG: Log = [1:00:01] → size=1 ≤ 2 ✅
+    RL-->>C: ✅ Allowed
+
+    C->>RL: Request at 1:00:30
+    RL->>LOG: Purge old entries (none to purge)
+    RL->>LOG: Add timestamp 1:00:30
+    Note over LOG: Log = [1:00:01, 1:00:30] → size=2 ≤ 2 ✅
+    RL-->>C: ✅ Allowed
+
+    C->>RL: Request at 1:00:50
+    RL->>LOG: Purge entries older than 12:59:50 (none)
+    RL->>LOG: Add timestamp 1:00:50
+    Note over LOG: Log = [1:00:01, 1:00:30, 1:00:50] → size=3 > 2 ❌
+    RL-->>C: ❌ HTTP 429 Rejected
+    Note over LOG: Rejected, but 1:00:50 stays in log!
+
+    C->>RL: Request at 1:01:40
+    RL->>LOG: Purge entries older than 1:00:40
+    Note over LOG: Removed: 1:00:01, 1:00:30 (older than 1:00:40)
+    RL->>LOG: Add timestamp 1:01:40
+    Note over LOG: Log = [1:00:50, 1:01:40] → size=2 ≤ 2 ✅
+    RL-->>C: ✅ Allowed (rolling window is accurate!)
+</pre><p>Notice that at <strong>1:01:40</strong>, the entries from <strong>1:00:01 and 1:00:30</strong> were purged because they fall outside the 1-minute rolling window. The rolling window always stays accurate.</p><p><strong>Pros and Cons:</strong></p><table><thead><tr><th>✅ Pros</th><th>❌ Cons</th></tr></thead><tbody><tr><td>Highly accurate — no boundary burst problem</td><td>High memory usage: every timestamp is stored</td></tr><tr><td>True rolling window, always precise</td><td>Even rejected requests consume memory (their timestamp stays)</td></tr></tbody></table><p><strong>When to use:</strong> Strict compliance APIs where you cannot allow any boundary burst — financial transaction limits, regulatory rate limits.</p><hr><h3 id=algorithm-5-sliding-window-counter--the-best-of-both-worlds->Algorithm 5: Sliding Window Counter — The Best of Both Worlds 🏆</h3><blockquote><p><strong>Used by: Cloudflare (400 million requests/day, 0.003% error rate)</strong></p></blockquote><p>This algorithm is a <strong>hybrid</strong> that combines the memory efficiency of Fixed Window Counter with the accuracy of Sliding Window Log. It doesn&rsquo;t store timestamps — it only stores two simple counters.</p><p><strong>The core insight:</strong> Instead of tracking exact timestamps, we approximate the rolling count by assuming requests in the previous window were evenly distributed.</p><pre class=mermaid>flowchart LR
+    subgraph PREV["Previous minute\n(2:00:00 - 2:01:00)\nCounter = 5 requests"]
+        P1["■■■■■"] 
     end
-</pre><hr><h2 id=step-4--rate-limiting-rules>Step 4 — Rate Limiting Rules</h2><p>Rules define <em>what</em> to throttle and <em>how much</em>. They&rsquo;re typically stored in config files:</p><div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#616e87;font-style:italic># Example rules (similar to Lyft&#39;s ratelimit config)</span>
+
+    subgraph CURR["Current minute\n(2:01:00 - 2:02:00)\nCounter = 3 requests"]
+        C1["■■■"]
+        CURSOR["▲ Current time\n= 30% into\ncurrent window"]
+    end
+
+    FORMULA["Rolling window estimate:\n\n3 + 5 × 70% = 3 + 3.5 = 6.5\n\nRounded down → 6\nLimit = 7 → ✅ Request ALLOWED"]
+
+    PREV --> FORMULA
+    CURR --> FORMULA
+</pre><p><strong>The formula:</strong></p><blockquote><p><strong>Rolling count = current_window_requests + previous_window_requests × overlap_percentage</strong></p></blockquote><p>Where <code>overlap_percentage</code> = what fraction of the previous window overlaps with the rolling window.</p><p>If we&rsquo;re 30% into the current minute, then 70% of the previous minute is within our rolling window.</p><p><strong>Worked example:</strong></p><ul><li>Limit: 7 requests/minute</li><li>Previous window: 5 requests</li><li>Current window (so far): 3 requests</li><li>We&rsquo;re 30% into current window → previous window overlap = 70%</li><li>Rolling estimate = 3 + 5 × 0.70 = <strong>6.5 → rounded to 6</strong></li><li>6 &lt; 7 → Request allowed ✅</li></ul><p>One more request arrives:</p><ul><li>Rolling estimate = 4 + 5 × 0.70 = <strong>7.5 → rounded to 7</strong></li><li>7 = 7 → Right at the limit, request allowed (or denied depending on implementation)</li></ul><p><strong>Why does Cloudflare trust this approximation?</strong></p><p>This algorithm assumes requests in the previous window were evenly distributed across time. That&rsquo;s not always true. But in Cloudflare&rsquo;s experiment across <strong>400 million requests</strong>, this assumption was wrong only <strong>0.003% of the time</strong>. That&rsquo;s an extraordinary level of accuracy with essentially no extra memory cost.</p><p><strong>Pros and Cons:</strong></p><table><thead><tr><th>✅ Pros</th><th>❌ Cons</th></tr></thead><tbody><tr><td>Smooths out edge-case spikes</td><td>Approximate — not 100% accurate</td></tr><tr><td>Very memory efficient (just 2 counters)</td><td>Assumes uniform distribution in previous window</td></tr><tr><td>Proven accurate at Cloudflare scale</td><td>—</td></tr><tr><td>No timestamp storage needed</td><td>—</td></tr></tbody></table><hr><h3 id=comparing-all-five-side-by-side>Comparing All Five Side by Side</h3><pre class=mermaid>quadrantChart
+    title Algorithm Tradeoffs — Accuracy vs Memory Efficiency
+    x-axis "Low Memory Efficiency" --> "High Memory Efficiency"
+    y-axis "Low Accuracy" --> "High Accuracy"
+    quadrant-1 "Best: High accuracy + Low memory"
+    quadrant-2 "Accurate but expensive"
+    quadrant-3 "Avoid: Low quality"
+    quadrant-4 "Simple but inaccurate"
+
+    Sliding Window Counter: [0.87, 0.88]
+    Token Bucket: [0.82, 0.72]
+    Leaky Bucket: [0.78, 0.62]
+    Fixed Window Counter: [0.92, 0.28]
+    Sliding Window Log: [0.15, 0.95]
+</pre><table><thead><tr><th>Algorithm</th><th>Memory</th><th>Accuracy</th><th>Burst OK?</th><th>Real-world usage</th></tr></thead><tbody><tr><td>Token Bucket</td><td>Low ✅</td><td>Medium</td><td>Yes ✅</td><td>AWS, Stripe</td></tr><tr><td>Leaky Bucket</td><td>Low ✅</td><td>Medium</td><td>No</td><td>Shopify</td></tr><tr><td>Fixed Window</td><td>Very Low ✅</td><td>Low ❌</td><td>Yes (exploitable)</td><td>Simple internal tools</td></tr><tr><td>Sliding Window Log</td><td>High ❌</td><td>Very High ✅</td><td>No</td><td>Strict compliance APIs</td></tr><tr><td>Sliding Window Counter</td><td>Low ✅</td><td>High ✅</td><td>Yes ✅</td><td>Cloudflare</td></tr></tbody></table><p><strong>My recommendation:</strong> For most teams building a public API, <strong>Token Bucket</strong> is the right default. For high-scale systems that need accuracy without memory cost, use <strong>Sliding Window Counter</strong>.</p><hr><h2 id=step-4--high-level-architecture>Step 4 — High-Level Architecture</h2><p>Now that we understand the algorithms, let&rsquo;s design the actual system around them.</p><h3 id=why-redis-and-not-a-database>Why Redis (and not a database)?</h3><p>The basic idea: we need a counter per user (or IP, or API key) that we can increment atomically on every single request.</p><p>You might think: &ldquo;Why not use PostgreSQL?&rdquo; Let&rsquo;s think about that:</p><ul><li>A busy API might handle <strong>50,000 requests per second</strong></li><li>Each request needs a counter read + increment</li><li>That&rsquo;s 100,000 database operations per second</li><li>A typical PostgreSQL instance maxes out at <strong>~10,000 simple operations per second</strong></li><li>With disk-based storage and connection overhead — <strong>you&rsquo;d never keep up</strong></li></ul><p>Redis is different:</p><ul><li><strong>In-memory</strong> — no disk I/O</li><li><strong>Single-threaded</strong> — operations are naturally serialized, no locking needed</li><li><strong>Sub-millisecond</strong> response time</li><li><strong>INCR + EXPIRE</strong> — atomic operations purpose-built for this</li></ul><pre class=mermaid>graph LR
+    CLIENT["👤 Client"] -->|HTTP Request| RL["🚦 Rate Limiter\nMiddleware"]
+    
+    RL <-->|"① INCR user:123:counter\n② check vs limit\n③ EXPIRE if new key"| REDIS[("🔴 Redis\nIn-memory counter store")]
+    
+    RL -->|"✅ Under limit\nForward request"| API["🖥️ API Servers"]
+    RL -->|"❌ Over limit\nHTTP 429 + headers"| CLIENT
+    
+    API -->|Response| CLIENT
+</pre><p><strong>The flow in detail:</strong></p><ol><li>Client sends request to rate limiter middleware</li><li>Rate limiter fetches the counter from Redis for this user/IP/key</li><li>If counter + 1 > limit → reject with HTTP 429, return headers</li><li>If counter + 1 ≤ limit → increment counter, forward to API servers</li><li>If the counter key doesn&rsquo;t exist yet → create it with an EXPIRE matching the window</li></ol><hr><h2 id=step-5--rate-limiting-rules>Step 5 — Rate Limiting Rules</h2><p>Rules define the policies. A rate limiter without rules is useless. Inspired by <a href=https://github.com/lyft/ratelimit>Lyft&rsquo;s open-source rate limiter</a>, rules are typically stored in config files:</p><div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#616e87;font-style:italic># 5 marketing messages per day</span>
+</span></span><span style=display:flex><span><span style=color:#81a1c1>domain</span><span style=color:#eceff4>:</span> messaging
+</span></span><span style=display:flex><span><span style=color:#81a1c1>descriptors</span><span style=color:#eceff4>:</span>
+</span></span><span style=display:flex><span>  - <span style=color:#81a1c1>key</span><span style=color:#eceff4>:</span> message_type
+</span></span><span style=display:flex><span>    <span style=color:#81a1c1>value</span><span style=color:#eceff4>:</span> marketing
+</span></span><span style=display:flex><span>    <span style=color:#81a1c1>rate_limit</span><span style=color:#eceff4>:</span>
+</span></span><span style=display:flex><span>      <span style=color:#81a1c1>unit</span><span style=color:#eceff4>:</span> day
+</span></span><span style=display:flex><span>      <span style=color:#81a1c1>requests_per_unit</span><span style=color:#eceff4>:</span> <span style=color:#b48ead>5</span>
 </span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#616e87;font-style:italic># 5 login attempts per minute (brute-force protection)</span>
 </span></span><span style=display:flex><span><span style=color:#81a1c1>domain</span><span style=color:#eceff4>:</span> auth
 </span></span><span style=display:flex><span><span style=color:#81a1c1>descriptors</span><span style=color:#eceff4>:</span>
 </span></span><span style=display:flex><span>  - <span style=color:#81a1c1>key</span><span style=color:#eceff4>:</span> auth_type
 </span></span><span style=display:flex><span>    <span style=color:#81a1c1>value</span><span style=color:#eceff4>:</span> login
 </span></span><span style=display:flex><span>    <span style=color:#81a1c1>rate_limit</span><span style=color:#eceff4>:</span>
 </span></span><span style=display:flex><span>      <span style=color:#81a1c1>unit</span><span style=color:#eceff4>:</span> minute
-</span></span><span style=display:flex><span>      <span style=color:#81a1c1>requests_per_unit</span><span style=color:#eceff4>:</span> <span style=color:#b48ead>5</span>      <span style=color:#616e87;font-style:italic># Max 5 login attempts per minute</span>
+</span></span><span style=display:flex><span>      <span style=color:#81a1c1>requests_per_unit</span><span style=color:#eceff4>:</span> <span style=color:#b48ead>5</span>
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#81a1c1>domain</span><span style=color:#eceff4>:</span> messaging  
-</span></span><span style=display:flex><span><span style=color:#81a1c1>descriptors</span><span style=color:#eceff4>:</span>
-</span></span><span style=display:flex><span>  - <span style=color:#81a1c1>key</span><span style=color:#eceff4>:</span> message_type
-</span></span><span style=display:flex><span>    <span style=color:#81a1c1>value</span><span style=color:#eceff4>:</span> marketing
-</span></span><span style=display:flex><span>    <span style=color:#81a1c1>rate_limit</span><span style=color:#eceff4>:</span>
-</span></span><span style=display:flex><span>      <span style=color:#81a1c1>unit</span><span style=color:#eceff4>:</span> day
-</span></span><span style=display:flex><span>      <span style=color:#81a1c1>requests_per_unit</span><span style=color:#eceff4>:</span> <span style=color:#b48ead>100</span>    <span style=color:#616e87;font-style:italic># Max 100 marketing messages per day</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#81a1c1>domain</span><span style=color:#eceff4>:</span> search
+</span></span><span style=display:flex><span><span style=color:#616e87;font-style:italic># Free tier: 60 API calls/hour, Paid tier: 3600/hour</span>
+</span></span><span style=display:flex><span><span style=color:#81a1c1>domain</span><span style=color:#eceff4>:</span> api
 </span></span><span style=display:flex><span><span style=color:#81a1c1>descriptors</span><span style=color:#eceff4>:</span>
 </span></span><span style=display:flex><span>  - <span style=color:#81a1c1>key</span><span style=color:#eceff4>:</span> user_tier
 </span></span><span style=display:flex><span>    <span style=color:#81a1c1>value</span><span style=color:#eceff4>:</span> free
 </span></span><span style=display:flex><span>    <span style=color:#81a1c1>rate_limit</span><span style=color:#eceff4>:</span>
 </span></span><span style=display:flex><span>      <span style=color:#81a1c1>unit</span><span style=color:#eceff4>:</span> hour
-</span></span><span style=display:flex><span>      <span style=color:#81a1c1>requests_per_unit: 60     # Free tier</span><span style=color:#eceff4>:</span> <span style=color:#b48ead>60</span> searches/hour
+</span></span><span style=display:flex><span>      <span style=color:#81a1c1>requests_per_unit</span><span style=color:#eceff4>:</span> <span style=color:#b48ead>60</span>
 </span></span><span style=display:flex><span>  - <span style=color:#81a1c1>key</span><span style=color:#eceff4>:</span> user_tier
 </span></span><span style=display:flex><span>    <span style=color:#81a1c1>value</span><span style=color:#eceff4>:</span> paid
 </span></span><span style=display:flex><span>    <span style=color:#81a1c1>rate_limit</span><span style=color:#eceff4>:</span>
 </span></span><span style=display:flex><span>      <span style=color:#81a1c1>unit</span><span style=color:#eceff4>:</span> hour
-</span></span><span style=display:flex><span>      <span style=color:#81a1c1>requests_per_unit: 3600   # Paid tier</span><span style=color:#eceff4>:</span> <span style=color:#b48ead>3600</span> searches/hour
+</span></span><span style=display:flex><span>      <span style=color:#81a1c1>requests_per_unit</span><span style=color:#eceff4>:</span> <span style=color:#b48ead>3600</span>
 </span></span></code></pre></div><p><strong>How rules flow through the system:</strong></p><pre class=mermaid>flowchart TD
-    DISK[("📁 Config Files\non Disk")] -->|Workers pull rules\nevery 60s| WORKERS[⚙️ Worker Processes]
-    WORKERS -->|Cache rules| CACHE[("🗄️ Rules Cache\n(fast local read)")]
-    
-    REQ[📨 Incoming Request] --> RL["🚦 Rate Limiter Middleware"]
-    RL -->|Load rules| CACHE
-    CACHE -->|Rule: 5 req/min for /login| RL
-    RL -->|Fetch+increment counter| REDIS[("🔴 Redis\nCounters")]
-    REDIS -->|counter=3| RL
-    
-    RL -->|3 ≤ 5 ✅| API[🖥️ API Server]
-    RL -->|counter > limit ❌| CLIENT[👤 Client\nHTTP 429]
-    
-    API -->|Process request| RESP[📤 Response]
-    CLIENT --> HEADERS["Headers returned:\nX-RateLimit-Limit: 5\nX-RateLimit-Remaining: 2\nX-RateLimit-Retry-After: 42"]
-</pre><hr><h2 id=step-5--http-headers-that-clients-need>Step 5 — HTTP Headers That Clients Need</h2><p>When a client gets rate limited, it&rsquo;s cruel to just drop the connection silently. Well-designed APIs return <strong>informative headers</strong>:</p><pre tabindex=0><code>HTTP/1.1 429 Too Many Requests
+    DISK[("📁 Config files\nstored on disk")] 
+    WORKERS["⚙️ Background Workers\n(pull rules periodically)"]
+    CACHE[("🗄️ Rules Cache\n(fast in-memory read)")]
+
+    DISK -->|"workers pull every ~60s"| WORKERS
+    WORKERS -->|"update cache"| CACHE
+
+    REQ["📨 Incoming request\nGET /api/v1/posts\nUser: alice, Tier: free"] --> RL["🚦 Rate Limiter"]
+    RL -->|"① Load rule for\nfree-tier users"| CACHE
+    CACHE -->|"Rule: 60 req/hour"| RL
+    RL -->|"② Check + increment\ncounter in Redis"| REDIS[("🔴 Redis")]
+    REDIS -->|"counter = 47"| RL
+    RL -->|"③ 47 < 60 ✅"| API["🖥️ API Server"]
+    RL -->|"If over limit ❌"| RESP429["HTTP 429 + headers"]
+</pre><hr><h2 id=step-6--communicating-rate-limits-to-clients>Step 6 — Communicating Rate Limits to Clients</h2><p>When you rate limit a client, don&rsquo;t just drop them silently. Give them the information they need to behave properly. The standard headers are:</p><pre tabindex=0><code>HTTP/1.1 429 Too Many Requests
+Content-Type: application/json
 X-RateLimit-Limit: 100
 X-RateLimit-Remaining: 0
-X-RateLimit-Reset: 1685484800
-Retry-After: 30
-Content-Type: application/json
+X-RateLimit-Reset: 1748649600
+Retry-After: 42
 
 {
   &#34;error&#34;: &#34;rate_limit_exceeded&#34;,
-  &#34;message&#34;: &#34;You have exceeded 100 requests per minute. Please retry after 30 seconds.&#34;,
-  &#34;limit&#34;: 100,
-  &#34;window&#34;: &#34;1 minute&#34;
+  &#34;message&#34;: &#34;You have exceeded your rate limit of 100 requests/minute.&#34;,
+  &#34;retry_after_seconds&#34;: 42
 }
-</code></pre><table><thead><tr><th>Header</th><th>Meaning</th></tr></thead><tbody><tr><td><code>X-RateLimit-Limit</code></td><td>Max requests allowed in the window</td></tr><tr><td><code>X-RateLimit-Remaining</code></td><td>How many requests left in current window</td></tr><tr><td><code>X-RateLimit-Reset</code></td><td>Unix timestamp when the window resets</td></tr><tr><td><code>Retry-After</code></td><td>Seconds until the client can retry</td></tr></tbody></table><p>A good client should <strong>read these headers</strong> and implement exponential backoff:</p><pre class=mermaid>flowchart TD
-    REQ[Make API Request] --> RESP{Response?}
-    RESP -->|200 OK| SUCCESS[Process Response ✅]
-    RESP -->|429 Too Many| READ[Read Retry-After header]
-    READ --> WAIT["Wait: retry_after seconds\n(or exponential backoff)"]
-    WAIT --> JITTER["Add random jitter\n(prevents thundering herd)"]
-    JITTER --> REQ
-    RESP -->|500 Server Error| BACKOFF[Exponential backoff\n1s → 2s → 4s → 8s]
-    BACKOFF --> REQ
-</pre><hr><h2 id=step-6--detailed-system-design>Step 6 — Detailed System Design</h2><p>Here&rsquo;s the full production-grade architecture:</p><pre class=mermaid>graph TB
+</code></pre><table><thead><tr><th>Header</th><th>What it tells the client</th></tr></thead><tbody><tr><td><code>X-RateLimit-Limit</code></td><td>Your total allowed requests per window</td></tr><tr><td><code>X-RateLimit-Remaining</code></td><td>How many you have left right now</td></tr><tr><td><code>X-RateLimit-Reset</code></td><td>Unix timestamp when your quota resets</td></tr><tr><td><code>Retry-After</code></td><td>Seconds to wait before retrying</td></tr></tbody></table><p>A well-behaved client reads these headers and adapts. A poorly-written client ignores them and keeps hammering — which is exactly why you need the rate limiter in the first place.</p><hr><h2 id=step-7--the-full-detailed-design>Step 7 — The Full Detailed Design</h2><p>Now let&rsquo;s put it all together into a production-grade design. This is the system we&rsquo;d actually build.</p><pre class=mermaid>graph TB
     subgraph CLIENTS["Clients"]
-        C1[📱 Mobile App]
-        C2[🌐 Web App]
-        C3[🤖 3rd Party API]
+        C1["📱 Mobile App"]
+        C2["🌐 Web Browser"]
+        C3["🤖 3rd Party API"]
     end
 
-    subgraph EDGE["Edge / Load Balancer"]
-        LB[⚖️ Load Balancer]
+    subgraph INFRA["Your Infrastructure"]
+
+        subgraph RL_CLUSTER["Rate Limiter Cluster (stateless)"]
+            RL1["🚦 Rate Limiter 1"]
+            RL2["🚦 Rate Limiter 2"]
+            RL3["🚦 Rate Limiter 3"]
+        end
+
+        subgraph RULES_LAYER["Rules Layer"]
+            RULES_DISK[("📁 Rules on Disk")]
+            WORKERS["⚙️ Workers"]
+            RULES_CACHE[("🗄️ Cached Rules")]
+            RULES_DISK --> WORKERS --> RULES_CACHE
+        end
+
+        subgraph REDIS_LAYER["Redis Cluster (shared counters)"]
+            REDIS[("🔴 Redis")]
+        end
+
+        subgraph API_LAYER["API Servers"]
+            API1["🖥️ Server 1"]
+            API2["🖥️ Server 2"]
+        end
+
+        subgraph OVERFLOW_HANDLING["Rate-Limited Request Handling"]
+            DROP["🗑️ Drop (Option A)"]
+            MQ["📨 Message Queue\nfor async processing\n(Option B — e.g. orders)"]
+        end
+
     end
 
-    subgraph RATE_LIMITERS["Rate Limiter Cluster"]
-        RL1[🚦 Rate Limiter 1]
-        RL2[🚦 Rate Limiter 2]
-        RL3[🚦 Rate Limiter 3]
-    end
+    C1 & C2 & C3 --> RL1 & RL2 & RL3
+    RL1 & RL2 & RL3 <-->|"read rules"| RULES_CACHE
+    RL1 & RL2 & RL3 <-->|"atomic INCR\ncheck counter"| REDIS
+    RL1 & RL2 & RL3 -->|"✅ allowed"| API1 & API2
+    RL1 & RL2 & RL3 -->|"❌ rate-limited\nOption A"| DROP
+    RL1 & RL2 & RL3 -->|"❌ rate-limited\nOption B"| MQ
+    RL1 & RL2 & RL3 -->|"429 + headers"| C1 & C2 & C3
+</pre><p><strong>The detailed flow:</strong></p><ol><li><p><strong>Rules</strong> are stored on disk. Background workers periodically pull the latest rules and store them in a fast local cache. Each rate limiter instance has its own rules cache — no network hop needed to look up a rule.</p></li><li><p><strong>A client request</strong> arrives at one of the rate limiter instances (via load balancer).</p></li><li><p><strong>The rate limiter</strong> loads the applicable rule from its local cache (e.g. &ldquo;free-tier users: 60/hour&rdquo;).</p></li><li><p><strong>It fetches the current counter</strong> from Redis and atomically increments it.</p></li><li><p><strong>Decision:</strong></p><ul><li>If counter ≤ limit → forward request to API servers</li><li>If counter > limit → return 429 to the client. The excess request is either:<ul><li><strong>Option A:</strong> Dropped entirely</li><li><strong>Option B:</strong> Queued in a message queue for later processing (useful when requests must eventually be processed, e.g. order submissions)</li></ul></li></ul></li></ol><hr><h2 id=step-8--the-hard-problem-distributed-rate-limiting>Step 8 — The Hard Problem: Distributed Rate Limiting</h2><p>Here&rsquo;s where it gets interesting. Running a rate limiter on one server is easy. But what happens when you have <strong>10 rate limiter servers</strong> running simultaneously? Two nasty problems emerge.</p><hr><h3 id=problem-1-race-condition->Problem 1: Race Condition ⚡</h3><p>Every rate limiter follows this sequence:</p><ol><li>Read counter from Redis</li><li>Check if counter + 1 > limit</li><li>If not, increment counter in Redis</li></ol><p>In a concurrent system, this sequence can interleave dangerously:</p><pre class=mermaid>sequenceDiagram
+    participant RL1 as "🚦 Rate Limiter 1"
+    participant RL2 as "🚦 Rate Limiter 2"
+    participant R as "🔴 Redis\n(counter = 3, limit = 4)"
 
-    subgraph CACHE["Rules Cache"]
-        RC[🗄️ Local Rules Cache\nin each RL instance]
-    end
+    Note over R: Counter = 3
 
-    subgraph STORAGE["Shared State (Redis Cluster)"]
-        R1[(🔴 Redis Primary\nShard 1)]
-        R2[(🔴 Redis Primary\nShard 2)]
-        R3[(🔴 Redis Primary\nShard 3)]
-    end
+    RL1->>R: READ counter
+    R-->>RL1: counter = 3
 
-    subgraph API["API Servers"]
-        API1[🖥️ API Server 1]
-        API2[🖥️ API Server 2]
-    end
+    RL2->>R: READ counter (same instant!)
+    R-->>RL2: counter = 3
 
-    subgraph RULES["Rules Storage"]
-        DISK[("📁 Config Files\non Disk")]
-        WORKERS[⚙️ Workers]
-    end
+    Note over RL1: 3 < 4 ✅ Allow request 1
+    Note over RL2: 3 < 4 ✅ Allow request 2
 
-    subgraph OVERFLOW["Rate Limited Requests"]
-        DROP[🗑️ Drop Request]
-        MQ[📨 Message Queue\nfor later processing]
-    end
+    RL1->>R: WRITE counter = 4 (3+1)
+    RL2->>R: WRITE counter = 4 (3+1)
 
-    C1 & C2 & C3 --> LB
-    LB --> RL1 & RL2 & RL3
-    DISK --> WORKERS --> RC
-    RL1 & RL2 & RL3 --> RC
-    RL1 & RL2 & RL3 <-->|Atomic counters| R1 & R2 & R3
-    RL1 & RL2 & RL3 -->|✅ Allowed| API1 & API2
-    RL1 & RL2 & RL3 -->|❌ Limited Option 1| DROP
-    RL1 & RL2 & RL3 -->|❌ Limited Option 2| MQ
-    RL1 & RL2 & RL3 -->|429 + headers| C1 & C2 & C3
-</pre><p><strong>Flow explanation:</strong></p><ol><li>Client hits the load balancer → routed to one of the rate limiter instances</li><li>Rate limiter loads rules from its local cache (fast — no network hop)</li><li>Rate limiter performs an <strong>atomic</strong> read-increment on Redis</li><li>If under limit → forward to API servers</li><li>If over limit → return 429 with headers, then either drop or queue the request</li></ol><hr><h2 id=step-7--the-distributed-challenge>Step 7 — The Distributed Challenge</h2><p>Building a rate limiter for one server is easy. Building one for 50 rate limiter servers is <strong>hard</strong>. Two nasty problems emerge:</p><h3 id=problem-1-race-condition->Problem 1: Race Condition 🏁</h3><pre class=mermaid>sequenceDiagram
-    participant RL1 as Rate Limiter 1
-    participant RL2 as Rate Limiter 2
-    participant R as Redis (counter=3)
-
-    Note over R: Counter = 3, Limit = 4
-
-    RL1->>R: READ counter → 3
-    RL2->>R: READ counter → 3 (same time!)
-    
-    RL1->>R: counter < 4 → WRITE counter = 4
-    RL2->>R: counter < 4 → WRITE counter = 4 ← BUG! Should be 5
-
-    Note over R: Both requests allowed. Counter should be 5, is 4.
-    Note over R: We've allowed more than the limit!
-</pre><p><strong>The fix:</strong> Use Redis <strong>Lua scripts</strong> to make read-check-increment <strong>atomic</strong>:</p><div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lua data-lang=lua><span style=display:flex><span><span style=color:#616e87;font-style:italic>-- Atomic Lua script executed in Redis (single-threaded)</span>
+    Note over R: ⚠️ Counter = 4, but should be 5!
+    Note over R: Both requests were allowed when only ONE should have been.
+    Note over R: We've exceeded our limit!
+</pre><p>Both rate limiters read <code>3</code>, both think it&rsquo;s safe to proceed, both increment to <code>4</code>. But the correct value is <code>5</code>. We&rsquo;ve allowed one extra request beyond our limit.</p><p><strong>The fix: Lua scripts in Redis</strong></p><p>Redis is single-threaded. If you wrap your entire read-check-increment logic in a Lua script, Redis executes it as a single, atomic, uninterruptible operation. No two Lua scripts can interleave.</p><div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lua data-lang=lua><span style=display:flex><span><span style=color:#616e87;font-style:italic>-- This entire script runs atomically in Redis</span>
+</span></span><span style=display:flex><span><span style=color:#616e87;font-style:italic>-- No other command can execute between these lines</span>
 </span></span><span style=display:flex><span><span style=color:#81a1c1;font-weight:700>local</span> key <span style=color:#81a1c1>=</span> KEYS<span style=color:#eceff4>[</span><span style=color:#b48ead>1</span><span style=color:#eceff4>]</span>
 </span></span><span style=display:flex><span><span style=color:#81a1c1;font-weight:700>local</span> limit <span style=color:#81a1c1>=</span> tonumber<span style=color:#eceff4>(</span>ARGV<span style=color:#eceff4>[</span><span style=color:#b48ead>1</span><span style=color:#eceff4>])</span>
-</span></span><span style=display:flex><span><span style=color:#81a1c1;font-weight:700>local</span> expiry <span style=color:#81a1c1>=</span> tonumber<span style=color:#eceff4>(</span>ARGV<span style=color:#eceff4>[</span><span style=color:#b48ead>2</span><span style=color:#eceff4>])</span>
+</span></span><span style=display:flex><span><span style=color:#81a1c1;font-weight:700>local</span> window_seconds <span style=color:#81a1c1>=</span> tonumber<span style=color:#eceff4>(</span>ARGV<span style=color:#eceff4>[</span><span style=color:#b48ead>2</span><span style=color:#eceff4>])</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#81a1c1;font-weight:700>local</span> current <span style=color:#81a1c1>=</span> redis.call<span style=color:#eceff4>(</span><span style=color:#a3be8c>&#34;INCR&#34;</span><span style=color:#eceff4>,</span> key<span style=color:#eceff4>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#616e87;font-style:italic>-- Set expiry only when first creating the key</span>
 </span></span><span style=display:flex><span><span style=color:#81a1c1;font-weight:700>if</span> current <span style=color:#81a1c1>==</span> <span style=color:#b48ead>1</span> <span style=color:#81a1c1;font-weight:700>then</span>
-</span></span><span style=display:flex><span>    redis.call<span style=color:#eceff4>(</span><span style=color:#a3be8c>&#34;EXPIRE&#34;</span><span style=color:#eceff4>,</span> key<span style=color:#eceff4>,</span> expiry<span style=color:#eceff4>)</span>
+</span></span><span style=display:flex><span>    redis.call<span style=color:#eceff4>(</span><span style=color:#a3be8c>&#34;EXPIRE&#34;</span><span style=color:#eceff4>,</span> key<span style=color:#eceff4>,</span> window_seconds<span style=color:#eceff4>)</span>
 </span></span><span style=display:flex><span><span style=color:#81a1c1;font-weight:700>end</span>
 </span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#616e87;font-style:italic>-- Return 1 (allowed) or 0 (rejected)</span>
 </span></span><span style=display:flex><span><span style=color:#81a1c1;font-weight:700>if</span> current <span style=color:#81a1c1>&gt;</span> limit <span style=color:#81a1c1;font-weight:700>then</span>
-</span></span><span style=display:flex><span>    <span style=color:#81a1c1;font-weight:700>return</span> <span style=color:#b48ead>0</span>  <span style=color:#616e87;font-style:italic>-- rejected</span>
+</span></span><span style=display:flex><span>    <span style=color:#81a1c1;font-weight:700>return</span> <span style=color:#b48ead>0</span>
 </span></span><span style=display:flex><span><span style=color:#81a1c1;font-weight:700>else</span>
-</span></span><span style=display:flex><span>    <span style=color:#81a1c1;font-weight:700>return</span> <span style=color:#b48ead>1</span>  <span style=color:#616e87;font-style:italic>-- allowed</span>
+</span></span><span style=display:flex><span>    <span style=color:#81a1c1;font-weight:700>return</span> <span style=color:#b48ead>1</span>
 </span></span><span style=display:flex><span><span style=color:#81a1c1;font-weight:700>end</span>
-</span></span></code></pre></div><p>Because Redis executes Lua scripts <strong>atomically</strong>, no two scripts can interleave. Race condition eliminated.</p><h3 id=problem-2-synchronization->Problem 2: Synchronization 🔄</h3><pre class=mermaid>flowchart LR
+</span></span></code></pre></div><p>Because the script is atomic, the race condition is impossible. Lua scripts are the standard solution — also used internally by popular rate limiting libraries.</p><hr><h3 id=problem-2-synchronization->Problem 2: Synchronization 🔄</h3><p>Imagine you have two rate limiter servers. A client sends requests that are load-balanced between them:</p><pre class=mermaid>graph LR
     subgraph BAD["❌ Without Centralized State"]
-        C1[Client 1] --> RL_A[Rate Limiter A\ncounter: 3]
-        C1 -.->|sometimes| RL_B[Rate Limiter B\ncounter: 0]
-        C2[Client 2] --> RL_B
-        RL_A -.- NOTE1["RL_A doesn't know\nClient 1 also hit RL_B!"]
-        RL_B -.- NOTE2["Each limiter has\nstale state"]
-    end
+        C1["Client 1"]
+        C2["Client 2"]
+        RL_A["Rate Limiter A\nMemory: {user1: 3}"]
+        RL_B["Rate Limiter B\nMemory: {user1: 2}"]
 
+        C1 --> RL_A
+        C1 -.->|"sometimes routed here"| RL_B
+        C2 --> RL_B
+
+        NOTE["❌ Rate Limiter A doesn't know\nClient 1 also hit Rate Limiter B.\nActual count: 5, but\nA thinks it's 3, B thinks it's 2."]
+    end
+</pre><pre class=mermaid>graph LR
     subgraph GOOD["✅ With Centralized Redis"]
-        C3[Client 1] --> RL_C[Rate Limiter A]
-        C3 -.->|sometimes| RL_D[Rate Limiter B]
-        C4[Client 2] --> RL_D
-        RL_C <-->|Read/Write| REDIS[(🔴 Redis\nShared Counter)]
-        RL_D <-->|Read/Write| REDIS
+        C3["Client 1"]
+        C4["Client 2"]
+        RL_C["Rate Limiter A"]
+        RL_D["Rate Limiter B"]
+        REDIS[("🔴 Redis\nuser1: 5 ← true count")]
+
+        C3 --> RL_C & RL_D
+        C4 --> RL_D
+        RL_C <-->|"read/write"| REDIS
+        RL_D <-->|"read/write"| REDIS
+
+        NOTE2["✅ Both rate limiters share\none source of truth.\nNo matter which server\nthe client hits, the count\nis always accurate."]
     end
-</pre><p><strong>The solution:</strong> All rate limiter servers read and write to the <strong>same Redis cluster</strong>. The counter for user <code>123</code> always lives in the same Redis shard — no inconsistency.</p><hr><h2 id=step-8--scaling-to-millions-of-requests>Step 8 — Scaling to Millions of Requests</h2><p>A single Redis node handles ~100,000 operations/second. What if you have 10 million requests/second?</p><pre class=mermaid>graph TB
-    subgraph RL_CLUSTER["Rate Limiter Cluster"]
-        RL1[RL 1]
-        RL2[RL 2]
-        RL3[RL 3]
+</pre><p><strong>The solution is simple:</strong> All rate limiter servers must share state through a centralized Redis cluster. The rate limiters themselves are <strong>stateless</strong> — they hold no local counters, only local rules cache.</p><hr><h2 id=step-9--performance-optimization>Step 9 — Performance Optimization</h2><p>Once you&rsquo;ve solved correctness, optimize for speed and global scale.</p><h3 id=optimization-1-multi-data-center-deployment>Optimization 1: Multi-Data Center Deployment</h3><p>A user in Tokyo calling a rate limiter in Virginia adds 150ms of latency <em>just for the rate limit check</em>. That&rsquo;s unacceptable.</p><pre class=mermaid>graph TD
+    subgraph GLOBAL["Global Deployment"]
+        subgraph US["🇺🇸 US East\n(Virginia)"]
+            US_RL["Rate Limiter"]
+            US_R[("Redis Cluster")]
+            US_API["API Servers"]
+            US_RL <--> US_R
+            US_RL --> US_API
+        end
+
+        subgraph EU["🇪🇺 EU West\n(Ireland)"]
+            EU_RL["Rate Limiter"]
+            EU_R[("Redis Cluster")]
+            EU_API["API Servers"]
+            EU_RL <--> EU_R
+            EU_RL --> EU_API
+        end
+
+        subgraph AP["🇯🇵 Asia Pacific\n(Tokyo)"]
+            AP_RL["Rate Limiter"]
+            AP_R[("Redis Cluster")]
+            AP_API["API Servers"]
+            AP_RL <--> AP_R
+            AP_RL --> AP_API
+        end
+
+        US_R <-.->|"async replication\n(eventual consistency)"| EU_R
+        EU_R <-.->|"async replication"| AP_R
+        AP_R <-.->|"async replication"| US_R
     end
 
-    subgraph REDIS_CLUSTER["Redis Cluster (Sharded)"]
-        direction LR
-        HASH["Consistent Hashing\nuser_id → shard"]
-        R1[(Shard 1\nUsers A–F)]
-        R2[(Shard 2\nUsers G–M)]
-        R3[(Shard 3\nUsers N–Z)]
-        HASH --> R1 & R2 & R3
-    end
+    USER_JP["👤 User in Tokyo"] --> AP_RL
+    USER_US["👤 User in NY"] --> US_RL
+    USER_EU["👤 User in London"] --> EU_RL
+</pre><p>Cloudflare runs 194 edge server locations worldwide, so every rate limit check happens within a few milliseconds of the client.</p><h3 id=optimization-2-eventual-consistency>Optimization 2: Eventual Consistency</h3><p>When you replicate Redis across multiple regions asynchronously, the counters aren&rsquo;t perfectly synchronized in real time. A user&rsquo;s counter in Tokyo and Virginia might differ by a few requests for a fraction of a second.</p><p>This is a deliberate tradeoff: <strong>slightly imprecise counting</strong> vs <strong>low latency for every user in the world</strong>. Cloudflare&rsquo;s data shows this imprecision affects only 0.003% of requests — a perfectly acceptable trade.</p><p>If you need strict consistency (e.g. financial APIs), synchronize data with a <strong>strong consistency model</strong> and accept the latency cost.</p><hr><h2 id=step-10--monitoring>Step 10 — Monitoring</h2><p>Deploying a rate limiter and forgetting about it is a mistake. You must monitor it continuously.</p><pre class=mermaid>flowchart LR
+    RL["🚦 Rate Limiter"]
 
-    subgraph REPLICAS["Read Replicas (for HA)"]
-        R1R[(Replica 1)]
-        R2R[(Replica 2)]
-        R3R[(Replica 3)]
-    end
+    RL -->|"Emit metrics"| METRICS[("📊 Prometheus\nMetrics Store")]
+    METRICS --> GRAFANA["📈 Grafana Dashboard"]
+    METRICS --> ALERTS{"🔔 Alert Rules"}
 
-    RL1 & RL2 & RL3 --> HASH
-    R1 --> R1R
-    R2 --> R2R
-    R3 --> R3R
-</pre><p><strong>Sharding strategy:</strong> Hash the user ID (or IP/API key) to determine which Redis shard holds that user&rsquo;s counter. All requests from <code>user:123</code> always go to <code>shard-2</code>. This ensures no cross-shard coordination needed.</p><p><strong>Multi-region deployment for global scale:</strong></p><pre class=mermaid>graph LR
-    subgraph US["🇺🇸 US East"]
-        US_RL[Rate Limiter\nUS]
-        US_R[(Redis US)]
-    end
-    subgraph EU["🇪🇺 EU West"]
-        EU_RL[Rate Limiter\nEU]
-        EU_R[(Redis EU)]
-    end
-    subgraph AP["🇯🇵 Asia Pacific"]
-        AP_RL[Rate Limiter\nAP]
-        AP_R[(Redis AP)]
-    end
+    ALERTS -->|"Rejection rate > 15%"| ALERT1["⚠️ Rules too strict!\nLegitimate users being blocked.\nConsider relaxing limits."]
 
-    US_R <-->|Async replication\nEventual consistency| EU_R
-    EU_R <-->|Async replication| AP_R
-    AP_R <-->|Async replication| US_R
+    ALERTS -->|"Rejection rate drops to 0%"| ALERT2["⚠️ Rules too loose?\nOr attack bypassing limiter.\nCheck for anomalies."]
 
-    USER_US[US User] --> US_RL
-    USER_EU[EU User] --> EU_RL
-    USER_AP[AP User] --> AP_RL
-</pre><p><strong>Trade-off:</strong> Eventual consistency means a user could briefly exceed the limit if two regions count independently. Cloudflare accepts this — they allow a small margin of error (0.003% of requests) in exchange for much lower latency.</p><hr><h2 id=step-9--hard-vs-soft-rate-limiting>Step 9 — Hard vs Soft Rate Limiting</h2><p>This is often asked as a follow-up in interviews:</p><pre class=mermaid>flowchart TD
-    REQ[Request Arrives] --> CHECK{Limit Check}
+    ALERTS -->|"Flash sale detected:\n100× traffic spike"| ALERT3["🚨 Consider switching\nto Token Bucket\nfor burst tolerance."]
+</pre><p><strong>Two things to validate constantly:</strong></p><ol><li><p><strong>Algorithm effectiveness</strong> — Are the right requests being blocked?</p><ul><li>If a flash sale sends real users into 429s → your rules are too strict for burst events. Consider switching to Token Bucket which allows short bursts.</li><li>If a bot is bypassing your limiter → check if they&rsquo;re rotating IPs, using distributed networks, or exploiting algorithm weaknesses.</li></ul></li><li><p><strong>Rule effectiveness</strong> — Are the rules the right thresholds?</p><ul><li>If 15% of requests are being rejected for a normally well-behaved endpoint → your limit is probably too low.</li><li>If an endpoint that should be protected shows 0% rejections during an attack → your limit is too high.</li></ul></li></ol><hr><h2 id=bonus--advanced-topics-for-interviews>Bonus — Advanced Topics for Interviews</h2><p>These are points you can raise in the &ldquo;wrap-up&rdquo; phase of a system design interview to show depth:</p><h3 id=hard-vs-soft-rate-limiting>Hard vs Soft Rate Limiting</h3><pre class=mermaid>flowchart TD
+    REQ["📨 Request arrives\n(over limit)"]
 
-    CHECK -->|Under limit| ALLOW[✅ Allow]
+    REQ --> HARD["🔴 Hard Rate Limiting\n\nCannot exceed threshold.\nPeriod.\n\nHTTP 429 — no exceptions.\n\nBest for: login endpoints,\nbilling APIs, admin actions"]
+
+    REQ --> SOFT["🟡 Soft Rate Limiting\n\nCan temporarily exceed\nfor short bursts.\n\nHTTP 200 with warning header:\nX-RateLimit-Warning: near-limit\n\nBest for: content APIs,\nnon-critical endpoints"]
+</pre><h3 id=rate-limiting-at-different-osi-layers>Rate Limiting at Different OSI Layers</h3><p>Most of this article covers <strong>Layer 7 (HTTP/Application)</strong>. But rate limiting can happen at multiple layers:</p><pre class=mermaid>graph TD
+    L3["🌐 Layer 3 — Network (IP)\nBlock by source IP packets\nTool: iptables, cloud firewalls\nBest for: volumetric DDoS attacks"]
+    L4["🔌 Layer 4 — Transport (TCP)\nLimit TCP connections per IP\nTool: Load balancer connection limits\nBest for: connection flood attacks"]
+    L7["📡 Layer 7 — Application (HTTP)\nThrottle by user ID, API key, endpoint\nTool: API Gateway, middleware\nBest for: API abuse, scraping"]
+
+    L3 -->|"Passes to"| L4 -->|"Passes to"| L7
     
-    CHECK -->|Over limit| TYPE{Hard or Soft?}
-    
-    TYPE -->|Hard limit| REJECT["❌ Strict Reject\nHTTP 429\nNo exceptions ever\n\nUse for: security-critical\napis, billing, auth"]
-    
-    TYPE -->|Soft limit| GRACE{Within grace\nperiod/burst?}
-    GRACE -->|Yes| ALLOW2["✅ Allow with warning\nHTTP 200 with header:\nX-RateLimit-Warning: approaching limit"]
-    GRACE -->|No| REJECT2["❌ Reject\nHTTP 429"]
-</pre><p><strong>Hard rate limiting:</strong> The number of requests cannot exceed the threshold. Full stop. Used for: login endpoints (security), billing APIs (cost control), admin APIs.</p><p><strong>Soft rate limiting:</strong> Requests can slightly exceed the threshold for a short period. Used for: less sensitive endpoints where user experience matters more than strict enforcement.</p><hr><h2 id=step-10--rate-limiting-at-different-layers>Step 10 — Rate Limiting at Different Layers</h2><p>We&rsquo;ve focused on Layer 7 (HTTP/application). But rate limiting can happen anywhere:</p><pre class=mermaid>graph TD
-    L7["Layer 7 — Application (HTTP)\n✅ Most common\nThrottle by: user ID, API key, endpoint\nTool: API Gateway, Nginx, middleware"]
-    L4["Layer 4 — Transport (TCP/UDP)\nThrottle by: connections per IP\nTool: Load balancer connection limits"]
-    L3["Layer 3 — Network (IP)\nThrottle by: packets per IP\nTool: iptables, cloud firewall\ngreat for DDoS protection"]
+    DDOS["🦹 DDoS Attacker\n(millions of packets)"] -->|"Blocked at L3"| L3
+    BOT["🤖 Scraper Bot\n(many connections)"] -->|"Blocked at L4"| L4
+    USER["😤 Abusive User\n(too many API calls)"] -->|"Blocked at L7"| L7
+</pre><p><strong>Pro tip:</strong> Layer your defences. A well-architected system uses cloud firewall rules at L3 for volumetric attacks, connection limits at L4, and application-level rate limiting at L7.</p><h3 id=how-to-write-a-well-behaved-api-client>How to Write a Well-Behaved API Client</h3><pre class=mermaid>flowchart TD
+    REQUEST["Make API Call"] --> CHECK_CACHE{"Response\ncached?"}
+    CHECK_CACHE -->|"Yes"| USE_CACHE["Use cached response\n(no API call needed) 🎉"]
+    CHECK_CACHE -->|"No"| CALL["Make HTTP request"]
 
-    L3 --> L4 --> L7
-    
-    ATTACKER[🦹 DDoS Attacker] -->|Layer 3 blocks first| L3
-    BOT[🤖 Bot] -->|Layer 7 blocks| L7
-    LEGIT[✅ Legitimate User] -->|Passes all layers| APP[Your Application]
-</pre><p><strong>Pro tip for interviews:</strong> Mention you can layer these — use IP-based blocking at L3 for DDoS, per-user throttling at L7 for API abuse.</p><hr><h2 id=step-11--monitoring-and-alerting>Step 11 — Monitoring and Alerting</h2><p>A rate limiter is useless without observability:</p><pre class=mermaid>flowchart LR
-    RL[Rate Limiter] -->|Metrics| PROM[(Prometheus\nMetrics)]
-    PROM --> GRAFANA[📊 Grafana Dashboard]
-    PROM --> ALERT{Alert Rules}
-    
-    ALERT -->|> 10% requests\nbeing rate-limited| SLACK[📢 Slack Alert\n'Rate limiting too aggressive'\nConsider relaxing rules]
-    
-    ALERT -->|Sudden 100×\ntraffic spike| PAGERDUTY[🚨 PagerDuty\n'Possible DDoS'\nConsider stricter rules]
-    
-    GRAFANA --> METRICS["Key Metrics to Watch:
-    • requests_allowed_total
-    • requests_rejected_total
-    • rejection_rate_per_endpoint
-    • p99 latency overhead
-    • Redis memory usage"]
-</pre><p><strong>Two things to validate:</strong></p><ol><li><strong>Algorithm effectiveness</strong> — Are the right requests being blocked? Too strict = legitimate users blocked. Too loose = abuse slips through.</li><li><strong>Rule effectiveness</strong> — Flash sale traffic might need a temporary rule relaxation, or token bucket instead of fixed window.</li></ol><hr><h2 id=real-world-examples-how-the-giants-do-it>Real-World Examples: How the Giants Do It</h2><pre class=mermaid>graph TD
-    subgraph STRIPE["💳 Stripe"]
-        S1["Token Bucket\n100 req/sec per API key\nBurst allowed up to 1000\nretry-after header on 429"]
-    end
-    subgraph AWS["☁️ AWS API Gateway"]
-        A1["Token Bucket\nDefault: 10,000 req/sec\nBurst: 5,000\nPer-stage or per-route limits"]
-    end
-    subgraph SHOPIFY["🛍️ Shopify"]
-        SH1["Leaky Bucket\n40 req/sec steady state\nBucket size: 80\nREST + GraphQL APIs"]
-    end
-    subgraph CLOUDFLARE["🌐 Cloudflare"]
-        CF1["Sliding Window Counter\n400M requests/day\n0.003% error rate\n194 edge locations"]
-    end
-    subgraph TWITTER["🐦 Twitter/X"]
-        T1["Fixed Window per endpoint\n15 min windows\nDifferent limits per app tier\n15 req/15min on free tier"]
-    end
-</pre><hr><h2 id=common-interview-follow-up-questions>Common Interview Follow-Up Questions</h2><pre class=mermaid>mindmap
-  root((Rate Limiter\nFollow-ups))
-    Distributed
-      How to handle eventual consistency?
-      What if Redis goes down?
-      How to shard Redis?
-    Edge Cases
-      What if client IPs are behind NAT?
-      Handling IPv6?
-      VPN users sharing IPs
-    Design Choices
-      Where to place: gateway vs middleware?
-      Hard vs soft limits?
-      What algorithm for flash sales?
-    Monitoring
-      How to detect if rules are too strict?
-      How to measure overhead?
-      Alerting on rejection rate spikes
-    Security
-      Can clients spoof user IDs?
-      What about distributed attacks?
-      Rate limit at DNS level?
-</pre><p><strong>The Redis failure question:</strong> If Redis goes down, should you block all traffic or allow all traffic?</p><ul><li><strong>Fail open</strong> (allow all): Users experience no downtime. Risk: abuse during outage window.</li><li><strong>Fail closed</strong> (block all): No abuse risk. Risk: complete outage.</li></ul><p><strong>Best answer:</strong> Fail open with circuit breakers. If Redis is unhealthy, temporarily bypass rate limiting (fail open) but immediately alert on-call. The brief window of no rate limiting is better than a complete outage for your users.</p><hr><h2 id=designing-for-your-client-best-practices>Designing for Your Client: Best Practices</h2><p>If you&rsquo;re calling a rate-limited API, here&rsquo;s how to write a well-behaved client:</p><pre class=mermaid>flowchart TD
-    REQ[API Request] --> CACHE{Cache hit?}
-    CACHE -->|Yes| RETURN[Return cached response\nNo API call needed]
-    CACHE -->|No| CALL[Make API call]
-    
-    CALL --> RESP{Response}
-    RESP -->|200 OK| STORE[Store in cache\nwith TTL] --> USE[Use response]
-    RESP -->|429| RETRY_AFTER[Read Retry-After header]
-    RETRY_AFTER --> SLEEP["Wait: retry_after + random_jitter seconds"]
-    SLEEP --> CALL
-    RESP -->|5xx| BACKOFF["Exponential backoff\n1s → 2s → 4s → 8s → 16s\nMax 5 retries"]
-    BACKOFF --> CALL
-    
-    NOTE["Always:\n• Cache aggressively\n• Read X-RateLimit-Remaining\n• Slow down before hitting 0\n• Add jitter to retries"]
-</pre><hr><h2 id=summary-the-complete-picture>Summary: The Complete Picture</h2><pre class=mermaid>graph TB
-    subgraph WHAT["What is it?"]
-        W["A system that controls\nhow many requests a client\ncan make in a time window"]
-    end
+    CALL --> RESPONSE{"HTTP\nResponse?"}
+    RESPONSE -->|"200 OK"| CACHE_RESP["Cache response\nwith appropriate TTL"]
+    CACHE_RESP --> READ_HEADERS["Read X-RateLimit-Remaining\nSlow down proactively\nif remaining < 10%"]
 
-    subgraph ALGOS["5 Algorithms"]
-        A1[Token Bucket\n🏆 Most popular]
-        A2[Leaky Bucket\nSmooth output]
-        A3[Fixed Window\nSimple but flawed]
-        A4[Sliding Window Log\nMost accurate]
-        A5[Sliding Window Counter\nBest balance]
-    end
+    RESPONSE -->|"429 Too Many"| READ_RETRY["Read Retry-After header"]
+    READ_RETRY --> JITTER["Wait: retry_after + random jitter\n(jitter prevents thundering herd\nwhen many clients retry at once)"]
+    JITTER --> REQUEST
 
-    subgraph INFRA["Infrastructure"]
-        I1[Redis\nAtomic counters]
-        I2[API Gateway\nEnforcement point]
-        I3[Rules Config\nYAML/disk]
-        I4[Workers\nCache rules]
-    end
-
-    subgraph CHALLENGES["Distributed Challenges"]
-        D1[Race conditions\n→ Lua scripts]
-        D2[Synchronization\n→ Centralized Redis]
-        D3[Scale\n→ Redis sharding]
-        D4[Latency\n→ Edge deployment]
-    end
-
-    subgraph EXTRAS["Interview Extras"]
-        E1[Hard vs Soft limits]
-        E2[L3/L4/L7 layers]
-        E3[Monitoring metrics]
-        E4[Client best practices]
-    end
-
-    WHAT --> ALGOS --> INFRA --> CHALLENGES --> EXTRAS
-</pre><hr><h2 id=key-takeaways>Key Takeaways</h2><ol><li><strong>Token Bucket</strong> is the default choice for most APIs — allows bursting, memory efficient, used by AWS and Stripe</li><li><strong>Sliding Window Counter</strong> is best when you need accuracy at massive scale — Cloudflare proved it at 400M req/day</li><li><strong>Never store counters in a relational database</strong> — use Redis for sub-millisecond atomic operations</li><li><strong>Race conditions in distributed systems</strong> are solved with Redis Lua scripts (atomic operations)</li><li><strong>Synchronization across rate limiter servers</strong> is solved by centralizing state in Redis</li><li><strong>Always return helpful headers</strong> — <code>X-RateLimit-Remaining</code>, <code>Retry-After</code> — so clients can behave well</li><li><strong>Monitor your rate limiter</strong> — rules that are too strict block real users; rules too loose allow abuse</li></ol><hr><h2 id=whats-next>What&rsquo;s Next?</h2><p>In <strong>Chapter 5</strong>, we&rsquo;ll tackle <strong>Consistent Hashing</strong> — the algorithm that makes it possible to distribute data across hundreds of servers while minimizing data movement when servers join or leave the cluster. It&rsquo;s the backbone of Redis Cluster, Cassandra, and DynamoDB.</p><p><em>If you found this useful, share it with a friend preparing for system design interviews. Every engineer deserves to understand how the systems they use every day actually work.</em></p></div><div class=social-share-bar><span class=share-label>Share:</span>
+    RESPONSE -->|"5xx Server Error"| BACKOFF["Exponential backoff:\n1s → 2s → 4s → 8s → 16s\nMax 5 retries, then give up"]
+    BACKOFF --> REQUEST
+</pre><p><strong>Client best practices from the book:</strong></p><ul><li><strong>Cache responses</strong> aggressively — fewer API calls = less chance of hitting limits</li><li><strong>Read <code>X-RateLimit-Remaining</code></strong> — slow down before you hit zero, don&rsquo;t wait for 429</li><li><strong>Add jitter to retries</strong> — if 1000 clients all get 429 at the same time and all retry after exactly 30 seconds, you create a thundering herd</li><li><strong>Handle exceptions gracefully</strong> — catch 429 errors, never let them bubble up to the user as a crash</li></ul><hr><h2 id=interview-cheat-sheet>Interview Cheat Sheet</h2><p>Here&rsquo;s everything you need to ace a rate limiter question in one diagram:</p><pre class=mermaid>mindmap
+  root(("🚦 Rate Limiter\nDesign"))
+    Requirements
+      Server-side, not client
+      Low latency < 1ms overhead
+      Distributed across servers
+      Fault tolerant
+      Inform clients on throttle
+    Algorithms
+      Token Bucket
+        AWS Stripe default
+        Allows bursting
+        Low memory
+      Leaky Bucket
+        Shopify uses it
+        Constant outflow rate
+        Good for stable downstream
+      Fixed Window
+        Simple to implement
+        Boundary burst bug
+        Avoid for strict limits
+      Sliding Window Log
+        Highest accuracy
+        High memory cost
+        Use for compliance APIs
+      Sliding Window Counter
+        Cloudflare at scale
+        Best balance of both
+        0.003% error rate
+    Architecture
+      Redis for counters
+        Atomic Lua scripts
+        Sub-millisecond latency
+        INCR + EXPIRE commands
+      Rules in config files
+        Workers cache rules
+        YAML format
+        Domain + descriptor model
+      API Gateway placement
+        Single enforcement point
+        No code changes to services
+    Distributed Challenges
+      Race condition
+        Lua script atomicity
+        Single-threaded Redis
+      Synchronization
+        Centralized Redis cluster
+        All limiters share state
+      Global scale
+        Multi-region deployment
+        Eventual consistency
+        Edge servers
+    HTTP Behaviour
+      429 Too Many Requests
+      X-RateLimit-Limit header
+      X-RateLimit-Remaining header
+      Retry-After header
+    Extras
+      Hard vs Soft limits
+      L3 L4 L7 layers
+      Monitor rejection rate
+      Client backoff + jitter
+</pre><hr><h2 id=summary>Summary</h2><p>A rate limiter is one of the most impactful components you can add to a production API. Here are the key takeaways:</p><ol><li><strong>Always put it on the server side</strong> — client-side rate limiting is trivially bypassed</li><li><strong>Token Bucket</strong> is the right default for most REST APIs — memory efficient, allows bursting, battle-tested by AWS and Stripe</li><li><strong>Sliding Window Counter</strong> is the best choice for high-scale systems — Cloudflare proved it handles 400M requests/day with 0.003% inaccuracy</li><li><strong>Use Redis</strong> for counter storage — sub-millisecond, atomic, in-memory</li><li><strong>Use Lua scripts</strong> to eliminate race conditions in distributed environments</li><li><strong>All rate limiter servers must share state</strong> via a centralized Redis cluster — never use local in-memory counters across multiple servers</li><li><strong>Always return helpful headers</strong> — <code>X-RateLimit-Remaining</code>, <code>Retry-After</code> — so well-behaved clients can adapt</li><li><strong>Monitor your rejection rate</strong> — too high means your rules are too strict, too low means they&rsquo;re too loose or you&rsquo;re being bypassed</li><li><strong>Layer your defences</strong> — combine L3 firewall rules for DDoS with L7 application rate limiting for API abuse</li></ol><hr><h2 id=whats-next>What&rsquo;s Next?</h2><p>In <strong>Chapter 5</strong>, we&rsquo;ll design a <strong>Consistent Hashing</strong> system — the brilliant algorithm that powers Redis Cluster, Apache Cassandra, and Amazon DynamoDB. It solves one of the hardest problems in distributed systems: how do you add or remove servers without redistributing all your data?</p><p><em>Share this article with a colleague preparing for system design interviews — understanding rate limiters is essential knowledge for any senior engineer.</em></p></div><div class=social-share-bar><span class=share-label>Share:</span>
 <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fdesign-a-rate-limiter%2f&title=Design&#43;a+Rate+Limiter" target=_blank rel=noopener class="share-btn share-linkedin" title="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i> LinkedIn
 </a><a href="https://twitter.com/intent/tweet?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fdesign-a-rate-limiter%2f&text=Design&#43;a+Rate+Limiter" target=_blank rel=noopener class="share-btn share-twitter" title="Share on Twitter / X"><i class="fa-brands fa-x-twitter"></i> X
 </a><a href="https://www.reddit.com/submit?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fdesign-a-rate-limiter%2f&title=Design&#43;a+Rate+Limiter" target=_blank rel=noopener class="share-btn share-reddit" title="Share on Reddit"><i class="fa-brands fa-reddit-alien"></i> Reddit</a></div></div></article><nav class="navigation post-navigation" role=navigation><h2 class=screen-reader-text>Post navigation</h2><div class=nav-links><div class=nav-next><a href=/2026/05/framework-for-system-design-interviews/ rel=prev><span class=post-title>A Framework for System Design Interviews: The Complete Playbook
