@@ -77,23 +77,26 @@ Now server 1 goes down. `N` changes from 4 to 3. We apply `hash(key) % 3`:
 flowchart LR
     subgraph BEFORE["Before: N=4"]
         direction TB
-        B0["Server 0\nkey1 key3"]
-        B1["Server 1\nkey0 key4"]
-        B2["Server 2\nkey2 key6"]
-        B3["Server 3\nkey5 key7"]
+        B0["Server 0: key1, key3"]
+        B1["Server 1: key0, key4"]
+        B2["Server 2: key2, key6"]
+        B3["Server 3: key5, key7"]
     end
 
-    subgraph AFTER["After: N=3 (server 1 removed)"]
+    subgraph AFTER["After: N=3 — server 1 removed"]
         direction TB
-        A0["Server 0\nkey0 key1 key5 key7"]
-        A1["Server 1\nkey2 key4 key6"]
-        A2["Server 2\nkey3"]
-        A3["❌ Server 1\n(gone)"]
+        A0["Server 0: key0, key1, key5, key7"]
+        A1["Server 1: key2, key4, key6"]
+        A2["Server 2: key3"]
+        A3["❌ Server 1: gone"]
     end
 
-    BEFORE -->|"Resize N"| AFTER
+    subgraph IMPACT["Impact"]
+        NOTE["😱 7 of 8 keys remapped to new servers\nEvery remapped key = cache miss\nEvery cache miss = database query\nDatabase overloaded instantly!"]
+    end
 
-    NOTE["😱 7 of 8 keys remapped!\nEvery cache miss = DB query\nDatabase immediately overloaded"]
+    BEFORE -->|"N changes from 4 to 3"| AFTER
+    AFTER --> IMPACT
 ```
 
 This is devastating in production. Every remapped key is a **cache miss**. Every cache miss is a **database query**. With millions of keys remapping simultaneously, your database gets a thundering herd of requests it was never designed to handle. The very moment you scale — the moment your system is under stress — traditional hashing makes everything worse.
@@ -321,18 +324,18 @@ But in practice, because server positions are determined by hashing their IP add
 
 ```mermaid
 graph LR
-    subgraph UNEQUAL["😱 After Server 1 is removed"]
+    subgraph UNEQUAL["After Server 1 is removed — Unequal Partitions"]
         direction LR
-        S0["🟣 Server 0\n(large partition)"]
-        S2["🟠 Server 2\n(small partition)"]
-        S3["🟢 Server 3\n(medium partition)"]
+        S0["🟣 Server 0\nlarge partition"]
+        S2["🟠 Server 2\nsmall partition"]
+        S3["🟢 Server 3\nmedium partition"]
+        WARN["⚠️ Server 0 handles far more traffic\nthan Server 2 or Server 3.\nLoad imbalance!"]
         
-        S0 -->|"Large arc\n(was S0→S1→S2,\nnow S0→S2)"| S2
+        S0 -->|"Large arc — was S0 to S1 to S2"| S2
         S2 -->|"Small arc"| S3
-        S3 -->|"Medium arc\n(wraps to S0)"| S0
+        S3 -->|"Medium arc — wraps to S0"| S0
+        S0 --- WARN
     end
-
-    NOTE["⚠️ Server 0 now handles\nfar more traffic than\nServer 2 or Server 3.\nLoad imbalance!"]
 ```
 
 When Server 1 is removed, Server 2's partition grows to include Server 1's old arc. Server 0's partition is now twice as large as Server 3's. Server 2's partition is tiny. **Unbalanced load, hot servers, slow responses.**
@@ -343,19 +346,19 @@ Even without removing servers, if servers happen to hash to positions that are c
 
 ```mermaid
 graph LR
-    subgraph CLUSTERED["😱 Servers Clustered Together"]
+    subgraph CLUSTERED["Servers Clustered Together — Key Distribution Skewed"]
         S0["🟣 Server 0"]
         S1["🔵 Server 1"]
-        S2["🟠 Server 2\n(huge partition\nhandles most keys)"]
+        S2["🟠 Server 2\nhugest partition — most keys land here"]
         S3["🟢 Server 3"]
+        WARN["⚠️ Server 2 handles 70% of keys\nServer 1 handles only 5%\nMassively unbalanced system!"]
 
         S3 -->|"tiny arc"| S0
         S0 -->|"tiny arc"| S1
         S1 -->|"tiny arc"| S2
-        S2 -->|"HUGE arc\n(most keys land here)"| S3
+        S2 -->|"HUGE arc"| S3
+        S2 --- WARN
     end
-
-    NOTE["⚠️ Server 2 handles 70% of keys.\nServer 1 handles 5% of keys.\nThe system is massively unbalanced."]
 ```
 
 The book gives a real, relatable example:
@@ -440,15 +443,15 @@ This comes from research cited in the book. With 100–200 virtual nodes per ser
 Virtual nodes give you a powerful bonus: you can allocate proportionally based on server capacity.
 
 ```mermaid
-graph LR
-    subgraph HETERO["Heterogeneous Cluster with Virtual Nodes"]
-        direction TB
-        STRONG["💪 Strong Server\n32 CPU cores, 256GB RAM\n→ 300 virtual nodes\n(handles 3× the traffic)"]
-        MEDIUM["🖥️ Medium Server\n16 cores, 128GB RAM\n→ 150 virtual nodes\n(handles 1.5× the traffic)"]
-        WEAK["📟 Weak Server\n8 cores, 32GB RAM\n→ 50 virtual nodes\n(handles less traffic)"]
+graph TD
+    subgraph HETERO["Heterogeneous Cluster — Proportional Virtual Nodes"]
+        direction LR
+        STRONG["💪 Strong Server\n32 cores / 256GB RAM\n300 virtual nodes\nhandles 3x traffic"]
+        MEDIUM["🖥️ Medium Server\n16 cores / 128GB RAM\n150 virtual nodes\nhandles 1.5x traffic"]
+        WEAK["📟 Weak Server\n8 cores / 32GB RAM\n50 virtual nodes\nhandles baseline traffic"]
+        RULE["✅ No special routing logic.\nMore virtual nodes on ring\n= more keys assigned\n= proportional load automatically."]
+        STRONG --- MEDIUM --- WEAK --- RULE
     end
-
-    NOTE["No special routing logic needed.\nThe ring naturally routes more\nkeys to the stronger server\nbecause it has more virtual nodes."]
 ```
 
 No custom routing logic. No configuration files. The ring handles it automatically. More virtual nodes = more arcs = more keys = more load. It's proportional by construction.
@@ -525,10 +528,10 @@ graph LR
         S3["🟣 Server 3 ← 3rd replica"]
         S4["🟠 Server 4"]
 
-        K0 -->|walk clockwise| S0 -->|skip\n(look for unique servers)| S1 -->|clockwise| S2 -->|clockwise| S3
+        K0 -->|"walk clockwise"| S0 -->|"skip same-physical"| S1 -->|"replica 1"| S2 -->|"replica 2"| S3
+        STORED["✅ key0 stored on Server 1, Server 2, Server 3\nIf Server 1 goes down, Server 2 and 3 still have the data!"]
+        S3 --- STORED
     end
-
-    NOTE["key0 is stored on\nServer 1, Server 2, AND Server 3.\n\nIf Server 1 goes down,\nServer 2 and Server 3\nstill have the data. No data loss!"]
 ```
 
 **Important:** With virtual nodes, you must skip virtual nodes that belong to the same physical server. If `s1_0` and `s1_1` are both for Server 1, you skip the second one — otherwise the same physical machine stores two "replicas," which defeats the purpose.
