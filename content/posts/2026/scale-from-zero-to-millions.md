@@ -28,49 +28,49 @@ A journey of a thousand miles begins with a single step. Building a complex syst
 
 To start with something simple, everything runs on a single server — web app, database, and cache all on the same machine.
 
-<svg viewBox="0 0 740 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div class="diagram"><svg viewBox="0 0 740 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <defs>
-    <marker id="a1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#64748B"/></marker>
-    <marker id="a1g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#10B981"/></marker>
+    <marker id="a1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-muted)"/></marker>
+    <marker id="a1g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-green)"/></marker>
   </defs>
-  <rect width="740" height="380" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <rect x="20" y="70" width="150" height="120" rx="12" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="2"/>
-  <text x="95" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#3730A3">USER</text>
-  <rect x="34" y="102" width="46" height="32" rx="5" fill="#4F46E5"/>
-  <rect x="36" y="104" width="42" height="8" rx="2" fill="#818CF8"/>
-  <text x="57" y="128" text-anchor="middle" font-size="9" fill="#C7D2FE">Browser</text>
-  <rect x="100" y="100" width="26" height="36" rx="5" fill="#6366F1"/>
-  <rect x="106" y="106" width="14" height="16" rx="2" fill="#A5B4FC"/>
-  <text x="113" y="130" text-anchor="middle" font-size="9" fill="#C7D2FE">App</text>
-  <circle cx="370" cy="105" r="52" fill="#FFFBEB" stroke="#FCD34D" stroke-width="2"/>
-  <ellipse cx="370" cy="105" rx="22" ry="52" fill="none" stroke="#FCD34D" stroke-width="1.5"/>
-  <line x1="318" y1="105" x2="422" y2="105" stroke="#FCD34D" stroke-width="1.5"/>
-  <line x1="328" y1="78" x2="412" y2="78" stroke="#FCD34D" stroke-width="1"/>
-  <line x1="328" y1="132" x2="412" y2="132" stroke="#FCD34D" stroke-width="1"/>
-  <text x="370" y="99" text-anchor="middle" font-size="13" font-weight="700" fill="#92400E">DNS</text>
-  <text x="370" y="117" text-anchor="middle" font-size="10" fill="#B45309">api.mysite.com</text>
-  <rect x="540" y="45" width="180" height="300" rx="14" fill="#F0FDF4" stroke="#86EFAC" stroke-width="2.5"/>
-  <text x="630" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#14532D">Single Server</text>
-  <rect x="556" y="82" width="148" height="60" rx="10" fill="#3B82F6"/>
-  <text x="630" y="108" text-anchor="middle" font-size="12" font-weight="600" fill="white">🖥  Web Server</text>
-  <text x="630" y="128" text-anchor="middle" font-size="10" fill="#BFDBFE">App logic · HTTP</text>
-  <rect x="556" y="156" width="148" height="60" rx="10" fill="#8B5CF6"/>
-  <text x="630" y="182" text-anchor="middle" font-size="12" font-weight="600" fill="white">🗄  Database</text>
-  <text x="630" y="202" text-anchor="middle" font-size="10" fill="#DDD6FE">All data storage</text>
-  <rect x="556" y="230" width="148" height="60" rx="10" fill="#F59E0B"/>
-  <text x="630" y="256" text-anchor="middle" font-size="12" font-weight="600" fill="white">⚡  Cache</text>
-  <text x="630" y="276" text-anchor="middle" font-size="10" fill="#FEF3C7">In-memory store</text>
-  <rect x="540" y="355" width="180" height="26" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
-  <text x="630" y="372" text-anchor="middle" font-size="11" font-weight="600" fill="#DC2626">⚠ Single Point of Failure</text>
-  <line x1="172" y1="95" x2="315" y2="98" stroke="#64748B" stroke-width="2" marker-end="url(#a1)"/>
-  <text x="243" y="87" text-anchor="middle" font-size="10" fill="#475569">① DNS query</text>
-  <line x1="315" y1="112" x2="172" y2="115" stroke="#10B981" stroke-width="2" marker-end="url(#a1g)"/>
-  <text x="243" y="130" text-anchor="middle" font-size="10" fill="#10B981">② IP: 15.125.23.214</text>
-  <path d="M 170 148 C 300 210 420 195 537 165" fill="none" stroke="#64748B" stroke-width="2" marker-end="url(#a1)"/>
-  <text x="350" y="210" text-anchor="middle" font-size="10" fill="#475569">③ HTTP Request</text>
-  <path d="M 537 215 C 420 290 300 275 170 175" fill="none" stroke="#10B981" stroke-width="2" marker-end="url(#a1g)"/>
-  <text x="350" y="295" text-anchor="middle" font-size="10" fill="#10B981">④ HTML / JSON Response</text>
-</svg>
+  <rect width="740" height="380" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <rect x="20" y="70" width="150" height="120" rx="12" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="95" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-blue-tx)">USER</text>
+  <rect x="34" y="102" width="46" height="32" rx="5" fill="var(--dg-blue-tx)"/>
+  <rect x="36" y="104" width="42" height="8" rx="2" fill="var(--dg-blue-tx)"/>
+  <text x="57" y="128" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">Browser</text>
+  <rect x="100" y="100" width="26" height="36" rx="5" fill="var(--dg-blue-tx)"/>
+  <rect x="106" y="106" width="14" height="16" rx="2" fill="var(--dg-blue-br)"/>
+  <text x="113" y="130" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">App</text>
+  <circle cx="370" cy="105" r="52" fill="var(--dg-orange-bg)" stroke="var(--dg-orange-br)" stroke-width="2"/>
+  <ellipse cx="370" cy="105" rx="22" ry="52" fill="none" stroke="var(--dg-orange-br)" stroke-width="1.5"/>
+  <line x1="318" y1="105" x2="422" y2="105" stroke="var(--dg-orange-br)" stroke-width="1.5"/>
+  <line x1="328" y1="78" x2="412" y2="78" stroke="var(--dg-orange-br)" stroke-width="1"/>
+  <line x1="328" y1="132" x2="412" y2="132" stroke="var(--dg-orange-br)" stroke-width="1"/>
+  <text x="370" y="99" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-orange-tx)">DNS</text>
+  <text x="370" y="117" text-anchor="middle" font-size="12" fill="var(--dg-orange-tx)">api.mysite.com</text>
+  <rect x="540" y="45" width="180" height="300" rx="14" fill="var(--dg-green-bg)" stroke="var(--dg-green-br)" stroke-width="2.5"/>
+  <text x="630" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-green-tx)">Single Server</text>
+  <rect x="556" y="82" width="148" height="60" rx="10" fill="var(--dg-blue)"/>
+  <text x="630" y="108" text-anchor="middle" font-size="12" font-weight="600" fill="white">Web Server</text>
+  <text x="630" y="128" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">App logic · HTTP</text>
+  <rect x="556" y="156" width="148" height="60" rx="10" fill="var(--dg-purple)"/>
+  <text x="630" y="182" text-anchor="middle" font-size="12" font-weight="600" fill="white">Database</text>
+  <text x="630" y="202" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">All data storage</text>
+  <rect x="556" y="230" width="148" height="60" rx="10" fill="var(--dg-orange)"/>
+  <text x="630" y="256" text-anchor="middle" font-size="12" font-weight="600" fill="white">Cache</text>
+  <text x="630" y="276" text-anchor="middle" font-size="12" fill="var(--dg-orange-bg)">In-memory store</text>
+  <rect x="540" y="355" width="180" height="26" rx="8" fill="var(--dg-red-bg)" stroke="var(--dg-red-br)" stroke-width="1.5"/>
+  <text x="630" y="372" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-red)">Single Point of Failure</text>
+  <line x1="172" y1="95" x2="315" y2="98" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a1)"/>
+  <text x="243" y="87" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">1. DNS query</text>
+  <line x1="315" y1="112" x2="172" y2="115" stroke="var(--dg-green)" stroke-width="2" marker-end="url(#a1g)"/>
+  <text x="243" y="130" text-anchor="middle" font-size="12" fill="var(--dg-green)">2. IP: 15.125.23.214</text>
+  <path d="M 170 148 C 300 210 420 195 537 165" fill="none" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a1)"/>
+  <text x="350" y="210" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">3. HTTP Request</text>
+  <path d="M 537 215 C 420 290 300 275 170 175" fill="none" stroke="var(--dg-green)" stroke-width="2" marker-end="url(#a1g)"/>
+  <text x="350" y="295" text-anchor="middle" font-size="12" fill="var(--dg-green)">4. HTML / JSON Response</text>
+</svg></div>
 
 ### How the request flow works
 
@@ -124,32 +124,32 @@ The fix for the first problem: separate the web tier from the data tier.
 
 With the growth of your user base, one server is no longer enough. We need multiple servers: one for web/mobile traffic, the other for the database. Separating web/mobile traffic (web tier) and database (data tier) servers allows them to be **scaled independently**.
 
-<svg viewBox="0 0 740 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div class="diagram"><svg viewBox="0 0 740 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <defs>
-    <marker id="a2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#64748B"/></marker>
+    <marker id="a2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-muted)"/></marker>
   </defs>
-  <rect width="740" height="240" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <rect x="30" y="80" width="120" height="80" rx="12" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="2"/>
-  <text x="90" y="115" text-anchor="middle" font-size="28">👤</text>
-  <text x="90" y="148" text-anchor="middle" font-size="12" font-weight="600" fill="#3730A3">User</text>
-  <rect x="240" y="60" width="160" height="120" rx="12" fill="#EFF6FF" stroke="#93C5FD" stroke-width="2"/>
-  <text x="320" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#1E40AF">WEB TIER</text>
-  <rect x="258" y="98" width="124" height="52" rx="8" fill="#3B82F6"/>
-  <text x="320" y="121" text-anchor="middle" font-size="12" font-weight="600" fill="white">🖥  Web Server</text>
-  <text x="320" y="139" text-anchor="middle" font-size="10" fill="#BFDBFE">App logic · HTTP</text>
-  <text x="320" y="196" text-anchor="middle" font-size="10" fill="#64748B">Scale independently ↕</text>
-  <rect x="510" y="60" width="205" height="120" rx="12" fill="#F5F3FF" stroke="#C4B5FD" stroke-width="2"/>
-  <text x="612" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#4C1D95">DATA TIER</text>
-  <rect x="528" y="98" width="169" height="52" rx="8" fill="#8B5CF6"/>
-  <text x="612" y="121" text-anchor="middle" font-size="12" font-weight="600" fill="white">🗄  Database Server</text>
-  <text x="612" y="139" text-anchor="middle" font-size="10" fill="#DDD6FE">Storage · Indexing · Queries</text>
-  <text x="612" y="196" text-anchor="middle" font-size="10" fill="#64748B">Scale independently ↕</text>
-  <line x1="152" y1="120" x2="237" y2="120" stroke="#64748B" stroke-width="2" marker-end="url(#a2)"/>
-  <line x1="402" y1="108" x2="507" y2="108" stroke="#64748B" stroke-width="2" marker-end="url(#a2)"/>
-  <text x="455" y="100" text-anchor="middle" font-size="10" fill="#475569">read / write</text>
-  <line x1="507" y1="130" x2="402" y2="130" stroke="#64748B" stroke-width="2" marker-end="url(#a2)"/>
-  <text x="455" y="148" text-anchor="middle" font-size="10" fill="#475569">return data</text>
-</svg>
+  <rect width="740" height="240" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <rect x="30" y="80" width="120" height="80" rx="12" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="90" y="115" text-anchor="middle" font-size="28"></text>
+  <text x="90" y="148" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-blue-tx)">User</text>
+  <rect x="240" y="60" width="160" height="120" rx="12" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="320" y="88" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-blue-tx)">WEB TIER</text>
+  <rect x="258" y="98" width="124" height="52" rx="8" fill="var(--dg-blue)"/>
+  <text x="320" y="121" text-anchor="middle" font-size="12" font-weight="600" fill="white">Web Server</text>
+  <text x="320" y="139" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">App logic · HTTP</text>
+  <text x="320" y="196" text-anchor="middle" font-size="12" fill="var(--dg-muted)">Scale independently ↕</text>
+  <rect x="510" y="60" width="205" height="120" rx="12" fill="var(--dg-purple-bg)" stroke="var(--dg-purple-br)" stroke-width="2"/>
+  <text x="612" y="88" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-purple-tx)">DATA TIER</text>
+  <rect x="528" y="98" width="169" height="52" rx="8" fill="var(--dg-purple)"/>
+  <text x="612" y="121" text-anchor="middle" font-size="12" font-weight="600" fill="white">Database Server</text>
+  <text x="612" y="139" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">Storage · Indexing · Queries</text>
+  <text x="612" y="196" text-anchor="middle" font-size="12" fill="var(--dg-muted)">Scale independently ↕</text>
+  <line x1="152" y1="120" x2="237" y2="120" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a2)"/>
+  <line x1="402" y1="108" x2="507" y2="108" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a2)"/>
+  <text x="455" y="100" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">read / write</text>
+  <line x1="507" y1="130" x2="402" y2="130" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a2)"/>
+  <text x="455" y="148" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">return data</text>
+</svg></div>
 
 ### Which database should you use?
 
@@ -178,53 +178,53 @@ For everything else, start with PostgreSQL or MySQL. They are proven, well-under
 
 When your single web server starts struggling under load, you have two paths forward.
 
-<svg viewBox="0 0 740 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div class="diagram"><svg viewBox="0 0 740 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <defs>
-    <marker id="a3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#475569"/></marker>
+    <marker id="a3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-muted2)"/></marker>
   </defs>
-  <rect width="740" height="360" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <line x1="370" y1="20" x2="370" y2="340" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="6,4"/>
+  <rect width="740" height="360" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <line x1="370" y1="20" x2="370" y2="340" stroke="var(--dg-border)" stroke-width="2" stroke-dasharray="6,4"/>
   <!-- LEFT PANEL: servers drawn first, then text on top -->
-  <rect x="60" y="105" width="60" height="80" rx="8" fill="#CBD5E1" stroke="#94A3B8" stroke-width="2"/>
-  <text x="90" y="141" text-anchor="middle" font-size="9" fill="#475569">2 CPU</text>
-  <text x="90" y="155" text-anchor="middle" font-size="9" fill="#475569">4 GB RAM</text>
-  <rect x="145" y="85" width="80" height="100" rx="8" fill="#93C5FD" stroke="#60A5FA" stroke-width="2"/>
-  <text x="185" y="131" text-anchor="middle" font-size="9" fill="#1E40AF">8 CPU</text>
-  <text x="185" y="145" text-anchor="middle" font-size="9" fill="#1E40AF">32 GB RAM</text>
-  <rect x="252" y="55" width="100" height="130" rx="8" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
-  <text x="302" y="111" text-anchor="middle" font-size="9" fill="white">64 CPU</text>
-  <text x="302" y="127" text-anchor="middle" font-size="9" fill="white">512 GB RAM</text>
-  <line x1="122" y1="145" x2="143" y2="140" stroke="#475569" stroke-width="1.5" marker-end="url(#a3)"/>
-  <line x1="227" y1="128" x2="250" y2="118" stroke="#475569" stroke-width="1.5" marker-end="url(#a3)"/>
+  <rect x="60" y="105" width="60" height="80" rx="8" fill="var(--dg-border2)" stroke="var(--dg-faint)" stroke-width="2"/>
+  <text x="90" y="141" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">2 CPU</text>
+  <text x="90" y="155" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">4 GB RAM</text>
+  <rect x="145" y="85" width="80" height="100" rx="8" fill="var(--dg-blue-br)" stroke="var(--dg-blue)" stroke-width="2"/>
+  <text x="185" y="131" text-anchor="middle" font-size="12" fill="var(--dg-blue-tx)">8 CPU</text>
+  <text x="185" y="145" text-anchor="middle" font-size="12" fill="var(--dg-blue-tx)">32 GB RAM</text>
+  <rect x="252" y="55" width="100" height="130" rx="8" fill="var(--dg-blue)" stroke="var(--dg-blue)" stroke-width="2"/>
+  <text x="302" y="111" text-anchor="middle" font-size="12" fill="white">64 CPU</text>
+  <text x="302" y="127" text-anchor="middle" font-size="12" fill="white">512 GB RAM</text>
+  <line x1="122" y1="145" x2="143" y2="140" stroke="var(--dg-muted2)" stroke-width="1.5" marker-end="url(#a3)"/>
+  <line x1="227" y1="128" x2="250" y2="118" stroke="var(--dg-muted2)" stroke-width="1.5" marker-end="url(#a3)"/>
   <!-- Text rendered AFTER boxes so it shows on top -->
-  <text x="185" y="38" text-anchor="middle" font-size="14" font-weight="700" fill="#1E293B">⬆ Vertical Scaling</text>
-  <text x="185" y="58" text-anchor="middle" font-size="11" fill="#64748B">"Scale Up" — bigger machine</text>
-  <rect x="30" y="205" width="325" height="30" rx="6" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
-  <text x="192" y="224" text-anchor="middle" font-size="11" fill="#DC2626" font-weight="600">⚠ Hardware ceiling · No failover</text>
-  <text x="192" y="260" text-anchor="middle" font-size="10" fill="#16A34A">✓ Simple — no code changes needed</text>
-  <text x="192" y="280" text-anchor="middle" font-size="10" fill="#DC2626">✗ Cannot add unlimited CPU/RAM</text>
-  <text x="192" y="300" text-anchor="middle" font-size="10" fill="#DC2626">✗ If server goes down, site goes down</text>
-  <text x="192" y="320" text-anchor="middle" font-size="10" fill="#DC2626">✗ No failover and redundancy</text>
+  <text x="185" y="38" text-anchor="middle" font-size="14" font-weight="700" fill="var(--dg-text)">Vertical Scaling</text>
+  <text x="185" y="58" text-anchor="middle" font-size="12" fill="var(--dg-muted)">"Scale Up" — bigger machine</text>
+  <rect x="30" y="205" width="325" height="30" rx="6" fill="var(--dg-red-bg)" stroke="var(--dg-red-br)" stroke-width="1.5"/>
+  <text x="192" y="224" text-anchor="middle" font-size="12" fill="var(--dg-red)" font-weight="600">Hardware ceiling · No failover</text>
+  <text x="192" y="260" text-anchor="middle" font-size="12" fill="var(--dg-green)">✓ Simple — no code changes needed</text>
+  <text x="192" y="280" text-anchor="middle" font-size="12" fill="var(--dg-red)">✗ Cannot add unlimited CPU/RAM</text>
+  <text x="192" y="300" text-anchor="middle" font-size="12" fill="var(--dg-red)">✗ If server goes down, site goes down</text>
+  <text x="192" y="320" text-anchor="middle" font-size="12" fill="var(--dg-red)">✗ No failover and redundancy</text>
   <!-- RIGHT PANEL: servers first, text on top -->
-  <rect x="390" y="100" width="70" height="60" rx="8" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
-  <text x="425" y="135" text-anchor="middle" font-size="10" fill="white">Server 1</text>
-  <rect x="475" y="100" width="70" height="60" rx="8" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
-  <text x="510" y="135" text-anchor="middle" font-size="10" fill="white">Server 2</text>
-  <rect x="560" y="100" width="70" height="60" rx="8" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
-  <text x="595" y="135" text-anchor="middle" font-size="10" fill="white">Server 3</text>
-  <rect x="645" y="100" width="70" height="60" rx="8" fill="#93C5FD" stroke="#60A5FA" stroke-width="1.5" stroke-dasharray="4,3"/>
-  <text x="680" y="128" text-anchor="middle" font-size="10" fill="#1E40AF">Server</text>
-  <text x="680" y="144" text-anchor="middle" font-size="10" fill="#1E40AF">N+1...</text>
+  <rect x="390" y="100" width="70" height="60" rx="8" fill="var(--dg-blue)" stroke="var(--dg-blue)" stroke-width="2"/>
+  <text x="425" y="135" text-anchor="middle" font-size="12" fill="white">Server 1</text>
+  <rect x="475" y="100" width="70" height="60" rx="8" fill="var(--dg-blue)" stroke="var(--dg-blue)" stroke-width="2"/>
+  <text x="510" y="135" text-anchor="middle" font-size="12" fill="white">Server 2</text>
+  <rect x="560" y="100" width="70" height="60" rx="8" fill="var(--dg-blue)" stroke="var(--dg-blue)" stroke-width="2"/>
+  <text x="595" y="135" text-anchor="middle" font-size="12" fill="white">Server 3</text>
+  <rect x="645" y="100" width="70" height="60" rx="8" fill="var(--dg-blue-br)" stroke="var(--dg-blue)" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="680" y="128" text-anchor="middle" font-size="12" fill="var(--dg-blue-tx)">Server</text>
+  <text x="680" y="144" text-anchor="middle" font-size="12" fill="var(--dg-blue-tx)">N+1...</text>
   <!-- Text on top -->
-  <text x="555" y="38" text-anchor="middle" font-size="14" font-weight="700" fill="#1E293B">➡ Horizontal Scaling</text>
-  <text x="555" y="58" text-anchor="middle" font-size="11" fill="#64748B">"Scale Out" — more machines</text>
-  <rect x="380" y="185" width="345" height="30" rx="6" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
-  <text x="552" y="204" text-anchor="middle" font-size="11" fill="#16A34A" font-weight="600">✓ No ceiling · Redundancy built-in</text>
-  <text x="552" y="240" text-anchor="middle" font-size="10" fill="#16A34A">✓ Add more servers as traffic grows</text>
-  <text x="552" y="260" text-anchor="middle" font-size="10" fill="#16A34A">✓ Traffic routed away from failed servers</text>
-  <text x="552" y="280" text-anchor="middle" font-size="10" fill="#16A34A">✓ Each server can be replaced independently</text>
-  <text x="552" y="300" text-anchor="middle" font-size="10" fill="#DC2626">✗ Requires stateless application design</text>
-</svg>
+  <text x="555" y="38" text-anchor="middle" font-size="14" font-weight="700" fill="var(--dg-text)">Horizontal Scaling</text>
+  <text x="555" y="58" text-anchor="middle" font-size="12" fill="var(--dg-muted)">"Scale Out" — more machines</text>
+  <rect x="380" y="185" width="345" height="30" rx="6" fill="var(--dg-green-bg)" stroke="var(--dg-green-br)" stroke-width="1.5"/>
+  <text x="552" y="204" text-anchor="middle" font-size="12" fill="var(--dg-green)" font-weight="600">✓ No ceiling · Redundancy built-in</text>
+  <text x="552" y="240" text-anchor="middle" font-size="12" fill="var(--dg-green)">✓ Add more servers as traffic grows</text>
+  <text x="552" y="260" text-anchor="middle" font-size="12" fill="var(--dg-green)">✓ Traffic routed away from failed servers</text>
+  <text x="552" y="280" text-anchor="middle" font-size="12" fill="var(--dg-green)">✓ Each server can be replaced independently</text>
+  <text x="552" y="300" text-anchor="middle" font-size="12" fill="var(--dg-red)">✗ Requires stateless application design</text>
+</svg></div>
 
 **Vertical scaling** — referred to as "scale up" — means adding more power (CPU, RAM) to your existing server. When traffic is low, vertical scaling is a great option and its main advantage is simplicity.
 
@@ -242,41 +242,41 @@ In the previous single-server design, users are connected to the web server dire
 
 A load balancer evenly distributes incoming traffic among web servers that are defined in a load-balanced set.
 
-<svg viewBox="0 0 740 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div class="diagram"><svg viewBox="0 0 740 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <defs>
-    <marker id="a4" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#64748B"/></marker>
-    <marker id="a4r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#EF4444"/></marker>
+    <marker id="a4" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-muted)"/></marker>
+    <marker id="a4r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-red)"/></marker>
   </defs>
-  <rect width="740" height="400" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <rect x="290" y="18" width="160" height="55" rx="10" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="2"/>
-  <text x="370" y="42" text-anchor="middle" font-size="22">👥</text>
-  <text x="370" y="64" text-anchor="middle" font-size="11" font-weight="600" fill="#3730A3">Users</text>
-  <rect x="265" y="110" width="210" height="65" rx="12" fill="#0E7490" stroke="#06B6D4" stroke-width="2.5"/>
-  <text x="370" y="136" text-anchor="middle" font-size="13" font-weight="700" fill="white">⚖  Load Balancer</text>
-  <text x="370" y="156" text-anchor="middle" font-size="10" fill="#A5F3FC">Public IP: 88.88.88.1</text>
-  <rect x="100" y="240" width="170" height="80" rx="12" fill="#EFF6FF" stroke="#93C5FD" stroke-width="2"/>
-  <rect x="115" y="258" width="140" height="46" rx="8" fill="#3B82F6"/>
-  <text x="185" y="279" text-anchor="middle" font-size="12" font-weight="600" fill="white">🖥  Server 1</text>
-  <text x="185" y="297" text-anchor="middle" font-size="10" fill="#BFDBFE">Private IP: 10.0.0.1</text>
-  <rect x="470" y="240" width="170" height="80" rx="12" fill="#EFF6FF" stroke="#93C5FD" stroke-width="2"/>
-  <rect x="485" y="258" width="140" height="46" rx="8" fill="#3B82F6"/>
-  <text x="555" y="279" text-anchor="middle" font-size="12" font-weight="600" fill="white">🖥  Server 2</text>
-  <text x="555" y="297" text-anchor="middle" font-size="10" fill="#BFDBFE">Private IP: 10.0.0.2</text>
-  <rect x="265" y="355" width="210" height="35" rx="10" fill="#8B5CF6"/>
-  <text x="370" y="377" text-anchor="middle" font-size="12" font-weight="600" fill="white">🗄  Database</text>
-  <line x1="370" y1="74" x2="370" y2="108" stroke="#64748B" stroke-width="2" marker-end="url(#a4)"/>
-  <line x1="300" y1="168" x2="220" y2="238" stroke="#06B6D4" stroke-width="2" marker-end="url(#a4)"/>
-  <text x="240" y="208" text-anchor="middle" font-size="10" fill="#0E7490">route</text>
-  <line x1="440" y1="168" x2="520" y2="238" stroke="#06B6D4" stroke-width="2" marker-end="url(#a4)"/>
-  <text x="500" y="208" text-anchor="middle" font-size="10" fill="#0E7490">route</text>
-  <line x1="210" y1="322" x2="300" y2="353" stroke="#64748B" stroke-width="1.5" marker-end="url(#a4)"/>
-  <line x1="530" y1="322" x2="442" y2="353" stroke="#64748B" stroke-width="1.5" marker-end="url(#a4)"/>
-  <rect x="20" y="244" width="75" height="44" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
-  <text x="57" y="262" text-anchor="middle" font-size="9" fill="#DC2626" font-weight="600">Server 1</text>
-  <text x="57" y="278" text-anchor="middle" font-size="9" fill="#DC2626">offline →</text>
-  <path d="M 93 268 Q 160 268 175 258" fill="none" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#a4r)"/>
-  <text x="57" y="300" text-anchor="middle" font-size="9" fill="#DC2626">100% → S2</text>
-</svg>
+  <rect width="740" height="400" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <rect x="290" y="18" width="160" height="55" rx="10" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="370" y="42" text-anchor="middle" font-size="22"></text>
+  <text x="370" y="64" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-blue-tx)">Users</text>
+  <rect x="265" y="110" width="210" height="65" rx="12" fill="var(--dg-teal-tx)" stroke="var(--dg-teal)" stroke-width="2.5"/>
+  <text x="370" y="136" text-anchor="middle" font-size="13" font-weight="700" fill="white">Load Balancer</text>
+  <text x="370" y="156" text-anchor="middle" font-size="12" fill="var(--dg-teal-br)">Public IP: 88.88.88.1</text>
+  <rect x="100" y="240" width="170" height="80" rx="12" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <rect x="115" y="258" width="140" height="46" rx="8" fill="var(--dg-blue)"/>
+  <text x="185" y="279" text-anchor="middle" font-size="12" font-weight="600" fill="white">Server 1</text>
+  <text x="185" y="297" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">Private IP: 10.0.0.1</text>
+  <rect x="470" y="240" width="170" height="80" rx="12" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <rect x="485" y="258" width="140" height="46" rx="8" fill="var(--dg-blue)"/>
+  <text x="555" y="279" text-anchor="middle" font-size="12" font-weight="600" fill="white">Server 2</text>
+  <text x="555" y="297" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">Private IP: 10.0.0.2</text>
+  <rect x="265" y="355" width="210" height="35" rx="10" fill="var(--dg-purple)"/>
+  <text x="370" y="377" text-anchor="middle" font-size="12" font-weight="600" fill="white">Database</text>
+  <line x1="370" y1="74" x2="370" y2="108" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a4)"/>
+  <line x1="300" y1="168" x2="220" y2="238" stroke="var(--dg-teal)" stroke-width="2" marker-end="url(#a4)"/>
+  <text x="240" y="208" text-anchor="middle" font-size="12" fill="var(--dg-teal-tx)">route</text>
+  <line x1="440" y1="168" x2="520" y2="238" stroke="var(--dg-teal)" stroke-width="2" marker-end="url(#a4)"/>
+  <text x="500" y="208" text-anchor="middle" font-size="12" fill="var(--dg-teal-tx)">route</text>
+  <line x1="210" y1="322" x2="300" y2="353" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#a4)"/>
+  <line x1="530" y1="322" x2="442" y2="353" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#a4)"/>
+  <rect x="20" y="244" width="75" height="44" rx="8" fill="var(--dg-red-bg)" stroke="var(--dg-red-br)" stroke-width="1.5"/>
+  <text x="57" y="262" text-anchor="middle" font-size="12" fill="var(--dg-red)" font-weight="600">Server 1</text>
+  <text x="57" y="278" text-anchor="middle" font-size="12" fill="var(--dg-red)">offline →</text>
+  <path d="M 93 268 Q 160 268 175 258" fill="none" stroke="var(--dg-red)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#a4r)"/>
+  <text x="57" y="300" text-anchor="middle" font-size="12" fill="var(--dg-red)">100% → S2</text>
+</svg></div>
 
 As shown above, users connect to the **public IP of the load balancer directly**. With this setup, web servers are unreachable directly by clients anymore.
 
@@ -297,45 +297,47 @@ Now the web tier looks good. What about the data tier? The current design has on
 
 *"Database replication can be used in many database management systems, usually with a master/slave relationship between the original (master) and the copies (slaves)."*
 
-<svg viewBox="0 0 740 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+> **A note on terminology.** You will see this pattern called *master/slave* in older material, including the sentence above. The industry has largely moved to **primary/replica** (also *leader/follower*). PostgreSQL, MongoDB and most cloud providers use the newer terms; MySQL added `SOURCE`/`REPLICA` syntax while keeping the older commands as aliases. The mechanics are identical — only the names changed. Expect to meet both in documentation and in interviews.
+
+<div class="diagram"><svg viewBox="0 0 740 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <defs>
-    <marker id="a5w" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#EF4444"/></marker>
-    <marker id="a5r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#10B981"/></marker>
-    <marker id="a5p" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#8B5CF6"/></marker>
+    <marker id="a5w" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-red)"/></marker>
+    <marker id="a5r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-green)"/></marker>
+    <marker id="a5p" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-purple)"/></marker>
   </defs>
-  <rect width="740" height="400" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <rect x="235" y="18" width="270" height="55" rx="10" fill="#EFF6FF" stroke="#93C5FD" stroke-width="2"/>
-  <text x="370" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#1E40AF">WEB SERVERS</text>
-  <rect x="248" y="44" width="75" height="20" rx="5" fill="#3B82F6"/>
-  <text x="285" y="58" text-anchor="middle" font-size="9" fill="white">Server 1</text>
-  <rect x="333" y="44" width="75" height="20" rx="5" fill="#3B82F6"/>
-  <text x="370" y="58" text-anchor="middle" font-size="9" fill="white">Server 2</text>
-  <rect x="418" y="44" width="75" height="20" rx="5" fill="#3B82F6"/>
-  <text x="455" y="58" text-anchor="middle" font-size="9" fill="white">Server 3</text>
-  <rect x="55" y="155" width="185" height="95" rx="14" fill="#7C3AED" stroke="#6D28D9" stroke-width="2.5"/>
+  <rect width="740" height="400" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <rect x="235" y="18" width="270" height="55" rx="10" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="370" y="38" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-blue-tx)">WEB SERVERS</text>
+  <rect x="248" y="44" width="75" height="20" rx="5" fill="var(--dg-blue)"/>
+  <text x="285" y="58" text-anchor="middle" font-size="12" fill="white">Server 1</text>
+  <rect x="333" y="44" width="75" height="20" rx="5" fill="var(--dg-blue)"/>
+  <text x="370" y="58" text-anchor="middle" font-size="12" fill="white">Server 2</text>
+  <rect x="418" y="44" width="75" height="20" rx="5" fill="var(--dg-blue)"/>
+  <text x="455" y="58" text-anchor="middle" font-size="12" fill="white">Server 3</text>
+  <rect x="55" y="155" width="185" height="95" rx="14" fill="var(--dg-purple)" stroke="var(--dg-purple)" stroke-width="2.5"/>
   <text x="147" y="185" text-anchor="middle" font-size="14" font-weight="700" fill="white">Master DB</text>
-  <text x="147" y="207" text-anchor="middle" font-size="10" fill="#DDD6FE">INSERT / UPDATE / DELETE</text>
-  <text x="147" y="225" text-anchor="middle" font-size="9" fill="#C4B5FD">All writes land here first</text>
-  <rect x="465" y="120" width="160" height="70" rx="12" fill="#6D28D9" stroke="#8B5CF6" stroke-width="2"/>
+  <text x="147" y="207" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">INSERT / UPDATE / DELETE</text>
+  <text x="147" y="225" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">All writes land here first</text>
+  <rect x="465" y="120" width="160" height="70" rx="12" fill="var(--dg-purple)" stroke="var(--dg-purple)" stroke-width="2"/>
   <text x="545" y="150" text-anchor="middle" font-size="12" font-weight="600" fill="white">Slave DB 1</text>
-  <text x="545" y="170" text-anchor="middle" font-size="10" fill="#DDD6FE">SELECT (reads only)</text>
-  <rect x="465" y="210" width="160" height="70" rx="12" fill="#6D28D9" stroke="#8B5CF6" stroke-width="2"/>
+  <text x="545" y="170" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">SELECT (reads only)</text>
+  <rect x="465" y="210" width="160" height="70" rx="12" fill="var(--dg-purple)" stroke="var(--dg-purple)" stroke-width="2"/>
   <text x="545" y="240" text-anchor="middle" font-size="12" font-weight="600" fill="white">Slave DB 2</text>
-  <text x="545" y="260" text-anchor="middle" font-size="10" fill="#DDD6FE">SELECT (reads only)</text>
-  <rect x="465" y="300" width="160" height="70" rx="12" fill="#6D28D9" stroke="#8B5CF6" stroke-width="2"/>
+  <text x="545" y="260" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">SELECT (reads only)</text>
+  <rect x="465" y="300" width="160" height="70" rx="12" fill="var(--dg-purple)" stroke="var(--dg-purple)" stroke-width="2"/>
   <text x="545" y="330" text-anchor="middle" font-size="12" font-weight="600" fill="white">Slave DB 3</text>
-  <text x="545" y="350" text-anchor="middle" font-size="10" fill="#DDD6FE">SELECT (reads only)</text>
-  <line x1="268" y1="74" x2="185" y2="153" stroke="#EF4444" stroke-width="2.5" marker-end="url(#a5w)"/>
-  <text x="200" y="118" text-anchor="middle" font-size="10" font-weight="600" fill="#EF4444">WRITES</text>
-  <line x1="242" y1="185" x2="463" y2="152" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a5p)"/>
-  <text x="355" y="160" text-anchor="middle" font-size="9" fill="#7C3AED">replicate</text>
-  <line x1="242" y1="200" x2="463" y2="245" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a5p)"/>
-  <text x="355" y="232" text-anchor="middle" font-size="9" fill="#7C3AED">replicate</text>
-  <line x1="200" y1="250" x2="463" y2="330" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a5p)"/>
-  <text x="320" y="312" text-anchor="middle" font-size="9" fill="#7C3AED">replicate</text>
-  <line x1="463" y1="142" x2="460" y2="74" stroke="#10B981" stroke-width="2" marker-end="url(#a5r)"/>
-  <text x="492" y="108" text-anchor="middle" font-size="10" font-weight="600" fill="#10B981">READS</text>
-</svg>
+  <text x="545" y="350" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">SELECT (reads only)</text>
+  <line x1="268" y1="74" x2="185" y2="153" stroke="var(--dg-red)" stroke-width="2.5" marker-end="url(#a5w)"/>
+  <text x="200" y="118" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-red)">WRITES</text>
+  <line x1="242" y1="185" x2="463" y2="152" stroke="var(--dg-purple)" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a5p)"/>
+  <text x="355" y="160" text-anchor="middle" font-size="12" fill="var(--dg-purple)">replicate</text>
+  <line x1="242" y1="200" x2="463" y2="245" stroke="var(--dg-purple)" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a5p)"/>
+  <text x="355" y="232" text-anchor="middle" font-size="12" fill="var(--dg-purple)">replicate</text>
+  <line x1="200" y1="250" x2="463" y2="330" stroke="var(--dg-purple)" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a5p)"/>
+  <text x="320" y="312" text-anchor="middle" font-size="12" fill="var(--dg-purple)">replicate</text>
+  <line x1="463" y1="142" x2="460" y2="74" stroke="var(--dg-green)" stroke-width="2" marker-end="url(#a5r)"/>
+  <text x="492" y="108" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-green)">READS</text>
+</svg></div>
 
 A **master database** generally only supports write operations (INSERT, UPDATE, DELETE). A **slave database** gets copies of the data from the master and only supports read operations (SELECT). All data-modifying commands must be sent to the master database. Most applications require a much higher ratio of reads to writes — thus, the number of slave databases in a system is usually larger than the number of master databases.
 
@@ -373,55 +375,55 @@ The **cache tier** is a temporary data store layer, much faster than the databas
 - Ability to reduce database workload
 - Ability to scale the cache tier independently
 
-<svg viewBox="0 0 740 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div class="diagram"><svg viewBox="0 0 740 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <defs>
-    <marker id="a6g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#10B981"/></marker>
-    <marker id="a6" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#64748B"/></marker>
-    <marker id="a6o" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#F97316"/></marker>
+    <marker id="a6g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-green)"/></marker>
+    <marker id="a6" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-muted)"/></marker>
+    <marker id="a6o" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-orange)"/></marker>
   </defs>
-  <rect width="740" height="360" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <rect x="15" y="15" width="340" height="330" rx="12" fill="#F0FDF4" stroke="#86EFAC" stroke-width="2"/>
-  <text x="185" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="#14532D">✅  Cache HIT</text>
-  <text x="185" y="60" text-anchor="middle" font-size="10" fill="#166534">Data found in cache — no DB query needed</text>
-  <rect x="40" y="80" width="120" height="55" rx="10" fill="#3B82F6"/>
-  <text x="100" y="104" text-anchor="middle" font-size="11" font-weight="600" fill="white">Web Server</text>
-  <text x="100" y="124" text-anchor="middle" font-size="9" fill="#BFDBFE">receives request</text>
-  <rect x="210" y="80" width="120" height="55" rx="10" fill="#10B981"/>
-  <text x="270" y="104" text-anchor="middle" font-size="11" font-weight="600" fill="white">⚡ Cache</text>
-  <text x="270" y="124" text-anchor="middle" font-size="9" fill="#D1FAE5">data found!</text>
-  <rect x="210" y="215" width="120" height="55" rx="10" fill="#E2E8F0"/>
-  <text x="270" y="239" text-anchor="middle" font-size="11" fill="#94A3B8">Database</text>
-  <text x="270" y="259" text-anchor="middle" font-size="9" fill="#CBD5E1">not contacted</text>
-  <line x1="162" y1="100" x2="208" y2="100" stroke="#10B981" stroke-width="2" marker-end="url(#a6g)"/>
-  <text x="185" y="92" text-anchor="middle" font-size="9" fill="#16A34A">① check</text>
-  <line x1="208" y1="118" x2="162" y2="118" stroke="#10B981" stroke-width="2.5" marker-end="url(#a6g)"/>
-  <text x="185" y="136" text-anchor="middle" font-size="9" fill="#16A34A">② return (~1ms)</text>
-  <rect x="40" y="200" width="140" height="70" rx="10" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
-  <text x="110" y="228" text-anchor="middle" font-size="14" font-weight="700" fill="#065F46">⚡ ~1ms</text>
-  <text x="110" y="248" text-anchor="middle" font-size="10" fill="#047857">Served from RAM</text>
-  <text x="110" y="266" text-anchor="middle" font-size="10" fill="#047857">No DB query</text>
-  <rect x="385" y="15" width="340" height="330" rx="12" fill="#FFF7ED" stroke="#FED7AA" stroke-width="2"/>
-  <text x="555" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="#92400E">❌  Cache MISS</text>
-  <text x="555" y="60" text-anchor="middle" font-size="10" fill="#B45309">Not in cache — must query database</text>
-  <rect x="405" y="80" width="120" height="55" rx="10" fill="#3B82F6"/>
-  <text x="465" y="104" text-anchor="middle" font-size="11" font-weight="600" fill="white">Web Server</text>
-  <text x="465" y="124" text-anchor="middle" font-size="9" fill="#BFDBFE">receives request</text>
-  <rect x="575" y="80" width="120" height="55" rx="10" fill="#F59E0B"/>
-  <text x="635" y="104" text-anchor="middle" font-size="11" font-weight="600" fill="white">⚡ Cache</text>
-  <text x="635" y="124" text-anchor="middle" font-size="9" fill="#FEF3C7">not found</text>
-  <rect x="575" y="205" width="120" height="55" rx="10" fill="#8B5CF6"/>
-  <text x="635" y="229" text-anchor="middle" font-size="11" font-weight="600" fill="white">Database</text>
-  <text x="635" y="249" text-anchor="middle" font-size="9" fill="#DDD6FE">fetch data</text>
-  <line x1="527" y1="100" x2="573" y2="100" stroke="#64748B" stroke-width="2" marker-end="url(#a6)"/>
-  <text x="550" y="92" text-anchor="middle" font-size="9" fill="#475569">① check</text>
-  <line x1="635" y1="137" x2="635" y2="203" stroke="#64748B" stroke-width="2" marker-end="url(#a6)"/>
-  <text x="660" y="172" text-anchor="middle" font-size="9" fill="#475569">② query</text>
-  <line x1="573" y1="222" x2="527" y2="118" stroke="#F97316" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#a6o)"/>
-  <text x="540" y="178" text-anchor="middle" font-size="9" fill="#EA580C">③ store + return</text>
-  <rect x="405" y="278" width="280" height="45" rx="10" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
-  <text x="545" y="297" text-anchor="middle" font-size="11" font-weight="600" fill="#92400E">Next request → Cache HIT ✅</text>
-  <text x="545" y="315" text-anchor="middle" font-size="10" fill="#B45309">Data now cached for future requests</text>
-</svg>
+  <rect width="740" height="360" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <rect x="15" y="15" width="340" height="330" rx="12" fill="var(--dg-green-bg)" stroke="var(--dg-green-br)" stroke-width="2"/>
+  <text x="185" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-green-tx)">✓ Cache HIT</text>
+  <text x="185" y="60" text-anchor="middle" font-size="12" fill="var(--dg-green-tx)">Data found in cache — no DB query needed</text>
+  <rect x="40" y="80" width="120" height="55" rx="10" fill="var(--dg-blue)"/>
+  <text x="100" y="104" text-anchor="middle" font-size="12" font-weight="600" fill="white">Web Server</text>
+  <text x="100" y="124" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">receives request</text>
+  <rect x="210" y="80" width="120" height="55" rx="10" fill="var(--dg-green)"/>
+  <text x="270" y="104" text-anchor="middle" font-size="12" font-weight="600" fill="white">Cache</text>
+  <text x="270" y="124" text-anchor="middle" font-size="12" fill="var(--dg-green-bg)">data found!</text>
+  <rect x="210" y="215" width="120" height="55" rx="10" fill="var(--dg-border)"/>
+  <text x="270" y="239" text-anchor="middle" font-size="12" fill="var(--dg-faint)">Database</text>
+  <text x="270" y="259" text-anchor="middle" font-size="12" fill="var(--dg-border2)">not contacted</text>
+  <line x1="162" y1="100" x2="208" y2="100" stroke="var(--dg-green)" stroke-width="2" marker-end="url(#a6g)"/>
+  <text x="185" y="92" text-anchor="middle" font-size="12" fill="var(--dg-green)">1. check</text>
+  <line x1="208" y1="118" x2="162" y2="118" stroke="var(--dg-green)" stroke-width="2.5" marker-end="url(#a6g)"/>
+  <text x="185" y="136" text-anchor="middle" font-size="12" fill="var(--dg-green)">2. return (~1ms)</text>
+  <rect x="40" y="200" width="140" height="70" rx="10" fill="var(--dg-green-bg)" stroke="var(--dg-green-br)" stroke-width="1.5"/>
+  <text x="110" y="228" text-anchor="middle" font-size="14" font-weight="700" fill="var(--dg-green-tx)">~1ms</text>
+  <text x="110" y="248" text-anchor="middle" font-size="12" fill="var(--dg-green)">Served from RAM</text>
+  <text x="110" y="266" text-anchor="middle" font-size="12" fill="var(--dg-green)">No DB query</text>
+  <rect x="385" y="15" width="340" height="330" rx="12" fill="var(--dg-orange-bg)" stroke="var(--dg-orange-br)" stroke-width="2"/>
+  <text x="555" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-orange-tx)">✗ Cache MISS</text>
+  <text x="555" y="60" text-anchor="middle" font-size="12" fill="var(--dg-orange-tx)">Not in cache — must query database</text>
+  <rect x="405" y="80" width="120" height="55" rx="10" fill="var(--dg-blue)"/>
+  <text x="465" y="104" text-anchor="middle" font-size="12" font-weight="600" fill="white">Web Server</text>
+  <text x="465" y="124" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">receives request</text>
+  <rect x="575" y="80" width="120" height="55" rx="10" fill="var(--dg-orange)"/>
+  <text x="635" y="104" text-anchor="middle" font-size="12" font-weight="600" fill="white">Cache</text>
+  <text x="635" y="124" text-anchor="middle" font-size="12" fill="var(--dg-orange-bg)">not found</text>
+  <rect x="575" y="205" width="120" height="55" rx="10" fill="var(--dg-purple)"/>
+  <text x="635" y="229" text-anchor="middle" font-size="12" font-weight="600" fill="white">Database</text>
+  <text x="635" y="249" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">fetch data</text>
+  <line x1="527" y1="100" x2="573" y2="100" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a6)"/>
+  <text x="550" y="92" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">1. check</text>
+  <line x1="635" y1="137" x2="635" y2="203" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a6)"/>
+  <text x="660" y="172" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">2. query</text>
+  <line x1="573" y1="222" x2="527" y2="118" stroke="var(--dg-orange)" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#a6o)"/>
+  <text x="540" y="178" text-anchor="middle" font-size="12" fill="var(--dg-orange)">3. store + return</text>
+  <rect x="405" y="278" width="280" height="45" rx="10" fill="var(--dg-orange-bg)" stroke="var(--dg-orange-br)" stroke-width="1.5"/>
+  <text x="545" y="297" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-orange-tx)">Next request → Cache HIT ✓</text>
+  <text x="545" y="315" text-anchor="middle" font-size="12" fill="var(--dg-orange-tx)">Data now cached for future requests</text>
+</svg></div>
 
 This caching strategy is called a **read-through cache**. After receiving a request, a web server first checks if the cache has the available response. If it does, it sends data back to the client. If not, it queries the database, stores the response in cache, and sends it back to the client.
 
@@ -455,46 +457,46 @@ Dynamic content caching is a relatively new concept. This tutorial focuses on ho
 
 Here is how CDN works at a high level: when a user visits a website, a CDN server closest to the user will deliver static content. Intuitively, the further users are from CDN servers, the slower the website loads. For example, if CDN servers are in San Francisco, users in Los Angeles will get content faster than users in Europe.
 
-<svg viewBox="0 0 740 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div class="diagram"><svg viewBox="0 0 740 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <defs>
-    <marker id="a7" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#64748B"/></marker>
-    <marker id="a7g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#10B981"/></marker>
-    <marker id="a7p" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#EC4899"/></marker>
+    <marker id="a7" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-muted)"/></marker>
+    <marker id="a7g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-green)"/></marker>
+    <marker id="a7p" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-red)"/></marker>
   </defs>
-  <rect width="740" height="360" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <rect x="20" y="55" width="120" height="70" rx="10" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="2"/>
-  <text x="80" y="80" text-anchor="middle" font-size="20">👤</text>
-  <text x="80" y="100" text-anchor="middle" font-size="11" font-weight="600" fill="#3730A3">User A</text>
-  <text x="80" y="116" text-anchor="middle" font-size="9" fill="#6366F1">Tokyo</text>
-  <rect x="20" y="230" width="120" height="70" rx="10" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="2"/>
-  <text x="80" y="255" text-anchor="middle" font-size="20">👤</text>
-  <text x="80" y="275" text-anchor="middle" font-size="11" font-weight="600" fill="#3730A3">User B</text>
-  <text x="80" y="291" text-anchor="middle" font-size="9" fill="#6366F1">Tokyo</text>
-  <rect x="270" y="120" width="200" height="115" rx="14" fill="#FDF2F8" stroke="#F9A8D4" stroke-width="2.5"/>
-  <text x="370" y="152" text-anchor="middle" font-size="28">⚡</text>
-  <text x="370" y="180" text-anchor="middle" font-size="13" font-weight="700" fill="#9D174D">CDN Edge Node</text>
-  <text x="370" y="200" text-anchor="middle" font-size="10" fill="#BE185D">Tokyo · ~5ms latency</text>
-  <text x="370" y="218" text-anchor="middle" font-size="9" fill="#DB2777">Caches images, CSS, JS</text>
-  <rect x="570" y="120" width="155" height="115" rx="14" fill="#EFF6FF" stroke="#93C5FD" stroke-width="2"/>
-  <text x="647" y="152" text-anchor="middle" font-size="22">🖥</text>
-  <text x="647" y="178" text-anchor="middle" font-size="12" font-weight="700" fill="#1E40AF">Origin Server</text>
-  <text x="647" y="198" text-anchor="middle" font-size="10" fill="#3B82F6">Virginia · ~150ms</text>
-  <text x="647" y="218" text-anchor="middle" font-size="9" fill="#60A5FA">Web server / S3 bucket</text>
-  <line x1="142" y1="82" x2="268" y2="158" stroke="#64748B" stroke-width="2" marker-end="url(#a7)"/>
-  <text x="180" y="108" text-anchor="middle" font-size="9" fill="#475569">① GET image.png</text>
-  <line x1="472" y1="158" x2="568" y2="163" stroke="#EC4899" stroke-width="2" marker-end="url(#a7p)"/>
-  <text x="520" y="150" text-anchor="middle" font-size="9" fill="#DB2777">② MISS → fetch</text>
-  <line x1="568" y1="183" x2="472" y2="183" stroke="#64748B" stroke-width="1.5" marker-end="url(#a7)"/>
-  <text x="520" y="200" text-anchor="middle" font-size="9" fill="#475569">③ return file + TTL</text>
-  <line x1="268" y1="168" x2="142" y2="100" stroke="#10B981" stroke-width="2.5" marker-end="url(#a7g)"/>
-  <text x="180" y="148" text-anchor="middle" font-size="9" fill="#059669">④ cached + returned</text>
-  <line x1="142" y1="258" x2="268" y2="210" stroke="#64748B" stroke-width="2" marker-end="url(#a7)"/>
-  <text x="180" y="246" text-anchor="middle" font-size="9" fill="#475569">⑤ GET image.png</text>
-  <line x1="268" y1="222" x2="142" y2="270" stroke="#10B981" stroke-width="2.5" marker-end="url(#a7g)"/>
-  <text x="185" y="264" text-anchor="middle" font-size="9" fill="#059669">⑥ HIT! 5ms ⚡</text>
-  <rect x="20" y="320" width="700" height="28" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
-  <text x="370" y="338" text-anchor="middle" font-size="11" fill="#166534" font-weight="600">Without CDN: 150ms · With CDN edge node: ~5ms — 30× faster</text>
-</svg>
+  <rect width="740" height="360" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <rect x="20" y="55" width="120" height="70" rx="10" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="80" y="80" text-anchor="middle" font-size="20"></text>
+  <text x="80" y="100" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-blue-tx)">User A</text>
+  <text x="80" y="116" text-anchor="middle" font-size="12" fill="var(--dg-blue-tx)">Tokyo</text>
+  <rect x="20" y="230" width="120" height="70" rx="10" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="80" y="255" text-anchor="middle" font-size="20"></text>
+  <text x="80" y="275" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-blue-tx)">User B</text>
+  <text x="80" y="291" text-anchor="middle" font-size="12" fill="var(--dg-blue-tx)">Tokyo</text>
+  <rect x="270" y="120" width="200" height="115" rx="14" fill="var(--dg-red-bg)" stroke="var(--dg-red-br)" stroke-width="2.5"/>
+  <text x="370" y="152" text-anchor="middle" font-size="28"></text>
+  <text x="370" y="180" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-red-tx)">CDN Edge Node</text>
+  <text x="370" y="200" text-anchor="middle" font-size="12" fill="var(--dg-red-tx)">Tokyo · ~5ms latency</text>
+  <text x="370" y="218" text-anchor="middle" font-size="12" fill="var(--dg-red)">Caches images, CSS, JS</text>
+  <rect x="570" y="120" width="155" height="115" rx="14" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="647" y="152" text-anchor="middle" font-size="22"></text>
+  <text x="647" y="178" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-blue-tx)">Origin Server</text>
+  <text x="647" y="198" text-anchor="middle" font-size="12" fill="var(--dg-blue)">Virginia · ~150ms</text>
+  <text x="647" y="218" text-anchor="middle" font-size="12" fill="var(--dg-blue)">Web server / S3 bucket</text>
+  <line x1="142" y1="82" x2="268" y2="158" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a7)"/>
+  <text x="180" y="108" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">1. GET image.png</text>
+  <line x1="472" y1="158" x2="568" y2="163" stroke="var(--dg-red)" stroke-width="2" marker-end="url(#a7p)"/>
+  <text x="520" y="150" text-anchor="middle" font-size="12" fill="var(--dg-red)">2. MISS → fetch</text>
+  <line x1="568" y1="183" x2="472" y2="183" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#a7)"/>
+  <text x="520" y="200" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">3. return file + TTL</text>
+  <line x1="268" y1="168" x2="142" y2="100" stroke="var(--dg-green)" stroke-width="2.5" marker-end="url(#a7g)"/>
+  <text x="180" y="148" text-anchor="middle" font-size="12" fill="var(--dg-green)">4. cached + returned</text>
+  <line x1="142" y1="258" x2="268" y2="210" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a7)"/>
+  <text x="180" y="246" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">5. GET image.png</text>
+  <line x1="268" y1="222" x2="142" y2="270" stroke="var(--dg-green)" stroke-width="2.5" marker-end="url(#a7g)"/>
+  <text x="185" y="264" text-anchor="middle" font-size="12" fill="var(--dg-green)">6. HIT! 5ms</text>
+  <rect x="20" y="320" width="700" height="28" rx="8" fill="var(--dg-green-bg)" stroke="var(--dg-green-br)" stroke-width="1.5"/>
+  <text x="370" y="338" text-anchor="middle" font-size="12" fill="var(--dg-green-tx)" font-weight="600">Without CDN: 150ms · With CDN edge node: ~5ms — 30× faster</text>
+</svg></div>
 
 ### CDN workflow step-by-step
 
@@ -529,66 +531,66 @@ Now it is time to consider scaling the web tier **horizontally**. To do this, we
 
 A stateful server and a stateless server have some key differences. A **stateful server** remembers client data (state) from one request to the next. A **stateless server** keeps no state information.
 
-<svg viewBox="0 0 740 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div class="diagram"><svg viewBox="0 0 740 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <defs>
-    <marker id="a8r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#EF4444"/></marker>
-    <marker id="a8g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#10B981"/></marker>
-    <marker id="a8" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#64748B"/></marker>
+    <marker id="a8r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-red)"/></marker>
+    <marker id="a8g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-green)"/></marker>
+    <marker id="a8" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-muted)"/></marker>
   </defs>
-  <rect width="740" height="380" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <rect x="10" y="10" width="355" height="360" rx="14" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="2"/>
-  <text x="188" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="#991B1B">❌  Stateful (Bad)</text>
-  <text x="188" y="55" text-anchor="middle" font-size="10" fill="#B91C1C">Session data stored in server memory</text>
-  <text x="55" y="90" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">User A</text>
-  <text x="188" y="90" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">User B</text>
-  <text x="320" y="90" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">User C</text>
-  <rect x="20" y="110" width="145" height="100" rx="10" fill="#EF4444"/>
-  <text x="93" y="135" text-anchor="middle" font-size="11" font-weight="600" fill="white">Server 1</text>
-  <text x="93" y="155" text-anchor="middle" font-size="9" fill="#FEE2E2">• Session: User A ✓</text>
-  <text x="93" y="172" text-anchor="middle" font-size="9" fill="#FEE2E2">• Profile image: User A</text>
-  <text x="93" y="192" text-anchor="middle" font-size="8" fill="#FECACA">User B → FAIL ✗</text>
-  <rect x="200" y="110" width="145" height="100" rx="10" fill="#EF4444"/>
-  <text x="273" y="135" text-anchor="middle" font-size="11" font-weight="600" fill="white">Server 2</text>
-  <text x="273" y="155" text-anchor="middle" font-size="9" fill="#FEE2E2">• Session: User B ✓</text>
-  <text x="273" y="172" text-anchor="middle" font-size="9" fill="#FEE2E2">• Profile image: User B</text>
-  <text x="273" y="192" text-anchor="middle" font-size="8" fill="#FECACA">User A → FAIL ✗</text>
-  <line x1="55" y1="95" x2="55" y2="108" stroke="#EF4444" stroke-width="2" marker-end="url(#a8r)"/>
-  <line x1="188" y1="95" x2="260" y2="108" stroke="#EF4444" stroke-width="2" marker-end="url(#a8r)"/>
-  <line x1="320" y1="95" x2="130" y2="108" stroke="#EF4444" stroke-width="2" marker-end="url(#a8r)"/>
-  <rect x="20" y="228" width="325" height="55" rx="8" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1.5"/>
-  <text x="183" y="249" text-anchor="middle" font-size="11" font-weight="600" fill="#991B1B">Problem: each user "stuck" to one server</text>
-  <text x="183" y="268" text-anchor="middle" font-size="10" fill="#B91C1C">If Server 1 crashes → User A is logged out</text>
-  <text x="183" y="300" text-anchor="middle" font-size="10" fill="#9F1239">• Adding/removing servers is risky</text>
-  <text x="183" y="320" text-anchor="middle" font-size="10" fill="#9F1239">• Uneven load distribution</text>
-  <text x="183" y="340" text-anchor="middle" font-size="10" fill="#9F1239">• Server failure causes user logout</text>
-  <rect x="375" y="10" width="355" height="360" rx="14" fill="#F0FDF4" stroke="#86EFAC" stroke-width="2"/>
-  <text x="553" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="#14532D">✅  Stateless (Good)</text>
-  <text x="553" y="55" text-anchor="middle" font-size="10" fill="#166534">Session stored in shared data store</text>
-  <text x="430" y="90" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">User A</text>
-  <text x="553" y="90" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">User B</text>
-  <text x="676" y="90" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">User C</text>
-  <rect x="478" y="108" width="150" height="35" rx="8" fill="#06B6D4"/>
-  <text x="553" y="130" text-anchor="middle" font-size="11" font-weight="600" fill="white">Load Balancer</text>
-  <rect x="385" y="165" width="115" height="55" rx="8" fill="#3B82F6"/>
-  <text x="443" y="190" text-anchor="middle" font-size="11" font-weight="600" fill="white">Server 1</text>
-  <text x="443" y="208" text-anchor="middle" font-size="9" fill="#BFDBFE">stateless</text>
-  <rect x="606" y="165" width="115" height="55" rx="8" fill="#3B82F6"/>
-  <text x="664" y="190" text-anchor="middle" font-size="11" font-weight="600" fill="white">Server 2</text>
-  <text x="664" y="208" text-anchor="middle" font-size="9" fill="#BFDBFE">stateless</text>
-  <rect x="453" y="252" width="200" height="60" rx="10" fill="#10B981"/>
-  <text x="553" y="278" text-anchor="middle" font-size="12" font-weight="600" fill="white">🗄  Shared Session Store</text>
-  <text x="553" y="298" text-anchor="middle" font-size="9" fill="#D1FAE5">Memcached / Redis / NoSQL / SQL</text>
-  <line x1="430" y1="95" x2="510" y2="106" stroke="#10B981" stroke-width="1.5" marker-end="url(#a8g)"/>
-  <line x1="553" y1="95" x2="553" y2="106" stroke="#10B981" stroke-width="1.5" marker-end="url(#a8g)"/>
-  <line x1="676" y1="95" x2="596" y2="106" stroke="#10B981" stroke-width="1.5" marker-end="url(#a8g)"/>
-  <line x1="510" y1="143" x2="460" y2="163" stroke="#64748B" stroke-width="1.5" marker-end="url(#a8)"/>
-  <line x1="596" y1="143" x2="646" y2="163" stroke="#64748B" stroke-width="1.5" marker-end="url(#a8)"/>
-  <line x1="443" y1="222" x2="490" y2="250" stroke="#64748B" stroke-width="1.5" marker-end="url(#a8)"/>
-  <line x1="664" y1="222" x2="616" y2="250" stroke="#64748B" stroke-width="1.5" marker-end="url(#a8)"/>
-  <rect x="385" y="325" width="335" height="35" rx="8" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1.5"/>
-  <text x="553" y="342" text-anchor="middle" font-size="10" fill="#166534" font-weight="600">Any server handles any user's request</text>
-  <text x="553" y="356" text-anchor="middle" font-size="10" fill="#166534">Add/remove servers without disruption</text>
-</svg>
+  <rect width="740" height="380" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <rect x="10" y="10" width="355" height="360" rx="14" fill="var(--dg-red-bg)" stroke="var(--dg-red-br)" stroke-width="2"/>
+  <text x="188" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="var(--dg-red-tx)">✗ Stateful (Bad)</text>
+  <text x="188" y="55" text-anchor="middle" font-size="12" fill="var(--dg-red-tx)">Session data stored in server memory</text>
+  <text x="55" y="90" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-muted2)">User A</text>
+  <text x="188" y="90" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-muted2)">User B</text>
+  <text x="320" y="90" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-muted2)">User C</text>
+  <rect x="20" y="110" width="145" height="100" rx="10" fill="var(--dg-red)"/>
+  <text x="93" y="135" text-anchor="middle" font-size="12" font-weight="600" fill="white">Server 1</text>
+  <text x="93" y="155" text-anchor="middle" font-size="12" fill="var(--dg-red-bg)">• Session: User A ✓</text>
+  <text x="93" y="172" text-anchor="middle" font-size="12" fill="var(--dg-red-bg)">• Profile image: User A</text>
+  <text x="93" y="192" text-anchor="middle" font-size="12" fill="var(--dg-red-br)">User B → FAIL ✗</text>
+  <rect x="200" y="110" width="145" height="100" rx="10" fill="var(--dg-red)"/>
+  <text x="273" y="135" text-anchor="middle" font-size="12" font-weight="600" fill="white">Server 2</text>
+  <text x="273" y="155" text-anchor="middle" font-size="12" fill="var(--dg-red-bg)">• Session: User B ✓</text>
+  <text x="273" y="172" text-anchor="middle" font-size="12" fill="var(--dg-red-bg)">• Profile image: User B</text>
+  <text x="273" y="192" text-anchor="middle" font-size="12" fill="var(--dg-red-br)">User A → FAIL ✗</text>
+  <line x1="55" y1="95" x2="55" y2="108" stroke="var(--dg-red)" stroke-width="2" marker-end="url(#a8r)"/>
+  <line x1="188" y1="95" x2="260" y2="108" stroke="var(--dg-red)" stroke-width="2" marker-end="url(#a8r)"/>
+  <line x1="320" y1="95" x2="130" y2="108" stroke="var(--dg-red)" stroke-width="2" marker-end="url(#a8r)"/>
+  <rect x="20" y="228" width="325" height="55" rx="8" fill="var(--dg-red-bg)" stroke="var(--dg-red-br)" stroke-width="1.5"/>
+  <text x="183" y="249" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-red-tx)">Problem: each user "stuck" to one server</text>
+  <text x="183" y="268" text-anchor="middle" font-size="12" fill="var(--dg-red-tx)">If Server 1 crashes → User A is logged out</text>
+  <text x="183" y="300" text-anchor="middle" font-size="12" fill="var(--dg-red-tx)">• Adding/removing servers is risky</text>
+  <text x="183" y="320" text-anchor="middle" font-size="12" fill="var(--dg-red-tx)">• Uneven load distribution</text>
+  <text x="183" y="340" text-anchor="middle" font-size="12" fill="var(--dg-red-tx)">• Server failure causes user logout</text>
+  <rect x="375" y="10" width="355" height="360" rx="14" fill="var(--dg-green-bg)" stroke="var(--dg-green-br)" stroke-width="2"/>
+  <text x="553" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="var(--dg-green-tx)">✓ Stateless (Good)</text>
+  <text x="553" y="55" text-anchor="middle" font-size="12" fill="var(--dg-green-tx)">Session stored in shared data store</text>
+  <text x="430" y="90" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-muted2)">User A</text>
+  <text x="553" y="90" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-muted2)">User B</text>
+  <text x="676" y="90" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-muted2)">User C</text>
+  <rect x="478" y="108" width="150" height="35" rx="8" fill="var(--dg-teal)"/>
+  <text x="553" y="130" text-anchor="middle" font-size="12" font-weight="600" fill="white">Load Balancer</text>
+  <rect x="385" y="165" width="115" height="55" rx="8" fill="var(--dg-blue)"/>
+  <text x="443" y="190" text-anchor="middle" font-size="12" font-weight="600" fill="white">Server 1</text>
+  <text x="443" y="208" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">stateless</text>
+  <rect x="606" y="165" width="115" height="55" rx="8" fill="var(--dg-blue)"/>
+  <text x="664" y="190" text-anchor="middle" font-size="12" font-weight="600" fill="white">Server 2</text>
+  <text x="664" y="208" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">stateless</text>
+  <rect x="453" y="252" width="200" height="60" rx="10" fill="var(--dg-green)"/>
+  <text x="553" y="278" text-anchor="middle" font-size="12" font-weight="600" fill="white">Shared Session Store</text>
+  <text x="553" y="298" text-anchor="middle" font-size="12" fill="var(--dg-green-bg)">Memcached / Redis / NoSQL / SQL</text>
+  <line x1="430" y1="95" x2="510" y2="106" stroke="var(--dg-green)" stroke-width="1.5" marker-end="url(#a8g)"/>
+  <line x1="553" y1="95" x2="553" y2="106" stroke="var(--dg-green)" stroke-width="1.5" marker-end="url(#a8g)"/>
+  <line x1="676" y1="95" x2="596" y2="106" stroke="var(--dg-green)" stroke-width="1.5" marker-end="url(#a8g)"/>
+  <line x1="510" y1="143" x2="460" y2="163" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#a8)"/>
+  <line x1="596" y1="143" x2="646" y2="163" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#a8)"/>
+  <line x1="443" y1="222" x2="490" y2="250" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#a8)"/>
+  <line x1="664" y1="222" x2="616" y2="250" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#a8)"/>
+  <rect x="385" y="325" width="335" height="35" rx="8" fill="var(--dg-green-bg)" stroke="var(--dg-green-br)" stroke-width="1.5"/>
+  <text x="553" y="342" text-anchor="middle" font-size="12" fill="var(--dg-green-tx)" font-weight="600">Any server handles any user's request</text>
+  <text x="553" y="356" text-anchor="middle" font-size="12" fill="var(--dg-green-tx)">Add/remove servers without disruption</text>
+</svg></div>
 
 In the **stateful** diagram above, User A's session data and profile image are stored in Server 1. To authenticate User A, HTTP requests must be routed to Server 1. If a request is sent to Server 2, authentication would fail because Server 2 does not contain User A's session data.
 
@@ -606,48 +608,48 @@ The shared data store could be a relational database, Memcached/Redis, or NoSQL.
 
 Your website grows rapidly and attracts a significant number of users internationally. To improve availability and provide a better user experience across wider geographical areas, supporting multiple data centers is crucial.
 
-<svg viewBox="0 0 740 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div class="diagram"><svg viewBox="0 0 740 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <defs>
-    <marker id="a9" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#64748B"/></marker>
-    <marker id="a9p" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#8B5CF6"/></marker>
+    <marker id="a9" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-muted)"/></marker>
+    <marker id="a9p" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-purple)"/></marker>
   </defs>
-  <rect width="740" height="420" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <rect x="295" y="15" width="150" height="50" rx="10" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="2"/>
-  <text x="370" y="44" text-anchor="middle" font-size="22">👥</text>
-  <text x="370" y="58" text-anchor="middle" font-size="10" font-weight="600" fill="#3730A3">Worldwide Users</text>
-  <rect x="295" y="92" width="150" height="45" rx="10" fill="#FFFBEB" stroke="#FCD34D" stroke-width="2"/>
-  <text x="370" y="119" text-anchor="middle" font-size="12" font-weight="700" fill="#92400E">🌐 GeoDNS</text>
-  <rect x="20" y="195" width="320" height="195" rx="14" fill="#EFF6FF" stroke="#93C5FD" stroke-width="2.5"/>
-  <text x="180" y="220" text-anchor="middle" font-size="13" font-weight="700" fill="#1E40AF">🏢 DC1 — US-East (Primary)</text>
-  <rect x="38" y="232" width="130" height="45" rx="8" fill="#3B82F6"/>
-  <text x="103" y="253" text-anchor="middle" font-size="11" font-weight="600" fill="white">Web Servers</text>
-  <text x="103" y="270" text-anchor="middle" font-size="9" fill="#BFDBFE">auto-scaled</text>
-  <rect x="180" y="232" width="130" height="45" rx="8" fill="#8B5CF6"/>
-  <text x="245" y="253" text-anchor="middle" font-size="11" font-weight="600" fill="white">Database</text>
-  <text x="245" y="270" text-anchor="middle" font-size="9" fill="#DDD6FE">primary</text>
-  <rect x="38" y="292" width="272" height="40" rx="8" fill="#10B981"/>
-  <text x="174" y="317" text-anchor="middle" font-size="11" font-weight="600" fill="white">⚡ Cache Cluster</text>
-  <rect x="400" y="195" width="320" height="195" rx="14" fill="#FFF7ED" stroke="#FED7AA" stroke-width="2.5"/>
-  <text x="560" y="220" text-anchor="middle" font-size="13" font-weight="700" fill="#92400E">🏢 DC2 — US-West (Failover)</text>
-  <rect x="418" y="232" width="130" height="45" rx="8" fill="#3B82F6"/>
-  <text x="483" y="253" text-anchor="middle" font-size="11" font-weight="600" fill="white">Web Servers</text>
-  <text x="483" y="270" text-anchor="middle" font-size="9" fill="#BFDBFE">auto-scaled</text>
-  <rect x="560" y="232" width="130" height="45" rx="8" fill="#8B5CF6"/>
-  <text x="625" y="253" text-anchor="middle" font-size="11" font-weight="600" fill="white">Database</text>
-  <text x="625" y="270" text-anchor="middle" font-size="9" fill="#DDD6FE">replica</text>
-  <rect x="418" y="292" width="272" height="40" rx="8" fill="#10B981"/>
-  <text x="554" y="317" text-anchor="middle" font-size="11" font-weight="600" fill="white">⚡ Cache Cluster</text>
-  <line x1="370" y1="65" x2="370" y2="90" stroke="#64748B" stroke-width="2" marker-end="url(#a9)"/>
-  <line x1="325" y1="135" x2="215" y2="193" stroke="#64748B" stroke-width="2" marker-end="url(#a9)"/>
-  <text x="243" y="163" text-anchor="middle" font-size="10" fill="#475569">x% (US users)</text>
-  <line x1="415" y1="135" x2="525" y2="193" stroke="#64748B" stroke-width="2" marker-end="url(#a9)"/>
-  <text x="497" y="163" text-anchor="middle" font-size="10" fill="#475569">(100-x)% traffic</text>
-  <line x1="342" y1="315" x2="398" y2="315" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#a9p)"/>
-  <line x1="398" y1="332" x2="342" y2="332" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#a9p)"/>
-  <text x="370" y="360" text-anchor="middle" font-size="9" fill="#7C3AED">async replication</text>
-  <rect x="155" y="375" width="430" height="30" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
-  <text x="370" y="395" text-anchor="middle" font-size="11" fill="#DC2626" font-weight="600">If DC2 goes offline → GeoDNS routes 100% traffic to DC1</text>
-</svg>
+  <rect width="740" height="420" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <rect x="295" y="15" width="150" height="50" rx="10" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="370" y="44" text-anchor="middle" font-size="22"></text>
+  <text x="370" y="58" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-blue-tx)">Worldwide Users</text>
+  <rect x="295" y="92" width="150" height="45" rx="10" fill="var(--dg-orange-bg)" stroke="var(--dg-orange-br)" stroke-width="2"/>
+  <text x="370" y="119" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-orange-tx)">GeoDNS</text>
+  <rect x="20" y="195" width="320" height="195" rx="14" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2.5"/>
+  <text x="180" y="220" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-blue-tx)">DC1 — US-East (Primary)</text>
+  <rect x="38" y="232" width="130" height="45" rx="8" fill="var(--dg-blue)"/>
+  <text x="103" y="253" text-anchor="middle" font-size="12" font-weight="600" fill="white">Web Servers</text>
+  <text x="103" y="270" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">auto-scaled</text>
+  <rect x="180" y="232" width="130" height="45" rx="8" fill="var(--dg-purple)"/>
+  <text x="245" y="253" text-anchor="middle" font-size="12" font-weight="600" fill="white">Database</text>
+  <text x="245" y="270" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">primary</text>
+  <rect x="38" y="292" width="272" height="40" rx="8" fill="var(--dg-green)"/>
+  <text x="174" y="317" text-anchor="middle" font-size="12" font-weight="600" fill="white">Cache Cluster</text>
+  <rect x="400" y="195" width="320" height="195" rx="14" fill="var(--dg-orange-bg)" stroke="var(--dg-orange-br)" stroke-width="2.5"/>
+  <text x="560" y="220" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-orange-tx)">DC2 — US-West (Failover)</text>
+  <rect x="418" y="232" width="130" height="45" rx="8" fill="var(--dg-blue)"/>
+  <text x="483" y="253" text-anchor="middle" font-size="12" font-weight="600" fill="white">Web Servers</text>
+  <text x="483" y="270" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">auto-scaled</text>
+  <rect x="560" y="232" width="130" height="45" rx="8" fill="var(--dg-purple)"/>
+  <text x="625" y="253" text-anchor="middle" font-size="12" font-weight="600" fill="white">Database</text>
+  <text x="625" y="270" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">replica</text>
+  <rect x="418" y="292" width="272" height="40" rx="8" fill="var(--dg-green)"/>
+  <text x="554" y="317" text-anchor="middle" font-size="12" font-weight="600" fill="white">Cache Cluster</text>
+  <line x1="370" y1="65" x2="370" y2="90" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a9)"/>
+  <line x1="325" y1="135" x2="215" y2="193" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a9)"/>
+  <text x="243" y="163" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">x% (US users)</text>
+  <line x1="415" y1="135" x2="525" y2="193" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#a9)"/>
+  <text x="497" y="163" text-anchor="middle" font-size="12" fill="var(--dg-muted2)">(100-x)% traffic</text>
+  <line x1="342" y1="315" x2="398" y2="315" stroke="var(--dg-purple)" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#a9p)"/>
+  <line x1="398" y1="332" x2="342" y2="332" stroke="var(--dg-purple)" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#a9p)"/>
+  <text x="370" y="360" text-anchor="middle" font-size="12" fill="var(--dg-purple)">async replication</text>
+  <rect x="155" y="375" width="430" height="30" rx="8" fill="var(--dg-red-bg)" stroke="var(--dg-red-br)" stroke-width="1.5"/>
+  <text x="370" y="395" text-anchor="middle" font-size="12" fill="var(--dg-red)" font-weight="600">If DC2 goes offline → GeoDNS routes 100% traffic to DC1</text>
+</svg></div>
 
 In normal operation, users are **geoDNS-routed** to the closest data center, with a split traffic of *x%* in US-East and *(100–x)%* in US-West. **GeoDNS** is a DNS service that allows domain names to be resolved to IP addresses based on the location of a user.
 
@@ -673,48 +675,48 @@ A message queue is a **durable component**, stored in memory, that supports asyn
 - **Input services** (called producers/publishers) create messages and publish them to a message queue
 - **Other services** (called consumers/subscribers) connect to the queue and perform actions defined by the messages
 
-<svg viewBox="0 0 740 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div class="diagram"><svg viewBox="0 0 740 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <defs>
-    <marker id="a10" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#64748B"/></marker>
-    <marker id="a10o" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#F97316"/></marker>
-    <marker id="a10g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#10B981"/></marker>
+    <marker id="a10" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-muted)"/></marker>
+    <marker id="a10o" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-orange)"/></marker>
+    <marker id="a10g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-green)"/></marker>
   </defs>
-  <rect width="740" height="300" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <rect x="20" y="90" width="155" height="120" rx="12" fill="#EFF6FF" stroke="#93C5FD" stroke-width="2"/>
-  <text x="97" y="115" text-anchor="middle" font-size="11" font-weight="700" fill="#1E40AF">PRODUCER</text>
-  <rect x="35" y="124" width="125" height="50" rx="8" fill="#3B82F6"/>
-  <text x="97" y="146" text-anchor="middle" font-size="11" font-weight="600" fill="white">🖥 Web Server</text>
-  <text x="97" y="164" text-anchor="middle" font-size="9" fill="#BFDBFE">publishes jobs</text>
-  <rect x="20" y="228" width="155" height="30" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
-  <text x="97" y="248" text-anchor="middle" font-size="10" fill="#166534">② Returns to user instantly</text>
-  <rect x="255" y="78" width="230" height="140" rx="14" fill="#FFF7ED" stroke="#FED7AA" stroke-width="2.5"/>
-  <text x="370" y="103" text-anchor="middle" font-size="12" font-weight="700" fill="#92400E">📬 Message Queue</text>
-  <text x="370" y="120" text-anchor="middle" font-size="10" fill="#B45309">Kafka · RabbitMQ · AWS SQS</text>
-  <rect x="270" y="130" width="45" height="35" rx="5" fill="#F97316"/>
-  <text x="292" y="153" text-anchor="middle" font-size="10" fill="white">job</text>
-  <rect x="323" y="130" width="45" height="35" rx="5" fill="#F97316"/>
-  <text x="345" y="153" text-anchor="middle" font-size="10" fill="white">job</text>
-  <rect x="376" y="130" width="45" height="35" rx="5" fill="#F97316"/>
-  <text x="398" y="153" text-anchor="middle" font-size="10" fill="white">job</text>
-  <rect x="429" y="130" width="45" height="35" rx="5" fill="#FED7AA" stroke="#F97316" stroke-width="1" stroke-dasharray="3,2"/>
-  <text x="451" y="153" text-anchor="middle" font-size="10" fill="#92400E">...</text>
-  <text x="370" y="200" text-anchor="middle" font-size="9" fill="#B45309">Queue grows → add workers | Queue empty → reduce workers</text>
-  <rect x="575" y="50" width="145" height="55" rx="10" fill="#F0FDFA" stroke="#99F6E4" stroke-width="2"/>
-  <rect x="590" y="62" width="115" height="34" rx="7" fill="#14B8A6"/>
-  <text x="647" y="82" text-anchor="middle" font-size="11" font-weight="600" fill="white">⚙ Worker 1</text>
-  <rect x="575" y="120" width="145" height="55" rx="10" fill="#F0FDFA" stroke="#99F6E4" stroke-width="2"/>
-  <rect x="590" y="132" width="115" height="34" rx="7" fill="#14B8A6"/>
-  <text x="647" y="152" text-anchor="middle" font-size="11" font-weight="600" fill="white">⚙ Worker 2</text>
-  <rect x="575" y="190" width="145" height="55" rx="10" fill="#F0FDFA" stroke="#99F6E4" stroke-width="2"/>
-  <rect x="590" y="202" width="115" height="34" rx="7" fill="#14B8A6"/>
-  <text x="647" y="222" text-anchor="middle" font-size="11" font-weight="600" fill="white">⚙ Worker 3</text>
-  <line x1="177" y1="145" x2="253" y2="145" stroke="#F97316" stroke-width="2.5" marker-end="url(#a10o)"/>
-  <text x="215" y="135" text-anchor="middle" font-size="9" fill="#EA580C">① publish job</text>
-  <line x1="487" y1="148" x2="572" y2="88" stroke="#10B981" stroke-width="2" marker-end="url(#a10g)"/>
-  <line x1="487" y1="155" x2="572" y2="155" stroke="#10B981" stroke-width="2" marker-end="url(#a10g)"/>
-  <line x1="487" y1="162" x2="572" y2="218" stroke="#10B981" stroke-width="2" marker-end="url(#a10g)"/>
-  <text x="536" y="132" text-anchor="middle" font-size="9" fill="#059669">③ consume</text>
-</svg>
+  <rect width="740" height="300" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <rect x="20" y="90" width="155" height="120" rx="12" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="97" y="115" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-blue-tx)">PRODUCER</text>
+  <rect x="35" y="124" width="125" height="50" rx="8" fill="var(--dg-blue)"/>
+  <text x="97" y="146" text-anchor="middle" font-size="12" font-weight="600" fill="white">Web Server</text>
+  <text x="97" y="164" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">publishes jobs</text>
+  <rect x="20" y="228" width="155" height="30" rx="8" fill="var(--dg-green-bg)" stroke="var(--dg-green-br)" stroke-width="1.5"/>
+  <text x="97" y="248" text-anchor="middle" font-size="12" fill="var(--dg-green-tx)">2. Returns to user instantly</text>
+  <rect x="255" y="78" width="230" height="140" rx="14" fill="var(--dg-orange-bg)" stroke="var(--dg-orange-br)" stroke-width="2.5"/>
+  <text x="370" y="103" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-orange-tx)">Message Queue</text>
+  <text x="370" y="120" text-anchor="middle" font-size="12" fill="var(--dg-orange-tx)">Kafka · RabbitMQ · AWS SQS</text>
+  <rect x="270" y="130" width="45" height="35" rx="5" fill="var(--dg-orange)"/>
+  <text x="292" y="153" text-anchor="middle" font-size="12" fill="white">job</text>
+  <rect x="323" y="130" width="45" height="35" rx="5" fill="var(--dg-orange)"/>
+  <text x="345" y="153" text-anchor="middle" font-size="12" fill="white">job</text>
+  <rect x="376" y="130" width="45" height="35" rx="5" fill="var(--dg-orange)"/>
+  <text x="398" y="153" text-anchor="middle" font-size="12" fill="white">job</text>
+  <rect x="429" y="130" width="45" height="35" rx="5" fill="var(--dg-orange-br)" stroke="var(--dg-orange)" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="451" y="153" text-anchor="middle" font-size="12" fill="var(--dg-orange-tx)">...</text>
+  <text x="370" y="200" text-anchor="middle" font-size="12" fill="var(--dg-orange-tx)">Queue grows → add workers | Queue empty → reduce workers</text>
+  <rect x="575" y="50" width="145" height="55" rx="10" fill="var(--dg-teal-bg)" stroke="var(--dg-teal-br)" stroke-width="2"/>
+  <rect x="590" y="62" width="115" height="34" rx="7" fill="var(--dg-teal)"/>
+  <text x="647" y="82" text-anchor="middle" font-size="12" font-weight="600" fill="white">Worker 1</text>
+  <rect x="575" y="120" width="145" height="55" rx="10" fill="var(--dg-teal-bg)" stroke="var(--dg-teal-br)" stroke-width="2"/>
+  <rect x="590" y="132" width="115" height="34" rx="7" fill="var(--dg-teal)"/>
+  <text x="647" y="152" text-anchor="middle" font-size="12" font-weight="600" fill="white">Worker 2</text>
+  <rect x="575" y="190" width="145" height="55" rx="10" fill="var(--dg-teal-bg)" stroke="var(--dg-teal-br)" stroke-width="2"/>
+  <rect x="590" y="202" width="115" height="34" rx="7" fill="var(--dg-teal)"/>
+  <text x="647" y="222" text-anchor="middle" font-size="12" font-weight="600" fill="white">Worker 3</text>
+  <line x1="177" y1="145" x2="253" y2="145" stroke="var(--dg-orange)" stroke-width="2.5" marker-end="url(#a10o)"/>
+  <text x="215" y="135" text-anchor="middle" font-size="12" fill="var(--dg-orange)">1. publish job</text>
+  <line x1="487" y1="148" x2="572" y2="88" stroke="var(--dg-green)" stroke-width="2" marker-end="url(#a10g)"/>
+  <line x1="487" y1="155" x2="572" y2="155" stroke="var(--dg-green)" stroke-width="2" marker-end="url(#a10g)"/>
+  <line x1="487" y1="162" x2="572" y2="218" stroke="var(--dg-green)" stroke-width="2" marker-end="url(#a10g)"/>
+  <text x="536" y="132" text-anchor="middle" font-size="12" fill="var(--dg-green)">3. consume</text>
+</svg></div>
 
 **Decoupling makes the message queue a preferred architecture for building scalable and reliable applications.** With the message queue, the producer can post a message to the queue when the consumer is unavailable to process it. The consumer can read messages from the queue even when the producer is unavailable.
 
@@ -736,45 +738,45 @@ Other real-world uses: **email delivery** (don't make users wait for SMTP), **vi
 
 When working with a small website that runs on a few servers, logging, metrics, and automation support are good practices but not a necessity. However, now that your site has grown to serve a large business, investing in these tools is essential.
 
-<svg viewBox="0 0 740 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-  <rect width="740" height="230" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <rect x="20" y="25" width="165" height="190" rx="12" fill="#EFF6FF" stroke="#93C5FD" stroke-width="2"/>
-  <text x="102" y="52" text-anchor="middle" font-size="24">📋</text>
-  <text x="102" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#1E40AF">Logging</text>
-  <text x="102" y="96" text-anchor="middle" font-size="10" fill="#3B82F6">Identify errors &amp;</text>
-  <text x="102" y="112" text-anchor="middle" font-size="10" fill="#3B82F6">problems in the system</text>
-  <text x="102" y="135" text-anchor="middle" font-size="10" fill="#64748B">ELK Stack</text>
-  <text x="102" y="153" text-anchor="middle" font-size="10" fill="#64748B">Grafana Loki</text>
-  <text x="102" y="171" text-anchor="middle" font-size="10" fill="#64748B">AWS CloudWatch</text>
-  <text x="102" y="200" text-anchor="middle" font-size="9" fill="#94A3B8">Per-server or centralized</text>
-  <rect x="200" y="25" width="165" height="190" rx="12" fill="#F0FDF4" stroke="#86EFAC" stroke-width="2"/>
-  <text x="282" y="52" text-anchor="middle" font-size="24">📊</text>
-  <text x="282" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#14532D">Metrics</text>
-  <text x="282" y="96" text-anchor="middle" font-size="10" fill="#16A34A">Host: CPU, Memory,</text>
-  <text x="282" y="112" text-anchor="middle" font-size="10" fill="#16A34A">disk I/O</text>
-  <text x="282" y="130" text-anchor="middle" font-size="10" fill="#16A34A">Aggregated: DB, Cache</text>
-  <text x="282" y="148" text-anchor="middle" font-size="10" fill="#16A34A">Business: DAU, revenue</text>
-  <text x="282" y="171" text-anchor="middle" font-size="10" fill="#64748B">Prometheus + Grafana</text>
-  <text x="282" y="189" text-anchor="middle" font-size="10" fill="#64748B">Datadog · CloudWatch</text>
-  <rect x="380" y="25" width="165" height="190" rx="12" fill="#FFF7ED" stroke="#FED7AA" stroke-width="2"/>
-  <text x="462" y="52" text-anchor="middle" font-size="24">🔔</text>
-  <text x="462" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#92400E">Monitoring</text>
-  <text x="462" y="96" text-anchor="middle" font-size="10" fill="#B45309">Alert on thresholds</text>
-  <text x="462" y="112" text-anchor="middle" font-size="10" fill="#B45309">Page on-call engineers</text>
-  <text x="462" y="135" text-anchor="middle" font-size="10" fill="#64748B">PagerDuty</text>
-  <text x="462" y="153" text-anchor="middle" font-size="10" fill="#64748B">OpsGenie</text>
-  <text x="462" y="171" text-anchor="middle" font-size="10" fill="#64748B">CloudWatch Alarms</text>
-  <text x="462" y="200" text-anchor="middle" font-size="9" fill="#94A3B8">Auto-detect outages</text>
-  <rect x="560" y="25" width="165" height="190" rx="12" fill="#F5F3FF" stroke="#C4B5FD" stroke-width="2"/>
-  <text x="642" y="52" text-anchor="middle" font-size="24">🤖</text>
-  <text x="642" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#4C1D95">Automation</text>
-  <text x="642" y="96" text-anchor="middle" font-size="10" fill="#7C3AED">CI: verify each code</text>
-  <text x="642" y="112" text-anchor="middle" font-size="10" fill="#7C3AED">check-in via automation</text>
-  <text x="642" y="130" text-anchor="middle" font-size="10" fill="#7C3AED">CD: auto-deploy builds</text>
-  <text x="642" y="148" text-anchor="middle" font-size="10" fill="#7C3AED">Auto Scaling</text>
-  <text x="642" y="171" text-anchor="middle" font-size="10" fill="#64748B">GitHub Actions</text>
-  <text x="642" y="189" text-anchor="middle" font-size="10" fill="#64748B">Terraform / CDK</text>
-</svg>
+<div class="diagram"><svg viewBox="0 0 740 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <rect width="740" height="230" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <rect x="20" y="25" width="165" height="190" rx="12" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="102" y="52" text-anchor="middle" font-size="24"></text>
+  <text x="102" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-blue-tx)">Logging</text>
+  <text x="102" y="96" text-anchor="middle" font-size="12" fill="var(--dg-blue)">Identify errors &amp;</text>
+  <text x="102" y="112" text-anchor="middle" font-size="12" fill="var(--dg-blue)">problems in the system</text>
+  <text x="102" y="135" text-anchor="middle" font-size="12" fill="var(--dg-muted)">ELK Stack</text>
+  <text x="102" y="153" text-anchor="middle" font-size="12" fill="var(--dg-muted)">Grafana Loki</text>
+  <text x="102" y="171" text-anchor="middle" font-size="12" fill="var(--dg-muted)">AWS CloudWatch</text>
+  <text x="102" y="200" text-anchor="middle" font-size="12" fill="var(--dg-faint)">Per-server or centralized</text>
+  <rect x="200" y="25" width="165" height="190" rx="12" fill="var(--dg-green-bg)" stroke="var(--dg-green-br)" stroke-width="2"/>
+  <text x="282" y="52" text-anchor="middle" font-size="24"></text>
+  <text x="282" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-green-tx)">Metrics</text>
+  <text x="282" y="96" text-anchor="middle" font-size="12" fill="var(--dg-green)">Host: CPU, Memory,</text>
+  <text x="282" y="112" text-anchor="middle" font-size="12" fill="var(--dg-green)">disk I/O</text>
+  <text x="282" y="130" text-anchor="middle" font-size="12" fill="var(--dg-green)">Aggregated: DB, Cache</text>
+  <text x="282" y="148" text-anchor="middle" font-size="12" fill="var(--dg-green)">Business: DAU, revenue</text>
+  <text x="282" y="171" text-anchor="middle" font-size="12" fill="var(--dg-muted)">Prometheus + Grafana</text>
+  <text x="282" y="189" text-anchor="middle" font-size="12" fill="var(--dg-muted)">Datadog · CloudWatch</text>
+  <rect x="380" y="25" width="165" height="190" rx="12" fill="var(--dg-orange-bg)" stroke="var(--dg-orange-br)" stroke-width="2"/>
+  <text x="462" y="52" text-anchor="middle" font-size="24"></text>
+  <text x="462" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-orange-tx)">Monitoring</text>
+  <text x="462" y="96" text-anchor="middle" font-size="12" fill="var(--dg-orange-tx)">Alert on thresholds</text>
+  <text x="462" y="112" text-anchor="middle" font-size="12" fill="var(--dg-orange-tx)">Page on-call engineers</text>
+  <text x="462" y="135" text-anchor="middle" font-size="12" fill="var(--dg-muted)">PagerDuty</text>
+  <text x="462" y="153" text-anchor="middle" font-size="12" fill="var(--dg-muted)">OpsGenie</text>
+  <text x="462" y="171" text-anchor="middle" font-size="12" fill="var(--dg-muted)">CloudWatch Alarms</text>
+  <text x="462" y="200" text-anchor="middle" font-size="12" fill="var(--dg-faint)">Auto-detect outages</text>
+  <rect x="560" y="25" width="165" height="190" rx="12" fill="var(--dg-purple-bg)" stroke="var(--dg-purple-br)" stroke-width="2"/>
+  <text x="642" y="52" text-anchor="middle" font-size="24"></text>
+  <text x="642" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-purple-tx)">Automation</text>
+  <text x="642" y="96" text-anchor="middle" font-size="12" fill="var(--dg-purple)">CI: verify each code</text>
+  <text x="642" y="112" text-anchor="middle" font-size="12" fill="var(--dg-purple)">check-in via automation</text>
+  <text x="642" y="130" text-anchor="middle" font-size="12" fill="var(--dg-purple)">CD: auto-deploy builds</text>
+  <text x="642" y="148" text-anchor="middle" font-size="12" fill="var(--dg-purple)">Auto Scaling</text>
+  <text x="642" y="171" text-anchor="middle" font-size="12" fill="var(--dg-muted)">GitHub Actions</text>
+  <text x="642" y="189" text-anchor="middle" font-size="12" fill="var(--dg-muted)">Terraform / CDK</text>
+</svg></div>
 
 **Logging** — Monitoring error logs is important because it helps identify errors and problems in the system. You can monitor error logs at the per-server level or use tools to aggregate them to a centralized service for easy search and viewing.
 
@@ -795,7 +797,7 @@ As the data grows every day, your database gets more overloaded. It is time to s
 
 There are two broad approaches for database scaling: **vertical scaling** and **horizontal scaling**.
 
-**Vertical scaling** (scale up) means adding more power (CPU, RAM, DISK) to an existing machine. There are some powerful database servers available — according to Amazon Relational Database Service (RDS), you can get a database server with **24 TB of RAM**. This kind of powerful database server could store and handle lots of data. For example, stackoverflow.com in 2013 had over 10 million monthly unique visitors, but it only had 1 master database.
+**Vertical scaling** (scale up) means adding more power (CPU, RAM, DISK) to an existing machine. There are some genuinely large database servers available. The often-quoted figure of *24 TB of RAM on RDS* is worth correcting: that number describes EC2 **High Memory** instances (the U-1 family, aimed at SAP HANA), not RDS — and AWS stopped selling U-1 in June 2025 in favour of U7i. For managed RDS itself, the largest memory-optimised class today is **`db.x2iedn.32xlarge`, at 4 TiB of RAM and 128 vCPUs**. That is still a very big machine: Stack Overflow served over 10 million monthly unique visitors in 2013 from a single primary database, and scaling up remains a legitimate first move.
 
 However, vertical scaling comes with serious drawbacks:
 - You can add more hardware, but there are **hardware limits** — if you have a large user base, a single server is not enough
@@ -804,41 +806,41 @@ However, vertical scaling comes with serious drawbacks:
 
 **Horizontal scaling** — also known as **sharding** — is the practice of adding more servers.
 
-<svg viewBox="0 0 740 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div class="diagram"><svg viewBox="0 0 740 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <defs>
-    <marker id="a12" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#64748B"/></marker>
-    <marker id="a12g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#10B981"/></marker>
+    <marker id="a12" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-muted)"/></marker>
+    <marker id="a12g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-green)"/></marker>
   </defs>
-  <rect width="740" height="340" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <rect x="255" y="15" width="230" height="55" rx="10" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="2"/>
-  <text x="370" y="38" text-anchor="middle" font-size="12" font-weight="700" fill="#3730A3">Query: user_id = 13</text>
-  <text x="370" y="58" text-anchor="middle" font-size="11" fill="#6366F1">13 % 4 = 1  →  Shard 1</text>
-  <rect x="285" y="92" width="170" height="38" rx="10" fill="#7C3AED" stroke="#6D28D9" stroke-width="2"/>
+  <rect width="740" height="340" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <rect x="255" y="15" width="230" height="55" rx="10" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="370" y="38" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-blue-tx)">Query: user_id = 13</text>
+  <text x="370" y="58" text-anchor="middle" font-size="12" fill="var(--dg-blue-tx)">13 % 4 = 1 → Shard 1</text>
+  <rect x="285" y="92" width="170" height="38" rx="10" fill="var(--dg-purple)" stroke="var(--dg-purple)" stroke-width="2"/>
   <text x="370" y="116" text-anchor="middle" font-size="12" font-weight="700" fill="white">Hash: user_id % 4</text>
-  <rect x="20" y="185" width="155" height="115" rx="12" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/>
-  <text x="98" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#64748B">Shard 0</text>
-  <text x="98" y="232" text-anchor="middle" font-size="10" fill="#94A3B8">user_id % 4 = 0</text>
-  <text x="98" y="252" text-anchor="middle" font-size="10" fill="#94A3B8">0, 4, 8, 12 ...</text>
-  <rect x="192" y="175" width="162" height="130" rx="12" fill="#F0FDF4" stroke="#10B981" stroke-width="3"/>
-  <text x="273" y="205" text-anchor="middle" font-size="13" font-weight="700" fill="#14532D">Shard 1 ✅</text>
-  <text x="273" y="225" text-anchor="middle" font-size="10" fill="#16A34A">user_id % 4 = 1</text>
-  <text x="273" y="245" text-anchor="middle" font-size="10" fill="#16A34A" font-weight="600">1, 5, 9, 13 ← match!</text>
-  <text x="273" y="265" text-anchor="middle" font-size="10" fill="#16A34A">17, 21 ...</text>
-  <rect x="199" y="278" width="148" height="22" rx="6" fill="#10B981"/>
-  <text x="273" y="293" text-anchor="middle" font-size="10" fill="white" font-weight="600">Query routed here</text>
-  <rect x="373" y="185" width="155" height="115" rx="12" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/>
-  <text x="450" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#64748B">Shard 2</text>
-  <text x="450" y="232" text-anchor="middle" font-size="10" fill="#94A3B8">user_id % 4 = 2</text>
-  <text x="450" y="252" text-anchor="middle" font-size="10" fill="#94A3B8">2, 6, 10, 14 ...</text>
-  <rect x="548" y="185" width="172" height="115" rx="12" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/>
-  <text x="634" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#64748B">Shard 3</text>
-  <text x="634" y="232" text-anchor="middle" font-size="10" fill="#94A3B8">user_id % 4 = 3</text>
-  <text x="634" y="252" text-anchor="middle" font-size="10" fill="#94A3B8">3, 7, 11, 15 ...</text>
-  <line x1="337" y1="130" x2="130" y2="183" stroke="#CBD5E1" stroke-width="1.5" marker-end="url(#a12)"/>
-  <line x1="358" y1="130" x2="298" y2="173" stroke="#10B981" stroke-width="2.5" marker-end="url(#a12g)"/>
-  <line x1="393" y1="130" x2="465" y2="183" stroke="#CBD5E1" stroke-width="1.5" marker-end="url(#a12)"/>
-  <line x1="415" y1="130" x2="595" y2="183" stroke="#CBD5E1" stroke-width="1.5" marker-end="url(#a12)"/>
-</svg>
+  <rect x="20" y="185" width="155" height="115" rx="12" fill="var(--dg-panel)" stroke="var(--dg-border2)" stroke-width="2"/>
+  <text x="98" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-muted)">Shard 0</text>
+  <text x="98" y="232" text-anchor="middle" font-size="12" fill="var(--dg-faint)">user_id % 4 = 0</text>
+  <text x="98" y="252" text-anchor="middle" font-size="12" fill="var(--dg-faint)">0, 4, 8, 12 ...</text>
+  <rect x="192" y="175" width="162" height="130" rx="12" fill="var(--dg-green-bg)" stroke="var(--dg-green)" stroke-width="3"/>
+  <text x="273" y="205" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-green-tx)">Shard 1 ✓</text>
+  <text x="273" y="225" text-anchor="middle" font-size="12" fill="var(--dg-green)">user_id % 4 = 1</text>
+  <text x="273" y="245" text-anchor="middle" font-size="12" fill="var(--dg-green)" font-weight="600">1, 5, 9, 13 ← match!</text>
+  <text x="273" y="265" text-anchor="middle" font-size="12" fill="var(--dg-green)">17, 21 ...</text>
+  <rect x="199" y="278" width="148" height="22" rx="6" fill="var(--dg-green)"/>
+  <text x="273" y="293" text-anchor="middle" font-size="12" fill="white" font-weight="600">Query routed here</text>
+  <rect x="373" y="185" width="155" height="115" rx="12" fill="var(--dg-panel)" stroke="var(--dg-border2)" stroke-width="2"/>
+  <text x="450" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-muted)">Shard 2</text>
+  <text x="450" y="232" text-anchor="middle" font-size="12" fill="var(--dg-faint)">user_id % 4 = 2</text>
+  <text x="450" y="252" text-anchor="middle" font-size="12" fill="var(--dg-faint)">2, 6, 10, 14 ...</text>
+  <rect x="548" y="185" width="172" height="115" rx="12" fill="var(--dg-panel)" stroke="var(--dg-border2)" stroke-width="2"/>
+  <text x="634" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-muted)">Shard 3</text>
+  <text x="634" y="232" text-anchor="middle" font-size="12" fill="var(--dg-faint)">user_id % 4 = 3</text>
+  <text x="634" y="252" text-anchor="middle" font-size="12" fill="var(--dg-faint)">3, 7, 11, 15 ...</text>
+  <line x1="337" y1="130" x2="130" y2="183" stroke="var(--dg-border2)" stroke-width="1.5" marker-end="url(#a12)"/>
+  <line x1="358" y1="130" x2="298" y2="173" stroke="var(--dg-green)" stroke-width="2.5" marker-end="url(#a12g)"/>
+  <line x1="393" y1="130" x2="465" y2="183" stroke="var(--dg-border2)" stroke-width="1.5" marker-end="url(#a12)"/>
+  <line x1="415" y1="130" x2="595" y2="183" stroke="var(--dg-border2)" stroke-width="1.5" marker-end="url(#a12)"/>
+</svg></div>
 
 Sharding separates large databases into smaller, more easily managed parts called shards. **Each shard shares the same schema**, though the actual data on each shard is unique to that shard.
 
@@ -860,72 +862,72 @@ Sharding is a great technique to scale the database but it is far from a perfect
 
 ## The Full Architecture: Zero to Millions of Users
 
-<svg viewBox="0 0 740 590" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div class="diagram"><svg viewBox="0 0 740 590" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <defs>
-    <marker id="af" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#64748B"/></marker>
+    <marker id="af" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--dg-muted)"/></marker>
   </defs>
-  <rect width="740" height="590" fill="#F8FAFC" rx="16" stroke="#E2E8F0" stroke-width="1.5"/>
-  <rect x="30" y="18" width="100" height="48" rx="10" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="2"/>
-  <text x="80" y="36" text-anchor="middle" font-size="18">👥</text>
-  <text x="80" y="56" text-anchor="middle" font-size="10" font-weight="600" fill="#3730A3">Users</text>
-  <rect x="300" y="18" width="140" height="48" rx="10" fill="#FDF2F8" stroke="#F9A8D4" stroke-width="2"/>
-  <text x="370" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#9D174D">⚡ CDN</text>
-  <text x="370" y="56" text-anchor="middle" font-size="9" fill="#BE185D">Static assets · Global edge</text>
-  <rect x="590" y="18" width="120" height="48" rx="10" fill="#FFFBEB" stroke="#FCD34D" stroke-width="2"/>
-  <text x="650" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#92400E">🌐 GeoDNS</text>
-  <text x="650" y="56" text-anchor="middle" font-size="9" fill="#B45309">Routes by location</text>
-  <rect x="270" y="100" width="200" height="45" rx="12" fill="#0E7490" stroke="#06B6D4" stroke-width="2.5"/>
-  <text x="370" y="120" text-anchor="middle" font-size="12" font-weight="700" fill="white">⚖  Load Balancer</text>
-  <text x="370" y="137" text-anchor="middle" font-size="9" fill="#A5F3FC">Round-robin · Health checks · Failover</text>
-  <rect x="80" y="183" width="115" height="52" rx="10" fill="#3B82F6"/>
-  <text x="138" y="204" text-anchor="middle" font-size="11" font-weight="600" fill="white">Web Server 1</text>
-  <text x="138" y="222" text-anchor="middle" font-size="9" fill="#BFDBFE">stateless</text>
-  <rect x="313" y="183" width="115" height="52" rx="10" fill="#3B82F6"/>
-  <text x="370" y="204" text-anchor="middle" font-size="11" font-weight="600" fill="white">Web Server 2</text>
-  <text x="370" y="222" text-anchor="middle" font-size="9" fill="#BFDBFE">stateless</text>
-  <rect x="546" y="183" width="115" height="52" rx="10" fill="#60A5FA" stroke="#3B82F6" stroke-dasharray="5,3" stroke-width="2"/>
-  <text x="603" y="204" text-anchor="middle" font-size="11" font-weight="600" fill="#1E3A8A">Web Server N</text>
-  <text x="603" y="222" text-anchor="middle" font-size="9" fill="#1D4ED8">auto-scaled</text>
-  <rect x="80" y="278" width="160" height="65" rx="12" fill="#10B981"/>
-  <text x="160" y="302" text-anchor="middle" font-size="12" font-weight="700" fill="white">⚡ Cache</text>
-  <text x="160" y="320" text-anchor="middle" font-size="9" fill="#D1FAE5">Redis · Memcached · LRU</text>
-  <rect x="500" y="278" width="200" height="65" rx="12" fill="#F97316"/>
-  <text x="600" y="302" text-anchor="middle" font-size="12" font-weight="700" fill="white">📬 Message Queue</text>
-  <text x="600" y="320" text-anchor="middle" font-size="9" fill="#FEF3C7">Kafka · RabbitMQ · SQS</text>
-  <rect x="30" y="393" width="170" height="75" rx="12" fill="#7C3AED" stroke="#6D28D9" stroke-width="2"/>
-  <text x="115" y="418" text-anchor="middle" font-size="11" font-weight="700" fill="white">Sharded DBs</text>
-  <text x="115" y="436" text-anchor="middle" font-size="9" fill="#DDD6FE">Shard 1 · 2 · 3 ...</text>
-  <text x="115" y="452" text-anchor="middle" font-size="9" fill="#DDD6FE">Writes → Master DB</text>
-  <rect x="220" y="393" width="140" height="75" rx="12" fill="#6D28D9" stroke="#8B5CF6" stroke-width="2"/>
-  <text x="290" y="418" text-anchor="middle" font-size="11" font-weight="700" fill="white">Slave DBs</text>
-  <text x="290" y="436" text-anchor="middle" font-size="9" fill="#DDD6FE">Read Replicas</text>
-  <text x="290" y="452" text-anchor="middle" font-size="9" fill="#DDD6FE">Reads → Here</text>
-  <rect x="380" y="393" width="160" height="75" rx="12" fill="#14B8A6"/>
-  <text x="460" y="418" text-anchor="middle" font-size="11" font-weight="700" fill="white">⚙ Workers</text>
-  <text x="460" y="436" text-anchor="middle" font-size="9" fill="#CCFBF1">Async processing</text>
-  <text x="460" y="452" text-anchor="middle" font-size="9" fill="#CCFBF1">Email · Images · Index</text>
-  <rect x="560" y="393" width="150" height="75" rx="12" fill="#84CC16"/>
-  <text x="635" y="418" text-anchor="middle" font-size="11" font-weight="700" fill="white">NoSQL Store</text>
-  <text x="635" y="436" text-anchor="middle" font-size="9" fill="#F7FEE7">Non-relational data</text>
-  <text x="635" y="452" text-anchor="middle" font-size="9" fill="#F7FEE7">Cassandra · DynamoDB</text>
-  <rect x="30" y="510" width="680" height="55" rx="12" fill="#1E293B"/>
-  <text x="200" y="535" text-anchor="middle" font-size="11" font-weight="700" fill="white">📋 Logging</text>
-  <text x="370" y="535" text-anchor="middle" font-size="11" font-weight="700" fill="white">📊 Metrics</text>
-  <text x="540" y="535" text-anchor="middle" font-size="11" font-weight="700" fill="white">🔔 Monitoring · 🤖 Automation</text>
-  <text x="370" y="553" text-anchor="middle" font-size="10" fill="#94A3B8">Prometheus · Grafana · ELK · Datadog · PagerDuty · GitHub Actions</text>
-  <line x1="80" y1="66" x2="300" y2="35" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#af)"/>
-  <line x1="130" y1="66" x2="589" y2="40" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#af)"/>
-  <line x1="370" y1="66" x2="370" y2="98" stroke="#64748B" stroke-width="2" marker-end="url(#af)"/>
-  <line x1="330" y1="145" x2="195" y2="181" stroke="#64748B" stroke-width="1.5" marker-end="url(#af)"/>
-  <line x1="370" y1="145" x2="370" y2="181" stroke="#64748B" stroke-width="1.5" marker-end="url(#af)"/>
-  <line x1="410" y1="145" x2="545" y2="181" stroke="#64748B" stroke-width="1.5" marker-end="url(#af)"/>
-  <line x1="160" y1="235" x2="160" y2="276" stroke="#64748B" stroke-width="1.5" marker-end="url(#af)"/>
-  <line x1="370" y1="235" x2="200" y2="276" stroke="#64748B" stroke-width="1.5" marker-end="url(#af)"/>
-  <line x1="600" y1="235" x2="620" y2="276" stroke="#64748B" stroke-width="1.5" marker-end="url(#af)"/>
-  <line x1="160" y1="343" x2="115" y2="391" stroke="#64748B" stroke-width="1.5" marker-end="url(#af)"/>
-  <line x1="600" y1="343" x2="460" y2="391" stroke="#64748B" stroke-width="1.5" marker-end="url(#af)"/>
-  <line x1="635" y1="343" x2="635" y2="391" stroke="#64748B" stroke-width="1.5" marker-end="url(#af)"/>
-</svg>
+  <rect width="740" height="590" fill="var(--dg-panel)" rx="16" stroke="var(--dg-border)" stroke-width="1.5"/>
+  <rect x="30" y="18" width="100" height="48" rx="10" fill="var(--dg-blue-bg)" stroke="var(--dg-blue-br)" stroke-width="2"/>
+  <text x="80" y="36" text-anchor="middle" font-size="18"></text>
+  <text x="80" y="56" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-blue-tx)">Users</text>
+  <rect x="300" y="18" width="140" height="48" rx="10" fill="var(--dg-red-bg)" stroke="var(--dg-red-br)" stroke-width="2"/>
+  <text x="370" y="38" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-red-tx)">CDN</text>
+  <text x="370" y="56" text-anchor="middle" font-size="12" fill="var(--dg-red-tx)">Static assets · Global edge</text>
+  <rect x="590" y="18" width="120" height="48" rx="10" fill="var(--dg-orange-bg)" stroke="var(--dg-orange-br)" stroke-width="2"/>
+  <text x="650" y="38" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-orange-tx)">GeoDNS</text>
+  <text x="650" y="56" text-anchor="middle" font-size="12" fill="var(--dg-orange-tx)">Routes by location</text>
+  <rect x="270" y="100" width="200" height="45" rx="12" fill="var(--dg-teal-tx)" stroke="var(--dg-teal)" stroke-width="2.5"/>
+  <text x="370" y="120" text-anchor="middle" font-size="12" font-weight="700" fill="white">Load Balancer</text>
+  <text x="370" y="137" text-anchor="middle" font-size="12" fill="var(--dg-teal-br)">Round-robin · Health checks · Failover</text>
+  <rect x="80" y="183" width="115" height="52" rx="10" fill="var(--dg-blue)"/>
+  <text x="138" y="204" text-anchor="middle" font-size="12" font-weight="600" fill="white">Web Server 1</text>
+  <text x="138" y="222" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">stateless</text>
+  <rect x="313" y="183" width="115" height="52" rx="10" fill="var(--dg-blue)"/>
+  <text x="370" y="204" text-anchor="middle" font-size="12" font-weight="600" fill="white">Web Server 2</text>
+  <text x="370" y="222" text-anchor="middle" font-size="12" fill="var(--dg-blue-br)">stateless</text>
+  <rect x="546" y="183" width="115" height="52" rx="10" fill="var(--dg-blue)" stroke="var(--dg-blue)" stroke-dasharray="5,3" stroke-width="2"/>
+  <text x="603" y="204" text-anchor="middle" font-size="12" font-weight="600" fill="var(--dg-blue-tx)">Web Server N</text>
+  <text x="603" y="222" text-anchor="middle" font-size="12" fill="var(--dg-blue)">auto-scaled</text>
+  <rect x="80" y="278" width="160" height="65" rx="12" fill="var(--dg-green)"/>
+  <text x="160" y="302" text-anchor="middle" font-size="12" font-weight="700" fill="white">Cache</text>
+  <text x="160" y="320" text-anchor="middle" font-size="12" fill="var(--dg-green-bg)">Redis · Memcached · LRU</text>
+  <rect x="500" y="278" width="200" height="65" rx="12" fill="var(--dg-orange)"/>
+  <text x="600" y="302" text-anchor="middle" font-size="12" font-weight="700" fill="white">Message Queue</text>
+  <text x="600" y="320" text-anchor="middle" font-size="12" fill="var(--dg-orange-bg)">Kafka · RabbitMQ · SQS</text>
+  <rect x="30" y="393" width="170" height="75" rx="12" fill="var(--dg-purple)" stroke="var(--dg-purple)" stroke-width="2"/>
+  <text x="115" y="418" text-anchor="middle" font-size="12" font-weight="700" fill="white">Sharded DBs</text>
+  <text x="115" y="436" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">Shard 1 · 2 · 3 ...</text>
+  <text x="115" y="452" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">Writes → Master DB</text>
+  <rect x="220" y="393" width="140" height="75" rx="12" fill="var(--dg-purple)" stroke="var(--dg-purple)" stroke-width="2"/>
+  <text x="290" y="418" text-anchor="middle" font-size="12" font-weight="700" fill="white">Slave DBs</text>
+  <text x="290" y="436" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">Read Replicas</text>
+  <text x="290" y="452" text-anchor="middle" font-size="12" fill="var(--dg-purple-br)">Reads → Here</text>
+  <rect x="380" y="393" width="160" height="75" rx="12" fill="var(--dg-teal)"/>
+  <text x="460" y="418" text-anchor="middle" font-size="12" font-weight="700" fill="white">Workers</text>
+  <text x="460" y="436" text-anchor="middle" font-size="12" fill="var(--dg-teal-bg)">Async processing</text>
+  <text x="460" y="452" text-anchor="middle" font-size="12" fill="var(--dg-teal-bg)">Email · Images · Index</text>
+  <rect x="560" y="393" width="150" height="75" rx="12" fill="var(--dg-green)"/>
+  <text x="635" y="418" text-anchor="middle" font-size="12" font-weight="700" fill="white">NoSQL Store</text>
+  <text x="635" y="436" text-anchor="middle" font-size="12" fill="var(--dg-green-bg)">Non-relational data</text>
+  <text x="635" y="452" text-anchor="middle" font-size="12" fill="var(--dg-green-bg)">Cassandra · DynamoDB</text>
+  <rect x="30" y="510" width="680" height="55" rx="12" fill="var(--dg-text)"/>
+  <text x="200" y="535" text-anchor="middle" font-size="12" font-weight="700" fill="white">Logging</text>
+  <text x="370" y="535" text-anchor="middle" font-size="12" font-weight="700" fill="white">Metrics</text>
+  <text x="540" y="535" text-anchor="middle" font-size="12" font-weight="700" fill="white">Monitoring · Automation</text>
+  <text x="370" y="553" text-anchor="middle" font-size="12" fill="var(--dg-faint)">Prometheus · Grafana · ELK · Datadog · PagerDuty · GitHub Actions</text>
+  <line x1="80" y1="66" x2="300" y2="35" stroke="var(--dg-faint)" stroke-width="1.5" marker-end="url(#af)"/>
+  <path d="M130 56 C 250 4, 450 0, 585 28" fill="none" stroke="var(--dg-faint)" stroke-width="1.5" marker-end="url(#af)"/>
+  <line x1="370" y1="66" x2="370" y2="98" stroke="var(--dg-muted)" stroke-width="2" marker-end="url(#af)"/>
+  <line x1="330" y1="145" x2="195" y2="181" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#af)"/>
+  <line x1="370" y1="145" x2="370" y2="181" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#af)"/>
+  <line x1="410" y1="145" x2="545" y2="181" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#af)"/>
+  <line x1="160" y1="235" x2="160" y2="276" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#af)"/>
+  <line x1="370" y1="235" x2="200" y2="276" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#af)"/>
+  <line x1="600" y1="235" x2="620" y2="276" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#af)"/>
+  <line x1="160" y1="343" x2="115" y2="391" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#af)"/>
+  <line x1="600" y1="343" x2="460" y2="391" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#af)"/>
+  <line x1="635" y1="343" x2="635" y2="391" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#af)"/>
+</svg></div>
 
 ---
 
@@ -947,6 +949,42 @@ Here is a summary of how we scale our system to support millions of users:
 | **Monitor your system and use automation tools** | Logging, metrics, CI/CD — you cannot improve what you cannot measure |
 
 Congratulations on getting this far! Now give yourself a pat on the back. Good job!
+
+---
+
+## References and Further Reading
+
+The canonical sources behind each step, so you can go deeper than this article.
+
+**Protocols and fundamentals**
+1. [Hypertext Transfer Protocol](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) — Wikipedia
+2. [Single point of failure](https://en.wikipedia.org/wiki/Single_point_of_failure) — Wikipedia
+3. [Replication (computing)](https://en.wikipedia.org/wiki/Replication_(computing)) — Wikipedia
+
+**Databases and replication**
+4. [Should you go Beyond Relational Databases?](https://blog.teamtreehouse.com/should-you-go-beyond-relational-databases) — Treehouse
+5. [Multi-master replication](https://en.wikipedia.org/wiki/Multi-master_replication) — Wikipedia
+6. [NDB Cluster Replication: Multi-Master and Circular Replication](https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster-replication-multi-master.html) — MySQL docs
+7. [Amazon RDS DB instance classes](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html) — the current ceiling for vertical scaling
+8. [What it takes to run Stack Overflow](https://nickcraver.com/blog/2013/11/22/what-it-takes-to-run-stack-overflow/) — Nick Craver, on how far one primary database goes
+
+**Caching**
+9. [Caching Strategies and How to Choose the Right One](https://codeahoy.com/2017/08/11/caching-strategies-and-how-to-choose-the-right-one/) — read-through, write-through, write-behind
+10. [Scaling Memcache at Facebook](https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf) — Nishtala et al., NSDI '13. The definitive paper on cache consistency at scale.
+
+**CDN and edge**
+11. [Amazon CloudFront Dynamic Content Delivery](https://aws.amazon.com/cloudfront/dynamic-content/) — caching beyond static assets
+
+**Stateless tiers and multi-region**
+12. [Configure sticky sessions for your Classic Load Balancer](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html) — the workaround a stateless tier lets you avoid
+13. [Active-Active for Multi-Regional Resiliency](https://netflixtechblog.com/active-active-for-multi-regional-resiliency-c47719f6685b) — Netflix Technology Blog
+
+**NoSQL and sharding**
+14. [What the Heck Are You Actually Using NoSQL For?](http://highscalability.com/blog/2010/12/6/what-the-heck-are-you-actually-using-nosql-for.html) — High Scalability
+
+**Books worth owning**
+15. *System Design Interview – An Insider's Guide* — Alex Xu. The chapter this article follows.
+16. *Designing Data-Intensive Applications* — Martin Kleppmann. The deepest treatment of replication, partitioning and consistency in print.
 
 ---
 
