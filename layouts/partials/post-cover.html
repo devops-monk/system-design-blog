@@ -1,0 +1,74 @@
+{{/*
+  Renders a post cover banner.
+  Call with: (dict "page" . "variant" "card")  -> listing thumbnail
+             (dict "page" . "variant" "hero")  -> full-width banner on the article
+
+  Cover source, in order:
+    1. front matter  image: /images/articles/foo.png   (string)
+    2. front matter  images: ["/images/..."]           (array, Wellington convention)
+    3. generated gradient banner seeded from the title
+
+  A front-matter path pointing at a file that is not in static/ is ignored and
+  falls through to the generated banner, so a typo or a not-yet-authored PNG
+  never renders as a broken image.
+*/}}
+{{- $page := .page -}}
+{{- $variant := .variant | default "card" -}}
+{{- $img := "" -}}
+
+{{- with $page.Params.image -}}{{- $img = . -}}{{- end -}}
+{{- if not $img -}}
+  {{- with $page.Params.images -}}
+    {{- if gt (len .) 0 -}}{{- $img = index . 0 -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if and $img (hasPrefix $img "/") -}}
+  {{- if not (fileExists (printf "static%s" $img)) -}}{{- $img = "" -}}{{- end -}}
+{{- end -}}
+
+{{- $cls := cond (eq $variant "hero") "post-hero-img" "post-card-img" -}}
+{{- $linkcls := cond (eq $variant "hero") "post-hero-img-link" "post-card-img-link" -}}
+
+{{- if $img -}}
+  {{- if eq $variant "hero" -}}
+<div class="{{ $linkcls }}">
+    <img class="{{ $cls }}" src="{{ $img | relURL }}" alt="{{ $page.Title }}" width="1200" height="480" />
+</div>
+  {{- else -}}
+<a class="{{ $linkcls }}" href="{{ $page.Permalink }}" rel="bookmark" aria-hidden="true" tabindex="-1">
+    <img class="{{ $cls }}" src="{{ $img | relURL }}" alt="" width="1200" height="480" loading="lazy" />
+</a>
+  {{- end -}}
+{{- else -}}
+  {{/* Generated banner: pick a palette pair from a hash of the title so each
+       post keeps a stable, distinct colourway across rebuilds. */}}
+  {{- $palettes := slice
+        (slice "#0ea5e9" "#6366f1")
+        (slice "#06b6d4" "#3b82f6")
+        (slice "#8b5cf6" "#d946ef")
+        (slice "#f59e0b" "#ef4444")
+        (slice "#10b981" "#0ea5e9")
+        (slice "#6366f1" "#ec4899")
+        (slice "#14b8a6" "#8b5cf6")
+        (slice "#3b82f6" "#06b6d4") -}}
+  {{/* Shift off the low bits before the modulo: FNV32a's tail bits cluster
+       badly at small moduli and half the posts collided on one colour. */}}
+  {{- $h := int (math.Abs (hash.FNV32a $page.Title)) -}}
+  {{- $i := mod (div $h 8) (len $palettes) -}}
+  {{- $p := index $palettes $i -}}
+  {{- $style := printf "--cover-a:%s;--cover-b:%s" (index $p 0) (index $p 1) -}}
+  {{- if eq $variant "hero" -}}
+<div class="{{ $linkcls }}">
+    <div class="{{ $cls }} post-cover--auto" style="{{ $style | safeCSS }}">
+        <span class="post-cover-title">{{ $page.Title }}</span>
+    </div>
+</div>
+  {{- else -}}
+<a class="{{ $linkcls }}" href="{{ $page.Permalink }}" rel="bookmark" aria-hidden="true" tabindex="-1">
+    <div class="{{ $cls }} post-cover--auto" style="{{ $style | safeCSS }}">
+        <span class="post-cover-title">{{ $page.Title }}</span>
+    </div>
+</a>
+  {{- end -}}
+{{- end -}}

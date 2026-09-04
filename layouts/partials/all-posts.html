@@ -17,10 +17,13 @@
 
     <div id="post-wrapper" class="post-wrapper clearfix">
         <div class="post-column clearfix">
-            {{ $sourcePages := cond .IsHome (where .Pages "Type" "post") .Pages }}
+            {{/* Filter on Section, not Type: posts that omit `type: post` in front
+     matter still belong to the posts section. */}}
+            {{ $sourcePages := cond .IsHome (where .Site.RegularPages "Section" "posts") .Pages }}
             {{ $paginator := .Paginate $sourcePages }}
             {{ range $paginator.Pages }}
             <article class="post type-post hentry">
+                {{ partial "post-cover.html" (dict "page" . "variant" "card") }}
                 {{ partial "post-meta.html" . }}
                 <div class="entry-content entry-excerpt clearfix">
                     <p>{{ .Summary }}</p>

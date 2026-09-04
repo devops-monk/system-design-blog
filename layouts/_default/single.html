@@ -3,6 +3,7 @@
     <main id="main" class="site-main" role="main">
         <article class="post type-post">
             <div class="post-inner-content">
+                {{ partial "post-cover.html" (dict "page" . "variant" "hero") }}
                 {{ partial "post-meta.html" . }}
                 {{ partial "social-share.html" . }}
                 {{ partial "toc.html" . }}
