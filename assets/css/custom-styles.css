@@ -1193,10 +1193,86 @@ a.cert-card:hover .cert-verify { opacity: 1; }
 
 [data-theme="dark"] .archive-header { background: #1e293b !important; border-color: #334155 !important; }
 
-/* ---- Post card cover image ---- */
-.post-card-img-link { display: block; margin: -1.75em -2em 1.25em; overflow: hidden; border-radius: var(--radius) var(--radius) 0 0; }
-.post-card-img { width: 100%; height: 120px; object-fit: cover; object-position: center 30%; display: block; transition: transform 0.3s; }
+/* ---- Post cover image (listing card + article hero) ---- */
+/* Negative margins bleed the banner to the card edges; they mirror the
+   1.75em/2em padding on .type-post / .hentry above. */
+.post-card-img-link,
+.post-hero-img-link {
+  display: block;
+  margin: -1.75em -2em 1.5em;
+  overflow: hidden;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--border);
+}
+
+.post-card-img,
+.post-hero-img {
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.3s;
+}
+
+/* Covers are designed graphics, not photos: show the whole 2.5:1 artwork
+   rather than cropping the chapter chip and strapline off the edges. */
+.post-card-img,
+.post-hero-img { aspect-ratio: 5 / 2; height: auto; }
+
 .type-post:hover .post-card-img { transform: scale(1.03); }
+
+/* Generated fallback banner for posts with no cover image in front matter.
+   --cover-a / --cover-b are set inline by partials/post-cover.html, seeded
+   from a hash of the post title so each post keeps a stable colourway. */
+.post-cover--auto {
+  background: linear-gradient(135deg, var(--cover-a, #0ea5e9), var(--cover-b, #6366f1));
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25em 1.75em;
+  text-align: center;
+}
+
+.post-cover--auto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 25%, rgba(255,255,255,0.22), transparent 45%),
+    radial-gradient(circle at 82% 78%, rgba(255,255,255,0.14), transparent 48%);
+  pointer-events: none;
+}
+
+.post-cover-title {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.28;
+  letter-spacing: -0.015em;
+  text-shadow: 0 1px 12px rgba(15, 23, 42, 0.28);
+  max-width: 26ch;
+}
+
+.post-hero-img.post-cover--auto .post-cover-title { font-size: 1.85rem; max-width: 30ch; }
+
+[data-theme="dark"] .post-card-img-link,
+[data-theme="dark"] .post-hero-img-link { background: #334155; }
+
+@media (max-width: 768px) {
+  .post-card-img-link,
+  .post-hero-img-link { margin: -1.75em -2em 1.25em; }
+  .post-cover-title { font-size: 1.15rem; }
+  .post-hero-img.post-cover--auto .post-cover-title { font-size: 1.3rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-card-img, .post-hero-img { transition: none; }
+  .type-post:hover .post-card-img { transform: none; }
+}
 
 /* ---- Experience list ---- */
 .experience-list { margin: 1em 0; }
