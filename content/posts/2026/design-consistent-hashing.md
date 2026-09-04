@@ -1,5 +1,6 @@
 ---
 title: "Design Consistent Hashing"
+image: /images/articles/design-consistent-hashing.webp
 date: 2026-05-30T18:00:00+00:00
 description: "A beginner-friendly deep dive into consistent hashing — the algorithm that powers Amazon DynamoDB, Apache Cassandra, Discord, and Akamai CDN. Understand hash rings, virtual nodes, and why this algorithm changed distributed systems forever."
 tags: ["system-design", "consistent-hashing", "distributed-systems", "dynamo", "cassandra", "caching"]

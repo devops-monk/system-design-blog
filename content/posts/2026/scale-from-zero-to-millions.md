@@ -5,7 +5,7 @@ author: Abhay
 type: post
 date: 2026-05-29T00:00:00+00:00
 url: /2026/05/scale-from-zero-to-millions/
-image: /images/articles/scale-from-zero-to-millions.png
+image: /images/articles/scale-from-zero-to-millions.webp
 toc: true
 categories:
   - Fundamentals

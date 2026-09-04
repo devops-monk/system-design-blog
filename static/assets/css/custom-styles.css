@@ -1209,13 +1209,15 @@ a.cert-card:hover .cert-verify { opacity: 1; }
 .post-hero-img {
   width: 100%;
   object-fit: cover;
-  object-position: center 30%;
+  object-position: center;
   display: block;
   transition: transform 0.3s;
 }
 
-.post-card-img { height: 200px; }
-.post-hero-img { height: 280px; }
+/* Covers are designed graphics, not photos: show the whole 2.5:1 artwork
+   rather than cropping the chapter chip and strapline off the edges. */
+.post-card-img,
+.post-hero-img { aspect-ratio: 5 / 2; height: auto; }
 
 .type-post:hover .post-card-img { transform: scale(1.03); }
 
@@ -1263,8 +1265,6 @@ a.cert-card:hover .cert-verify { opacity: 1; }
 @media (max-width: 768px) {
   .post-card-img-link,
   .post-hero-img-link { margin: -1.75em -2em 1.25em; }
-  .post-card-img { height: 150px; }
-  .post-hero-img { height: 180px; }
   .post-cover-title { font-size: 1.15rem; }
   .post-hero-img.post-cover--auto .post-cover-title { font-size: 1.3rem; }
 }
