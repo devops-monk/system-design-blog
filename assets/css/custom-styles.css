@@ -1495,3 +1495,47 @@ a.cert-card:hover .cert-verify { opacity: 1; }
 [data-theme="dark"] .series-nav-link { background: #1e293b !important; border-color: #334155 !important; }
 [data-theme="dark"] .series-nav-title { color: var(--primary-light) !important; }
 [data-theme="dark"] .tutorial-index h2 { color: #f0f9ff !important; border-color: #334155 !important; }
+
+
+/* ==========================================================================
+   Diagram design system
+   Inline SVG diagrams in posts hardcoded ~78 one-off colours and assumed a
+   light page, so they glared in dark mode. Diagrams now paint from these
+   tokens only; each has a light value and a dark override below.
+   ========================================================================== */
+:root {
+  --dg-panel:  #f8fafc;  --dg-surface: #ffffff;
+  --dg-border: #e2e8f0;  --dg-border2: #cbd5e1;
+  --dg-text:   #1e293b;  --dg-muted:   #64748b;
+  --dg-muted2: #475569;  --dg-faint:   #94a3b8;
+
+  --dg-blue:   #3b82f6;  --dg-blue-bg:   #eff6ff;  --dg-blue-br:   #bfdbfe;  --dg-blue-tx:   #1e40af;
+  --dg-green:  #10b981;  --dg-green-bg:  #f0fdf4;  --dg-green-br:  #86efac;  --dg-green-tx:  #166534;
+  --dg-purple: #8b5cf6;  --dg-purple-bg: #f5f3ff;  --dg-purple-br: #ddd6fe;  --dg-purple-tx: #5b21b6;
+  --dg-orange: #f97316;  --dg-orange-bg: #fff7ed;  --dg-orange-br: #fed7aa;  --dg-orange-tx: #b45309;
+  --dg-red:    #ef4444;  --dg-red-bg:    #fef2f2;  --dg-red-br:    #fca5a5;  --dg-red-tx:    #b91c1c;
+  --dg-teal:   #14b8a6;  --dg-teal-bg:   #f0fdfa;  --dg-teal-br:   #99f6e4;  --dg-teal-tx:   #0e7490;
+}
+
+:root[data-theme="dark"] {
+  --dg-panel:  #0f1a2e;  --dg-surface: #16233c;
+  --dg-border: #2b3a55;  --dg-border2: #3b4d6b;
+  --dg-text:   #e2e8f0;  --dg-muted:   #94a3b8;
+  --dg-muted2: #cbd5e1;  --dg-faint:   #64748b;
+
+  --dg-blue-bg:   #17263f;  --dg-blue-br:   #2b4a7a;  --dg-blue-tx:   #93c5fd;
+  --dg-green-bg:  #10291f;  --dg-green-br:  #1d5c40;  --dg-green-tx:  #6ee7b7;
+  --dg-purple-bg: #1e1b38;  --dg-purple-br: #4c3d8a;  --dg-purple-tx: #c4b5fd;
+  --dg-orange-bg: #2a1d10;  --dg-orange-br: #7c4a1d;  --dg-orange-tx: #fcd34d;
+  --dg-red-bg:    #2b1418;  --dg-red-br:    #7f2733;  --dg-red-tx:    #fca5a5;
+  --dg-teal-bg:   #0d2a2c;  --dg-teal-br:   #1c5f5e;  --dg-teal-tx:   #5eead4;
+}
+
+/* Wide diagrams scroll inside their own box; the page never scrolls sideways. */
+.diagram {
+  margin: 1.75em 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.diagram svg { display: block; width: 100%; min-width: 620px; height: auto; }
+.entry-content svg text { font-family: var(--font); }
