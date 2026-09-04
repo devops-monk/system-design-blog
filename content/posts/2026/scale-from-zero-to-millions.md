@@ -954,37 +954,44 @@ Congratulations on getting this far! Now give yourself a pat on the back. Good j
 
 ## References and Further Reading
 
-The canonical sources behind each step, so you can go deeper than this article.
+The primary sources behind each step, if you want to go deeper than this article.
 
 **Protocols and fundamentals**
-1. [Hypertext Transfer Protocol](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) — Wikipedia
-2. [Single point of failure](https://en.wikipedia.org/wiki/Single_point_of_failure) — Wikipedia
-3. [Replication (computing)](https://en.wikipedia.org/wiki/Replication_(computing)) — Wikipedia
+
+- [Hypertext Transfer Protocol](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) — the request/response model everything above sits on
+- [Single point of failure](https://en.wikipedia.org/wiki/Single_point_of_failure) — the failure mode Steps 4, 5 and 9 exist to remove
+- [Replication (computing)](https://en.wikipedia.org/wiki/Replication_(computing)) — the general idea, beyond databases
 
 **Databases and replication**
-4. [Should you go Beyond Relational Databases?](https://blog.teamtreehouse.com/should-you-go-beyond-relational-databases) — Treehouse
-5. [Multi-master replication](https://en.wikipedia.org/wiki/Multi-master_replication) — Wikipedia
-6. [NDB Cluster Replication: Multi-Master and Circular Replication](https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster-replication-multi-master.html) — MySQL docs
-7. [Amazon RDS DB instance classes](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html) — the current ceiling for vertical scaling
-8. [What it takes to run Stack Overflow](https://nickcraver.com/blog/2013/11/22/what-it-takes-to-run-stack-overflow/) — Nick Craver, on how far one primary database goes
+
+- [Should You Go Beyond Relational Databases?](https://blog.teamtreehouse.com/should-you-go-beyond-relational-databases) — a level-headed take on when SQL stops being the answer
+- [Multi-master replication](https://en.wikipedia.org/wiki/Multi-master_replication) — what to reach for when one writer is the bottleneck
+- [NDB Cluster: Multi-Master and Circular Replication](https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster-replication-multi-master.html) — MySQL's own documentation on the harder topologies
+- [Amazon RDS DB instance classes](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html) — the real present-day ceiling on vertical scaling
+- [What It Takes to Run Stack Overflow](https://nickcraver.com/blog/2013/11/22/what-it-takes-to-run-stack-overflow/) — Nick Craver. Proof of how far a single primary database will carry you
 
 **Caching**
-9. [Caching Strategies and How to Choose the Right One](https://codeahoy.com/2017/08/11/caching-strategies-and-how-to-choose-the-right-one/) — read-through, write-through, write-behind
-10. [Scaling Memcache at Facebook](https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf) — Nishtala et al., NSDI '13. The definitive paper on cache consistency at scale.
 
-**CDN and edge**
-11. [Amazon CloudFront Dynamic Content Delivery](https://aws.amazon.com/cloudfront/dynamic-content/) — caching beyond static assets
+- [Caching Strategies and How to Choose the Right One](https://codeahoy.com/2017/08/11/caching-strategies-and-how-to-choose-the-right-one/) — read-through, write-through and write-behind, compared
+- [Scaling Memcache at Facebook](https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf) — Nishtala et al., NSDI '13. The definitive paper on cache consistency at scale
 
-**Stateless tiers and multi-region**
-12. [Configure sticky sessions for your Classic Load Balancer](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html) — the workaround a stateless tier lets you avoid
-13. [Active-Active for Multi-Regional Resiliency](https://netflixtechblog.com/active-active-for-multi-regional-resiliency-c47719f6685b) — Netflix Technology Blog
+**CDN and the edge**
+
+- [Amazon CloudFront Dynamic Content Delivery](https://aws.amazon.com/cloudfront/dynamic-content/) — caching past the static assets covered in Step 7
+
+**Stateless tiers and multiple regions**
+
+- [Sticky sessions for Classic Load Balancers](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html) — the workaround a stateless tier lets you stop needing
+- [Active-Active for Multi-Regional Resiliency](https://netflixtechblog.com/active-active-for-multi-regional-resiliency-c47719f6685b) — Netflix, on running Step 9 for real
 
 **NoSQL and sharding**
-14. [What the Heck Are You Actually Using NoSQL For?](http://highscalability.com/blog/2010/12/6/what-the-heck-are-you-actually-using-nosql-for.html) — High Scalability
+
+- [What the Heck Are You Actually Using NoSQL For?](https://highscalability.com/what-the-heck-are-you-actually-using-nosql-for/) — use cases rather than hype
 
 **Books worth owning**
-15. *System Design Interview – An Insider's Guide* — Alex Xu. The chapter this article follows.
-16. *Designing Data-Intensive Applications* — Martin Kleppmann. The deepest treatment of replication, partitioning and consistency in print.
+
+- *System Design Interview – An Insider's Guide* — Alex Xu. The chapter this article follows.
+- *Designing Data-Intensive Applications* — Martin Kleppmann. The deepest treatment of replication, partitioning and consistency in print.
 
 ---
 
