@@ -27,6 +27,9 @@
     <link href="{{ .Permalink }}" rel="feed" type="application/rss+xml" title="{{ $.Site.Title }}" />
     {{ end }}
     {{ partial "site-schema.html" . }}
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js" defer></script>
+    <script src="{{ "assets/js/search.js" | relURL }}" defer></script>
+    <script src="{{ "assets/js/enhancements.js" | relURL }}" defer></script>
     {{ if .IsPage }}
     <script type="module">
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
