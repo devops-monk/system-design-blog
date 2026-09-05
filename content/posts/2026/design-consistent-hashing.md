@@ -681,7 +681,7 @@ graph LR
 
     style CH fill:#6366f1,color:#fff
     style B1 fill:#dbeafe
-    style B2 fill:#dcfce7
+    style B2 fill:#10B981,stroke:#047857,color:#fff
     style B3 fill:#fef9c3
     style B4 fill:#fce7f3
     style B5 fill:#ede9fe

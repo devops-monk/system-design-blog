@@ -298,10 +298,10 @@ flowchart TD
 
     Client --> Edge --> API --> Data
 
-    style Client fill:#EEF2FF,stroke:#6366F1
-    style Edge fill:#EFF6FF,stroke:#3B82F6
-    style API fill:#F0FDF4,stroke:#10B981
-    style Data fill:#FFFBEB,stroke:#F59E0B
+    style Client fill:#6366F1,stroke:#4338CA,color:#fff
+    style Edge fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style API fill:#10B981,stroke:#047857,color:#fff
+    style Data fill:#F59E0B,stroke:#B45309,color:#fff
 ```
 
 Not every system needs all of these. Part of good design is knowing which to include and why. A junior engineer adds everything. A senior engineer adds only what's justified.
@@ -335,7 +335,7 @@ flowchart TD
     MQ -->|"4. consume"| FW
     FW -->|"5. update each\nfriend's feed cache"| NFC
 
-    style U fill:#EEF2FF,stroke:#6366F1
+    style U fill:#6366F1,stroke:#4338CA,color:#fff
     style LB fill:#0E7490,color:#fff
     style WS fill:#3B82F6,color:#fff
     style PS fill:#10B981,color:#fff
@@ -481,9 +481,9 @@ flowchart LR
         H2 --> H3
     end
 
-    style FOW fill:#EFF6FF,stroke:#3B82F6
-    style FOR fill:#FEF2F2,stroke:#EF4444
-    style HYBRID fill:#F0FDF4,stroke:#10B981
+    style FOW fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style FOR fill:#EF4444,stroke:#B91C1C,color:#fff
+    style HYBRID fill:#10B981,stroke:#047857,color:#fff
 ```
 
 | | Fanout-on-Write | Fanout-on-Read | Hybrid |
@@ -655,7 +655,7 @@ flowchart TD
         D8["Confirm your understanding\nRecap scope before designing"]
     end
 
-    style DOS fill:#F0FDF4,stroke:#10B981
+    style DOS fill:#10B981,stroke:#047857,color:#fff
 ```
 
 ### ❌ Never Do These
@@ -673,7 +673,7 @@ flowchart TD
         X8["Over-engineer\nDon't add microservices for a 1,000-user app"]
     end
 
-    style DONTS fill:#FEF2F2,stroke:#EF4444
+    style DONTS fill:#EF4444,stroke:#B91C1C,color:#fff
 ```
 
 ---
@@ -730,9 +730,9 @@ flowchart TD
         C8["Design a Notification System"]
     end
 
-    style KNOW fill:#EFF6FF,stroke:#3B82F6
-    style PRACTICE fill:#F0FDF4,stroke:#10B981
-    style COMMON fill:#FFFBEB,stroke:#F59E0B
+    style KNOW fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style PRACTICE fill:#10B981,stroke:#047857,color:#fff
+    style COMMON fill:#F59E0B,stroke:#B45309,color:#fff
 ```
 
 ---
@@ -773,10 +773,10 @@ flowchart LR
 
     STEP1 --> STEP2 --> STEP3 --> STEP4
 
-    style STEP1 fill:#EEF2FF,stroke:#6366F1
-    style STEP2 fill:#EFF6FF,stroke:#3B82F6
-    style STEP3 fill:#FFFBEB,stroke:#F59E0B
-    style STEP4 fill:#F0FDF4,stroke:#10B981
+    style STEP1 fill:#6366F1,stroke:#4338CA,color:#fff
+    style STEP2 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style STEP3 fill:#F59E0B,stroke:#B45309,color:#fff
+    style STEP4 fill:#10B981,stroke:#047857,color:#fff
 ```
 
 ---

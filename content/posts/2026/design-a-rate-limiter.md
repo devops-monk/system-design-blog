@@ -48,9 +48,9 @@ graph TD
     RL --> R3["⚡ Prevent Server Overload\n\nFilter out excess requests from bots,\nscrapers, and badly-written clients.\nProtect your database and keep the\nexperience fast for legitimate users."]
 
     style RL fill:#6366f1,color:#fff
-    style R1 fill:#fee2e2
+    style R1 fill:#EF4444,stroke:#B91C1C,color:#fff
     style R2 fill:#fef9c3
-    style R3 fill:#dcfce7
+    style R3 fill:#10B981,stroke:#047857,color:#fff
 ```
 
 **The DoS angle is especially important.** DoS (Denial of Service) attacks don't have to be malicious. A junior developer at a client company accidentally puts their API call inside a `while(true)` loop. Without a rate limiter, they'll take your system down just as effectively as an attacker would.
@@ -116,9 +116,9 @@ flowchart TD
 
     USER -->|Option D| GATEWAY["✅✅✅ API Gateway\n\nFully managed service.\nSupports rate limiting, SSL termination,\nauthentication, IP whitelisting.\nBest if you're already using microservices.\nExamples: AWS API Gateway, Kong, Apigee"]
 
-    style CLIENT_RL fill:#fee2e2
+    style CLIENT_RL fill:#EF4444,stroke:#B91C1C,color:#fff
     style SERVER_RL fill:#fef9c3
-    style MIDDLEWARE fill:#dcfce7
+    style MIDDLEWARE fill:#10B981,stroke:#047857,color:#fff
     style GATEWAY fill:#dbeafe
 ```
 

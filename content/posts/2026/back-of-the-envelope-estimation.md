@@ -47,7 +47,21 @@ Without answers to these, you're guessing at architecture. With them, you can ma
 
 ## Foundation 1: The Power of Two — How Big Is Your Data?
 
-All data in computers is stored in bytes. When dealing with large systems, you work with large multiples. These are the numbers to memorize cold:
+All data in computers is stored in bytes. A byte is 8 bits, and one ASCII character is one byte. When you deal with distributed systems the volumes get enormous, but the arithmetic still comes back to a handful of multiples.
+
+Strictly speaking, data volume is defined in **powers of two**:
+
+| Power | Approximate value | Full name | Short name |
+|---|---|---|---|
+| 2^10 | 1 thousand | 1 Kilobyte | 1 KB |
+| 2^20 | 1 million | 1 Megabyte | 1 MB |
+| 2^30 | 1 billion | 1 Gigabyte | 1 GB |
+| 2^40 | 1 trillion | 1 Terabyte | 1 TB |
+| 2^50 | 1 quadrillion | 1 Petabyte | 1 PB |
+
+**A precision note most sources skip.** 2^10 is 1,024 bytes, not 1,000. The strictly correct name for 1,024 bytes is a **kibibyte (KiB)**; "kilobyte" formally means 1,000 bytes. Storage vendors sell you decimal GB, while your operating system reports binary GiB — which is exactly why a "1 TB" drive shows up as about 931 GB.
+
+For estimation, ignore all of that and use powers of ten. Here is the version you actually calculate with:
 
 ```
 1 KB  =  1,000 bytes         (10^3)   ← a short text message
@@ -65,12 +79,12 @@ graph LR
     GB -->|×1,000| TB[1 TB<br/>1,000 movies]
     TB -->|×1,000| PB[1 PB<br/>whole Netflix]
 
-    style B fill:#EEF2FF,stroke:#6366F1
-    style KB fill:#EFF6FF,stroke:#3B82F6
-    style MB fill:#F0FDF4,stroke:#10B981
-    style GB fill:#FFFBEB,stroke:#F59E0B
-    style TB fill:#FEF2F2,stroke:#EF4444
-    style PB fill:#F5F3FF,stroke:#8B5CF6
+    style B fill:#6366F1,stroke:#4338CA,color:#fff
+    style KB fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style MB fill:#10B981,stroke:#047857,color:#fff
+    style GB fill:#F59E0B,stroke:#B45309,color:#fff
+    style TB fill:#EF4444,stroke:#B91C1C,color:#fff
+    style PB fill:#8B5CF6,stroke:#6D28D9,color:#fff
 ```
 
 ### Real-world anchor points
@@ -114,6 +128,31 @@ Read 1 MB sequentially from disk    30,000,000 ns = 30 ms
 Send packet CA → Netherlands → CA  150,000,000 ns = 150 ms
 ```
 
+### What has changed since 2010 (and what has not)
+
+Dean's table is from 2010 and is still what interviewers expect you to quote. But one line in it is now badly out of date, and knowing which one is a genuine edge.
+
+**The disk line.** In 2010, "disk" meant a spinning platter and a seek cost ~10 ms. Today a production database sits on NVMe flash, where a random 4 KB read is roughly **20 µs**. That is not an improvement — it is about **three orders of magnitude**, and it changes conclusions:
+
+| Operation | 2010 (HDD) | 2026 (NVMe) | Change |
+|---|---|---|---|
+| Random read | ~10 ms | ~20 µs | ~500× faster |
+| Read 1 MB sequentially | ~30 ms | ~50 µs | ~600× faster |
+| Same-datacenter round trip | ~500 µs | ~500 µs | unchanged |
+| Main memory reference | ~100 ns | ~80 ns | roughly flat |
+| CA → Netherlands → CA | ~150 ms | ~150 ms | unchanged, and never will |
+
+Read that table by column, not by row. The interesting fact is not that flash got fast — it is that **storage got 500× faster while the network did not move at all.** A round trip across a datacenter is now *slower* than reading a megabyte off local disk, which was unthinkable in 2010.
+
+**What this means for design:**
+
+- "Avoid disk, it's slow" is a 2010 heuristic. On NVMe, an extra disk read is often cheaper than an extra network hop.
+- **The network is the new disk.** Chattiness between services — the N+1 query across a service boundary — is now the dominant cost in most systems.
+- The one number that has not improved and cannot is **the speed of light**. San Francisco to Amsterdam is ~150 ms round trip because physics says so. No amount of engineering removes it; only moving the data closer does, which is the entire argument for CDNs and multi-region deployments.
+- Memory is still roughly 250× faster than NVMe, so caching still wins. It just wins by a smaller margin than the classic table implies.
+
+In an interview, quoting Dean's numbers is correct and expected. Adding "though NVMe has closed the memory-to-disk gap by about three orders of magnitude since then" is what makes you sound like someone who has actually operated a system.
+
 ### Visualizing the gap — the "zoom out" perspective
 
 The difference between a cache hit and a disk seek is hard to grasp in nanoseconds. Here's a human-scale analogy:
@@ -140,12 +179,12 @@ graph TD
     end
     A --> B --> C --> D --> E --> F
 
-    style A fill:#F0FDF4,stroke:#10B981,color:#065F46
-    style B fill:#EFF6FF,stroke:#3B82F6,color:#1E40AF
-    style C fill:#EEF2FF,stroke:#6366F1,color:#3730A3
-    style D fill:#FFFBEB,stroke:#F59E0B,color:#92400E
-    style E fill:#FEF2F2,stroke:#EF4444,color:#991B1B
-    style F fill:#F5F3FF,stroke:#8B5CF6,color:#4C1D95
+    style A fill:#10B981,stroke:#047857,color:#fff
+    style B fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style C fill:#6366F1,stroke:#4338CA,color:#fff
+    style D fill:#F59E0B,stroke:#B45309,color:#fff
+    style E fill:#EF4444,stroke:#B91C1C,color:#fff
+    style F fill:#8B5CF6,stroke:#6D28D9,color:#fff
 ```
 
 ### What these numbers teach us
@@ -188,10 +227,10 @@ graph LR
     end
     A --> B --> C --> D
 
-    style A fill:#FEF2F2,stroke:#EF4444
-    style B fill:#FFFBEB,stroke:#F59E0B
-    style C fill:#F0FDF4,stroke:#10B981
-    style D fill:#EFF6FF,stroke:#3B82F6
+    style A fill:#EF4444,stroke:#B91C1C,color:#fff
+    style B fill:#F59E0B,stroke:#B45309,color:#fff
+    style C fill:#10B981,stroke:#047857,color:#fff
+    style D fill:#3B82F6,stroke:#1D4ED8,color:#fff
 ```
 
 ### A mental model for availability
@@ -225,10 +264,10 @@ flowchart LR
 
     S1 --> S2 --> S3 --> S4
 
-    style S1 fill:#EEF2FF,stroke:#6366F1,color:#3730A3
-    style S2 fill:#EFF6FF,stroke:#3B82F6,color:#1E40AF
-    style S3 fill:#F0FDF4,stroke:#10B981,color:#065F46
-    style S4 fill:#FFFBEB,stroke:#F59E0B,color:#92400E
+    style S1 fill:#6366F1,stroke:#4338CA,color:#fff
+    style S2 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style S3 fill:#10B981,stroke:#047857,color:#fff
+    style S4 fill:#F59E0B,stroke:#B45309,color:#fff
 ```
 
 ### Step 1: State your assumptions out loud
@@ -327,11 +366,11 @@ flowchart TD
 
     MAU --> DAU --> TPD --> AQPS --> PQPS
 
-    style MAU fill:#EEF2FF,stroke:#6366F1
-    style DAU fill:#EFF6FF,stroke:#3B82F6
-    style TPD fill:#F0FDF4,stroke:#10B981
-    style AQPS fill:#FFFBEB,stroke:#F59E0B
-    style PQPS fill:#FEF2F2,stroke:#EF4444
+    style MAU fill:#6366F1,stroke:#4338CA,color:#fff
+    style DAU fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style TPD fill:#10B981,stroke:#047857,color:#fff
+    style AQPS fill:#F59E0B,stroke:#B45309,color:#fff
+    style PQPS fill:#EF4444,stroke:#B91C1C,color:#fff
 ```
 
 ### Step 3: Calculate Storage
@@ -375,8 +414,8 @@ flowchart LR
     end
     T --- M
 
-    style T fill:#F0FDF4,stroke:#10B981
-    style M fill:#FEF2F2,stroke:#EF4444
+    style T fill:#10B981,stroke:#047857,color:#fff
+    style M fill:#EF4444,stroke:#B91C1C,color:#fff
 ```
 
 ---
@@ -466,13 +505,13 @@ graph TD
     end
     L1 --> L2 --> L3 --> RAM --> SSD --> HDD --> NET
 
-    style L1 fill:#F0FDF4,stroke:#10B981,color:#065F46
-    style L2 fill:#ECFDF5,stroke:#34D399,color:#065F46
-    style L3 fill:#EFF6FF,stroke:#60A5FA,color:#1E40AF
-    style RAM fill:#EEF2FF,stroke:#6366F1,color:#3730A3
-    style SSD fill:#FFFBEB,stroke:#F59E0B,color:#92400E
-    style HDD fill:#FEF2F2,stroke:#EF4444,color:#991B1B
-    style NET fill:#F5F3FF,stroke:#8B5CF6,color:#4C1D95
+    style L1 fill:#10B981,stroke:#047857,color:#fff
+    style L2 fill:#10B981,stroke:#047857,color:#fff
+    style L3 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style RAM fill:#6366F1,stroke:#4338CA,color:#fff
+    style SSD fill:#F59E0B,stroke:#B45309,color:#fff
+    style HDD fill:#EF4444,stroke:#B91C1C,color:#fff
+    style NET fill:#8B5CF6,stroke:#6D28D9,color:#fff
 ```
 
 ### The key design implication
@@ -503,11 +542,11 @@ flowchart TD
     T4["✅ Use scientific notation\n300,000,000 = 3 × 10^8\nMuch easier to multiply"]
     T5["✅ Check your answer\nDoes this make intuitive sense?\nIs Twitter really 55 PB? Yes — plausible."]
 
-    style T1 fill:#F0FDF4,stroke:#10B981
-    style T2 fill:#EFF6FF,stroke:#3B82F6
-    style T3 fill:#EEF2FF,stroke:#6366F1
-    style T4 fill:#FFFBEB,stroke:#F59E0B
-    style T5 fill:#FEF2F2,stroke:#EF4444
+    style T1 fill:#10B981,stroke:#047857,color:#fff
+    style T2 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style T3 fill:#6366F1,stroke:#4338CA,color:#fff
+    style T4 fill:#F59E0B,stroke:#B45309,color:#fff
+    style T5 fill:#EF4444,stroke:#B91C1C,color:#fff
 ```
 
 ### The numbers to have memorized
@@ -558,10 +597,10 @@ flowchart TD
 
     A1 --> B1 --> C1 --> D1
 
-    style A1 fill:#EEF2FF,stroke:#6366F1
-    style B1 fill:#EFF6FF,stroke:#3B82F6
-    style C1 fill:#F0FDF4,stroke:#10B981
-    style D1 fill:#FFFBEB,stroke:#F59E0B
+    style A1 fill:#6366F1,stroke:#4338CA,color:#fff
+    style B1 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style C1 fill:#10B981,stroke:#047857,color:#fff
+    style D1 fill:#F59E0B,stroke:#B45309,color:#fff
 ```
 
 This is how you'd arrive at the same conclusion WhatsApp engineers reach when deciding to use Erlang (for concurrency), Mnesia (for in-memory storage), and horizontal sharding across hundreds of database nodes.
@@ -586,6 +625,34 @@ Back-of-the-envelope estimation is a learnable skill. Practice these numbers unt
 | Storage replication | Always ×3 |
 
 The more you practice, the faster and more confident you become. In interviews, interviewers aren't testing whether you get 54 PB or 60 PB — they're testing whether you *think like an engineer* who reasons systematically from numbers to architecture decisions.
+
+---
+
+## References and Further Reading
+
+**The primary sources**
+
+- [Google Pro Tip: Use Back-of-the-Envelope Calculations to Choose the Best Design](http://highscalability.com/blog/2011/1/26/google-pro-tip-use-back-of-the-envelope-calculations-to-choo.html) — Jeff Dean, where the quote at the top comes from
+- [Latency Numbers Every Programmer Should Know](https://colin-scott.github.io/personal_website/research/interactive_latency.html) — Colin Scott's interactive version. Drag the year slider to watch NVMe collapse the disk gap
+- [The original latency gist](https://gist.github.com/jboner/2841832) — Jonas Bonér's transcription of Dean's numbers, the version most people have seen
+- [System Design Primer](https://github.com/donnemartin/system-design-primer) — the open-source companion to all of this
+
+**Availability and SLAs**
+
+- [Amazon Compute Service Level Agreement](https://aws.amazon.com/compute/sla/) — what "99.99%" actually commits AWS to
+- [Google Compute Engine SLA](https://cloud.google.com/compute/sla)
+- [SLA summary for Azure services](https://azure.microsoft.com/en-us/support/legal/sla/summary/)
+- [Implementing SLOs](https://sre.google/workbook/implementing-slos/) — Google SRE Workbook. The distinction between SLI, SLO and SLA, which interviewers increasingly probe
+
+**Storage and hardware numbers**
+
+- [NVMe latency: typical numbers and what drives them](https://simplyblock.io/glossary/nvme-latency/) — where the modern storage figures above come from
+- [Amazon RDS DB instance classes](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html) — real memory and vCPU ceilings for sizing exercises
+
+**Books worth owning**
+
+- *System Design Interview – An Insider's Guide* — Alex Xu. The chapter this article follows.
+- *Designing Data-Intensive Applications* — Martin Kleppmann. Chapter 1's discussion of percentiles is the natural next step after this article.
 
 ---
 
