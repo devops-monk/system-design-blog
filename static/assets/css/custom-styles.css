@@ -2731,3 +2731,109 @@ a.cert-card:hover .cert-verify { opacity: 1; }
   .lb-demo { padding: 1rem; }
   .lb-cmd { font-size: 0.72rem; }
 }
+
+/* ==========================================================================
+   Double-entry ledger demo (posts/2026/design-payment-system)
+   ========================================================================== */
+
+.ledger-demo {
+  margin: 1.75rem 0;
+  padding: 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.ld-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.1rem; }
+
+.ld-actions button {
+  padding: 0.42rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.ld-actions button:hover { filter: brightness(1.08); }
+
+.ld-actions .ld-sec {
+  color: var(--text-muted);
+  background: var(--bg);
+  border-color: var(--border);
+}
+
+.ld-actions .ld-sec:hover { color: var(--primary-dark); border-color: var(--primary); }
+
+.ld-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+.ld-table th {
+  padding: 0.4rem 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.ld-table td { padding: 0.38rem 0.5rem; border-bottom: 1px solid var(--border); }
+.ld-table .ld-n { text-align: right; font-family: var(--mono); width: 6rem; }
+.ld-acct { font-family: var(--mono); color: var(--text-muted); }
+.ld-dr { color: var(--primary-dark); font-weight: 600; }
+.ld-cr { color: #be185d; font-weight: 600; }
+.ld-alt { background: rgba(148, 163, 184, 0.05); }
+.ld-empty { color: var(--text-muted); font-style: italic; }
+
+.ld-balances { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
+
+.ld-badge {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.ld-badge i { font-style: normal; font-weight: 400; color: var(--text-muted); font-size: 0.74rem; }
+.ld-muted { color: var(--text-muted); font-weight: 400; }
+
+.ld-check {
+  padding: 0.65rem 0.9rem;
+  font-family: var(--mono);
+  font-size: 0.86rem;
+  text-align: center;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.ld-ok  { color: #166534; background: rgba(22,163,74,0.1);  border-color: rgba(22,163,74,0.32); }
+.ld-bad { color: #991b1b; background: rgba(220,38,38,0.1);  border-color: rgba(220,38,38,0.32); }
+
+[data-theme="dark"] .ledger-demo { background: #1e293b !important; border-color: #334155 !important; }
+[data-theme="dark"] .ld-actions .ld-sec,
+[data-theme="dark"] .ld-badge { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+[data-theme="dark"] .ld-table th,
+[data-theme="dark"] .ld-table td { border-color: #334155 !important; }
+[data-theme="dark"] .ld-alt { background: rgba(148,163,184,0.07) !important; }
+[data-theme="dark"] .ld-dr { color: var(--primary-light) !important; }
+[data-theme="dark"] .ld-cr { color: #f9a8d4 !important; }
+[data-theme="dark"] .ld-ok  { color: #4ade80 !important; border-color: rgba(74,222,128,0.32) !important; }
+[data-theme="dark"] .ld-bad { color: #fca5a5 !important; border-color: rgba(248,113,113,0.35) !important; }
+
+@media only screen and (max-width: 40em) {
+  .ledger-demo { padding: 1rem; }
+  .ld-table { font-size: 0.76rem; }
+  .ld-table .ld-n { width: 4.6rem; }
+  .ld-check { font-size: 0.74rem; }
+}

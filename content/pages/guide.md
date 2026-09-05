@@ -78,6 +78,7 @@ Harder problems, and the ones that come up most often for senior roles.
 24. [Design a Distributed Email Service](/2026/06/design-distributed-email-service/) — two exabytes a year, forty-year-old protocols, denormalising for a query NoSQL refuses, and the deliverability problem that isn't engineering. Includes an interactive deliverability checker.
 25. [Design S3-like Object Storage](/2026/06/design-s3-object-storage/) — eleven nines on hardware that fails constantly: immutability, replication versus erasure coding, and why small files waste disks. Includes an interactive durability calculator.
 26. [Design a Real-time Gaming Leaderboard](/2026/06/design-gaming-leaderboard/) — why SQL cannot rank 25 million players, how a skip list makes it logarithmic, and the sharding choice with no clean answer. Includes a live leaderboard.
+27. [Design a Payment System](/2026/06/design-payment-system/) — ten transactions a second and the hardest correctness problem in the series: double-entry bookkeeping, idempotency, and reconciliation as the last line of defence. Includes an interactive ledger.
 
 ---
 

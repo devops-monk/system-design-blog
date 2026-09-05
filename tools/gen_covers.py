@@ -286,6 +286,32 @@ def art_skiplist():
     return f'<svg width="640" height="420" viewBox="0 0 640 420">{"".join(s)}</svg>'
 
 
+
+def art_ledger():
+    """Debits on the left, credits on the right, summing to zero."""
+    s = []
+    x0, y0, w, rowh = 40, 96, 250, 46
+    entries = [("Platform cash", 100, True), ("Seller payable", 100, False),
+               ("Seller payable", 10, True), ("Platform revenue", 10, False),
+               ("Seller payable", 90, True), ("Platform cash", 90, False)]
+    for i, (acct, amt, is_dr) in enumerate(entries):
+        y = y0 + i * rowh
+        x = x0 if is_dr else x0 + w + 30
+        col = BLUE if is_dr else PINK
+        s.append(f'<rect x="{x}" y="{y}" width="{w}" height="{rowh-8}" fill="{col}" opacity=".16" rx="4"/>')
+        s.append(f'<rect x="{x}" y="{y}" width="3" height="{rowh-8}" fill="{col}" rx="2"/>')
+        s.append(f'<text x="{x+14}" y="{y+25}" fill="#cbd5e1" font-size="14">{acct}</text>')
+        s.append(f'<text x="{x+w-14}" y="{y+25}" fill="{col}" font-size="15" font-weight="700" text-anchor="end">${amt}</text>')
+    s.append(f'<text x="{x0}" y="{y0-14}" fill="{BLUE}" font-size="13" letter-spacing="1.5">DEBIT</text>')
+    s.append(f'<text x="{x0+w+30}" y="{y0-14}" fill="{PINK}" font-size="13" letter-spacing="1.5">CREDIT</text>')
+    ly = y0 + len(entries) * rowh + 6
+    s.append(f'<rect x="{x0}" y="{ly}" width="{2*w+30}" height="40" fill="{GREEN}" opacity=".12" rx="5"/>')
+    s.append(f'<rect x="{x0}" y="{ly}" width="{2*w+30}" height="40" fill="none" stroke="{GREEN}" stroke-opacity=".55" stroke-width="1.5" rx="5"/>')
+    s.append(f'<text x="{x0+(2*w+30)/2}" y="{ly+26}" fill="{GREEN}" font-size="16" font-weight="700" text-anchor="middle">'
+             f'200 &#8722; 200 = 0</text>')
+    return f'<svg width="640" height="420" viewBox="0 0 640 420">{"".join(s)}</svg>'
+
+
 COVERS = [
     ("proximity-service", "VOLUME 2 · CH 1", "Design a<br>Proximity Service", 58,
      "200 million businesses, 500 metres, under 100ms.", "two B-tree indexes are <i>not</i> a 2D index", art_quadtree),
@@ -307,6 +333,8 @@ COVERS = [
      "Eleven nines of durability on drives that fail constantly.", "immutability is what makes it <i>tractable</i>", art_erasure),
     ("gaming-leaderboard", "VOLUME 2 · CH 10", "Real-time Gaming<br>Leaderboard", 56,
      "Ranking 25 million players, and telling each one where they stand.", "rank belongs to the <i>set</i>, not the row", art_skiplist),
+    ("payment-system", "VOLUME 2 · CH 11", "Design a<br>Payment System", 58,
+     "Ten transactions per second, and the hardest correctness problem yet.", "a lost cent is <i>structurally</i> impossible", art_ledger),
 ]
 
 def build(only=None):
