@@ -1,0 +1,275 @@
+<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - Design a News Feed System"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - Fan-out on write or fan-out on read? Build a Facebook-style feed for 10 million daily users, understand exactly why one celebrity account breaks the obvious design, and see the hybrid that every large platform actually ships."><title>System Design - Design a News Feed System</title><meta property="og:url" content="https://system-design.devops-monk.com/2026/06/design-news-feed-system/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="Design a News Feed System"><meta property="og:description" content="Fan-out on write or fan-out on read? Build a Facebook-style feed for 10 million daily users, understand exactly why one celebrity account breaks the obvious design, and see the hybrid that every large platform actually ships."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-06-01T10:00:00+00:00"><meta property="article:modified_time" content="2026-06-01T10:00:00+00:00"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="News-Feed"><meta property="article:tag" content="Caching"><meta property="article:tag" content="Distributed-Systems"><meta property="article:tag" content="Scalability"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"Design a News Feed System","headline":"Design a News Feed System","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/06/design-news-feed-system/","description":"Fan-out on write or fan-out on read? Build a Facebook-style feed for 10 million daily users, understand exactly why one celebrity account breaks the obvious design, and see the hybrid that every large platform actually ships.","wordCount":"2775","keywords":["system-design","news-feed","caching","distributed-systems","scalability"],"datePublished":"2026-06-01T10:00:00Z","dateModified":"2026-06-01T10:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/06/design-news-feed-system/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/06/design-news-feed-system/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js defer></script><script src=/assets/js/search.js defer></script><script src=/assets/js/enhancements.js defer></script><script type=module>
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+      
+      const isDark = () =>
+        document.documentElement.getAttribute('data-theme') === 'dark';
+
+      
+      
+      const vars = {
+        light: {
+          background: '#ffffff', mainBkg: '#eff6ff',
+          primaryColor: '#eff6ff', primaryTextColor: '#1e293b',
+          primaryBorderColor: '#3b82f6', secondaryColor: '#f0fdf4',
+          secondaryTextColor: '#166534', secondaryBorderColor: '#10b981',
+          tertiaryColor: '#f8fafc', tertiaryTextColor: '#1e293b',
+          tertiaryBorderColor: '#cbd5e1',
+          lineColor: '#64748b', textColor: '#1e293b', titleColor: '#0f172a',
+          clusterBkg: '#f8fafc', clusterBorder: '#cbd5e1',
+          edgeLabelBackground: '#ffffff', nodeBorder: '#3b82f6',
+          actorBkg: '#eff6ff', actorBorder: '#3b82f6', actorTextColor: '#1e293b',
+          signalColor: '#475569', signalTextColor: '#1e293b',
+          labelBoxBkgColor: '#eff6ff', labelBoxBorderColor: '#3b82f6',
+          labelTextColor: '#1e293b', loopTextColor: '#1e293b',
+          noteBkgColor: '#fffbeb', noteBorderColor: '#f59e0b', noteTextColor: '#92400e',
+        },
+        dark: {
+          background: '#16233c', mainBkg: '#1e3a5f',
+          primaryColor: '#1e3a5f', primaryTextColor: '#e2e8f0',
+          primaryBorderColor: '#3b82f6', secondaryColor: '#10291f',
+          secondaryTextColor: '#6ee7b7', secondaryBorderColor: '#10b981',
+          tertiaryColor: '#0f1a2e', tertiaryTextColor: '#e2e8f0',
+          tertiaryBorderColor: '#3b4d6b',
+          lineColor: '#94a3b8', textColor: '#e2e8f0', titleColor: '#f1f5f9',
+          clusterBkg: '#0f1a2e', clusterBorder: '#2b3a55',
+          edgeLabelBackground: '#16233c', nodeBorder: '#3b82f6',
+          actorBkg: '#1e3a5f', actorBorder: '#3b82f6', actorTextColor: '#e2e8f0',
+          signalColor: '#94a3b8', signalTextColor: '#e2e8f0',
+          labelBoxBkgColor: '#1e3a5f', labelBoxBorderColor: '#3b82f6',
+          labelTextColor: '#e2e8f0', loopTextColor: '#e2e8f0',
+          noteBkgColor: '#2a1d10', noteBorderColor: '#f59e0b', noteTextColor: '#fcd34d',
+        },
+      };
+
+      
+      
+      
+      function sourceOf(el) {
+        const t = document.createElement('textarea');
+        t.innerHTML = el.dataset.src;
+        return t.value;
+      }
+
+      let seq = 0;
+
+      async function draw() {
+        const blocks = [...document.querySelectorAll('pre.mermaid')];
+        blocks.forEach((el) => {
+          if (el.dataset.src === undefined) el.dataset.src = el.innerHTML;
+        });
+
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'base',
+          themeVariables: {
+            fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
+            fontSize: '15px',
+            ...(isDark() ? vars.dark : vars.light),
+          },
+          securityLevel: 'loose',
+          
+          
+          flowchart: { htmlLabels: true, useMaxWidth: true },
+          sequence: { useMaxWidth: true },
+        });
+
+        
+        
+        
+        
+        
+        for (const el of blocks) {
+          const id = 'mermaid-svg-' + (seq++);
+          try {
+            const { svg, bindFunctions } = await mermaid.render(id, sourceOf(el));
+            el.innerHTML = svg;
+            if (bindFunctions) bindFunctions(el);
+          } catch (err) {
+            console.error('mermaid: failed to render diagram', err);
+          }
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', draw);
+      new MutationObserver((m) => {
+        if (m.some((r) => r.attributeName === 'data-theme')) draw();
+      }).observe(document.documentElement, { attributes: true });
+    </script></head><body class="home blog post-layout-one-column"><button onclick=topFunction() id=scrollTopBtn title="Go to top">
+<i class="fa-solid fa-arrow-up"></i></button><div id=header-top class=header-bar-wrap></div><div id=page class=site><a class="skip-link screen-reader-text" href=#content>Skip to content</a><header id=masthead class="site-header clearfix" role=banner><div class="header-main container clearfix"><div id=logo class="site-branding clearfix"><h1 class=site-title><a href=/ title="System Design" rel=home>System Design</a></h1><p class=site-description>Build Systems That Scale</p></div><button id=dark-mode-toggle title="Toggle dark mode" aria-label="Toggle dark mode">
+<i class="fa-solid fa-moon" id=dm-icon></i></button></div><div id=main-navigation-wrap class=primary-navigation-wrap><nav id=main-navigation class="primary-navigation navigation container clearfix" role=navigation><ul id=menu-home class=main-navigation-menu><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/>Home</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/categories/fundamentals/>Fundamentals</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/categories/case-studies/>Case Studies</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children"><a href=#>Concepts</a><ul class=sub-menu><li class=menu-item><a href=/tags/scalability/>Scalability</a></li><li class=menu-item><a href=/tags/databases/>Databases</a></li><li class=menu-item><a href=/tags/caching/>Caching</a></li><li class=menu-item><a href=/tags/load-balancing/>Load Balancing</a></li><li class=menu-item><a href=/tags/message-queues/>Message Queues</a></li></ul></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/about/>About</a></li><li class="menu-item nav-rss"><a href=/index.xml title="Subscribe via RSS" target=_blank rel=noopener><i class="fa-solid fa-rss"></i> RSS</a></li></ul></nav></div></header><div id=content class="site-content container clearfix"><section id=primary class="content-archive content-area post-content-area"><main id=main class=site-main role=main><article class="post type-post"><div class=post-inner-content><div class=post-hero-img-link><img class=post-hero-img src=/images/articles/news-feed-system.webp alt="Design a News Feed System" width=1200 height=480></div><header class=entry-header><div class=entry-meta><span class=meta-date><a href=https://system-design.devops-monk.com/2026/06/design-news-feed-system/ rel=bookmark><time class="entry-date published" datetime=2026-06-01T10:00:00>June 01, 2026
+</time></a></span><span class=meta-author><span class="author vcard">Abhay</span>
+</span><span class=meta-reading-time>14 min read</span></div><h2 class=entry-title><a href=https://system-design.devops-monk.com/2026/06/design-news-feed-system/ rel=bookmark>Design a News Feed System</a></h2><div><span class="tagcloud post-tags"><i class="fa fa-tags"></i>
+<a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/system-design/>system-design</a>
+&nbsp;
+<a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/news-feed/>news-feed</a>
+&nbsp;
+<a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/caching/>caching</a>
+&nbsp;
+<a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/distributed-systems/>distributed-systems</a>
+&nbsp;
+<a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/scalability/>scalability</a></span></div></header><div class=social-share-bar><span class=share-label>Share:</span>
+<a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f06%2fdesign-news-feed-system%2f&title=Design+a+News+Feed+System" target=_blank rel=noopener class="share-btn share-linkedin" title="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i> LinkedIn
+</a><a href="https://twitter.com/intent/tweet?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f06%2fdesign-news-feed-system%2f&text=Design+a+News+Feed+System" target=_blank rel=noopener class="share-btn share-twitter" title="Share on Twitter / X"><i class="fa-brands fa-x-twitter"></i> X
+</a><a href="https://www.reddit.com/submit?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f06%2fdesign-news-feed-system%2f&title=Design+a+News+Feed+System" target=_blank rel=noopener class="share-btn share-reddit" title="Share on Reddit"><i class="fa-brands fa-reddit-alien"></i> Reddit</a></div><nav class=toc-widget><h3 class=toc-title><i class="fa-solid fa-list"></i> Contents</h3><div class=toc-links><nav id=TableOfContents><ul><li><a href=#step-1--understand-the-problem-and-establish-scope>Step 1 — Understand the Problem and Establish Scope</a><ul><li><a href=#what-the-numbers-say>What the numbers say</a></li></ul></li><li><a href=#step-2--high-level-design>Step 2 — High-Level Design</a><ul><li><a href=#the-apis>The APIs</a></li><li><a href=#publishing>Publishing</a></li></ul></li><li><a href=#step-3--the-central-trade-off>Step 3 — The Central Trade-off</a><ul><li><a href=#fan-out-on-write-push>Fan-out on write (push)</a></li><li><a href=#fan-out-on-read-pull>Fan-out on read (pull)</a></li><li><a href=#side-by-side>Side by side</a></li></ul></li><li><a href=#the-celebrity-problem>The Celebrity Problem</a><ul><li><a href=#the-hybrid>The hybrid</a></li></ul></li><li><a href=#step-4--design-deep-dive>Step 4 — Design Deep Dive</a><ul><li><a href=#inside-the-fan-out-service>Inside the fan-out service</a></li><li><a href=#retrieval-and-hydration>Retrieval and hydration</a></li></ul></li><li><a href=#beyond-the-book>Beyond the Book</a><ul><li><a href=#real-feeds-are-ranked-not-chronological>Real feeds are ranked, not chronological</a></li><li><a href=#edits-deletes-and-the-cost-of-denormalisation>Edits, deletes, and the cost of denormalisation</a></li><li><a href=#what-to-monitor>What to monitor</a></li></ul></li><li><a href=#interview-quick-reference>Interview Quick Reference</a></li><li><a href=#summary>Summary</a></li><li><a href=#references-and-further-reading>References and Further Reading</a></li><li><a href=#whats-next>What&rsquo;s Next?</a></li></ul></nav></div></nav><div id=tts-player class=tts-player role=region aria-label="Article audio player"><div class=tts-inner><div class=tts-meta><span class=tts-headphone aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3z"/><path d="M3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span><div><div class=tts-title>Listen to this article</div><div class=tts-status id=tts-status>Click ▶ to start</div></div></div><div class=tts-controls><button class=tts-icon-btn id=tts-stop title="Stop & reset" aria-label=Stop>
+<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+</button>
+<button class=tts-play-btn id=tts-play title="Play / Pause" aria-label="Play article">
+<span id=tts-play-label><svg id="tts-play-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 4l14 8-14 8z"/></svg>
+<svg id="tts-pause-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" style="display:none"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+</span><span class=tts-play-text id=tts-play-text>Play</span></button><div class=tts-speed><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" aria-hidden="true"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/></svg>
+<select id=tts-speed-select class=tts-speed-select aria-label="Playback speed"><option value=0.75>0.75×</option><option value=1 selected>1×</option><option value=1.25>1.25×</option><option value=1.5>1.5×</option><option value=2>2×</option></select></div></div><div class=tts-counter id=tts-counter aria-live=polite>0%</div></div><div class=tts-track><div class=tts-fill id=tts-progress-bar></div></div></div><style>.tts-player{position:sticky;top:0;z-index:200;background:#0f172a;border-bottom:2px solid #6366f1;box-shadow:0 2px 16px rgba(0,0,0,.4);margin-bottom:2rem;font-family:-apple-system,BlinkMacSystemFont,segoe ui,sans-serif}.tts-inner{display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap}.tts-meta{display:flex;align-items:center;gap:10px;flex:1;min-width:160px}.tts-headphone{color:#818cf8;flex-shrink:0}.tts-title{font-size:13px;font-weight:700;color:#f1f5f9;letter-spacing:.02em;line-height:1.2}.tts-status{font-size:11px;color:#64748b;margin-top:2px;line-height:1}.tts-controls{display:flex;align-items:center;gap:10px}.tts-icon-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:none;background:#ef4444;color:#fff;cursor:pointer;transition:background .15s,color .15s;flex-shrink:0}.tts-icon-btn:hover{background:#dc2626;color:#fff}.tts-play-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:999px;border:none;background:#6366f1;color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,transform .1s;flex-shrink:0}.tts-play-btn:hover{background:#4f46e5;transform:scale(1.03)}.tts-play-btn.active{background:#10b981}.tts-play-text{white-space:nowrap}.tts-speed{display:flex;align-items:center;gap:5px;color:#475569}.tts-speed-select{background:#1e293b;color:#cbd5e1;border:1px solid #334155;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer;outline:none}.tts-speed-select:focus{border-color:#6366f1}.tts-counter{font-size:12px;font-weight:600;color:#475569;min-width:36px;text-align:right;white-space:nowrap}.tts-track{height:3px;background:#1e293b;width:100%}.tts-fill{height:3px;width:0%;background:linear-gradient(90deg,#6366f1 0%,#10b981 100%);transition:width .35s linear}.tts-reading{background:rgba(99,102,241,7%)!important;border-left:3px solid #6366f1!important;padding-left:10px!important;border-radius:0 4px 4px 0!important;transition:background .3s!important}@media(max-width:520px){.tts-inner{gap:8px;padding:8px 12px}.tts-speed{display:none}.tts-counter{display:none}}</style><script>document.addEventListener("DOMContentLoaded",function(){var e,t,s,i,r,c,l,d,u,h,m,g,v,n=window.speechSynthesis,p=document.getElementById("tts-player");if(!n||!p)return;s=document.getElementById("tts-play"),r=document.getElementById("tts-play-text"),v=document.getElementById("tts-stop"),c=document.getElementById("tts-play-icon"),l=document.getElementById("tts-pause-icon"),g=document.getElementById("tts-status"),m=document.getElementById("tts-progress-bar"),h=document.getElementById("tts-counter"),d=document.getElementById("tts-speed-select"),u=document.querySelector(".entry-content")||document.querySelector(".post-content")||document.querySelector("article .content")||document.querySelector("article")||document.querySelector("main"),t=[],i=0,e=!1;function _(){if(!u){p.style.display="none";return}var e=u.querySelectorAll("p, h1, h2, h3, h4, li, blockquote");t=Array.from(e).filter(function(e){return e.textContent.trim().length>15&&!e.closest("#tts-player")}),t.length||(p.style.display="none")}function o(e){g.textContent=e}function b(e){if(!t.length)return;var n=Math.round(e/t.length*100);m.style.width=n+"%",h.textContent=n+"%"}function f(){document.querySelectorAll(".tts-reading").forEach(function(e){e.classList.remove("tts-reading")})}function a(s){if(n.cancel(),f(),s>=t.length){y(),o("Finished ✓"),b(t.length);return}i=s;var r,c=t[s],l=c.textContent.trim().replace(/\s+/g," ");c.classList.add("tts-reading"),c.scrollIntoView({behavior:"smooth",block:"center"}),r=new SpeechSynthesisUtterance(l),r.rate=parseFloat(d.value),r.pitch=1,r.lang="en-US",b(s+1),o(s+1+" of "+t.length+" sections"),r.onend=function(){c.classList.remove("tts-reading"),e&&a(s+1)},r.onerror=function(){c.classList.remove("tts-reading"),e&&a(s+1)},n.speak(r)}function w(){e=!0,s.classList.add("active"),c.style.display="none",l.style.display="block",r.textContent="Pause",o("Playing…"),a(i)}function j(){e=!1,s.classList.remove("active"),c.style.display="block",l.style.display="none",r.textContent="Play",n.cancel(),f(),o("Paused — click Play to resume")}function y(){e=!1,i=0,s.classList.remove("active"),c.style.display="block",l.style.display="none",r.textContent="Play",n.cancel(),f(),m.style.width="0%",h.textContent="0%",o("Click ▶ to start")}s.addEventListener("click",function(){e?j():w()}),v.addEventListener("click",y),d.addEventListener("change",function(){e&&a(i)}),window.addEventListener("beforeunload",function(){n.cancel()}),document.addEventListener("visibilitychange",function(){document.hidden&&e&&j()}),_()})</script><div class=entry-content><p>Every social product has the same question at its centre, and it has exactly two answers:</p><p><strong>Do you build a user&rsquo;s feed when someone posts, or when that user opens the app?</strong></p><p>That is it. Everything else — the caches, the queues, the graph database — follows from which side you pick. And the reason this is a great interview question is that <strong>both answers are wrong</strong>, in ways that only become visible when you do the arithmetic.</p><p>Pick &ldquo;when someone posts&rdquo; and one celebrity with 50 million followers generates 50 million writes for a single post. Pick &ldquo;when the user opens the app&rdquo; and every feed load turns into a fan of hundreds of queries while the user stares at a spinner.</p><p>The real answer is that you do both, on different accounts, and hide the seam. Let&rsquo;s build up to why.</p><hr><h2 id=step-1--understand-the-problem-and-establish-scope>Step 1 — Understand the Problem and Establish Scope</h2><blockquote><p><strong>Candidate:</strong> Mobile app, web, or both?<br><strong>Interviewer:</strong> Both.</p><p><strong>Candidate:</strong> What are the core features?<br><strong>Interviewer:</strong> A user can publish a post, and see their friends&rsquo; posts on the feed.</p><p><strong>Candidate:</strong> Is the feed reverse-chronological, or ranked by some score?<br><strong>Interviewer:</strong> Reverse chronological, to keep it simple.</p><p><strong>Candidate:</strong> How many friends can a user have?<br><strong>Interviewer:</strong> Up to 5,000.</p><p><strong>Candidate:</strong> Traffic?<br><strong>Interviewer:</strong> 10 million daily active users.</p><p><strong>Candidate:</strong> Does a post contain media?<br><strong>Interviewer:</strong> Yes — images and video.</p></blockquote><p>Two of those answers deserve a flag, because interviewers plant them deliberately:</p><ul><li><strong>&ldquo;Reverse chronological&rdquo; is a simplification, and you should say so.</strong> No major feed has worked that way for a decade. Accept it to keep the design tractable, but note that a ranking layer slots in at read time — we come back to where it goes.</li><li><strong>&ldquo;Up to 5,000 friends&rdquo; quietly bounds the problem.</strong> With a hard ceiling of 5,000, pure fan-out-on-write is survivable. The moment the product allows <em>followers</em> rather than mutual friends, that ceiling disappears and the celebrity problem appears. Asking about this distinction is a strong move.</li></ul><h3 id=what-the-numbers-say>What the numbers say</h3><table><thead><tr><th>Quantity</th><th>Working</th><th>Result</th></tr></thead><tbody><tr><td>Feed reads</td><td>10M DAU x ~10 refreshes</td><td><strong>~100M reads/day, ~1,200/s</strong></td></tr><tr><td>Posts</td><td>10M DAU x ~2 posts</td><td><strong>~20M writes/day, ~230/s</strong></td></tr><tr><td>Read:write ratio</td><td>100M : 20M</td><td><strong>~5:1, read-heavy</strong></td></tr><tr><td>Fan-out writes</td><td>20M posts x avg friends</td><td><strong>billions of timeline writes/day</strong></td></tr></tbody></table><p>The last row is the whole chapter. <strong>A modest number of posts becomes an enormous number of writes, because every post is copied into every friend&rsquo;s feed.</strong> This is <em>write amplification</em>, and it is the cost you pay for fast reads.</p><hr><h2 id=step-2--high-level-design>Step 2 — High-Level Design</h2><p>Two flows, and it is worth keeping them mentally separate throughout:</p><ul><li><strong>Feed publishing</strong> — a user posts; the post reaches their friends&rsquo; feeds.</li><li><strong>Feed retrieval</strong> — a user opens the app; their feed is assembled and returned.</li></ul><h3 id=the-apis>The APIs</h3><pre tabindex=0><code>POST /v1/me/feed          publish a post
+     params: content, auth_token
+
+GET  /v1/me/feed          retrieve the feed
+     params: auth_token, cursor
+</code></pre><p>Note <code>cursor</code>, not <code>page</code>. Offset pagination (<code>?page=2</code>) is broken for feeds: new posts arrive between requests, so page 2 shifts down and the user sees items they already saw, or misses items entirely. <strong>Cursor pagination</strong> — &ldquo;give me what comes after post ID X&rdquo; — is stable under insertion. It is a small detail that signals you have built a feed rather than read about one.</p><h3 id=publishing>Publishing</h3><pre class=mermaid>flowchart LR
+    U["User posts"] --> LB["Load balancer"]
+    LB --> WS["Web servers<br>auth + rate limit"]
+    WS --> PS["Post service<br>persist to DB and cache"]
+    WS --> FS["Fanout service<br>deliver to friends' feeds"]
+    WS --> NS["Notification service"]
+
+    style U fill:#2DD4BF,stroke:#0F766E,color:#fff
+    style LB fill:#14B8A6,stroke:#0F766E,color:#fff
+    style WS fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style PS fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style FS fill:#EC4899,stroke:#BE185D,color:#fff
+    style NS fill:#F59E0B,stroke:#B45309,color:#fff
+</pre><p>The fan-out service is where all the difficulty lives. Everything else is routine.</p><hr><h2 id=step-3--the-central-trade-off>Step 3 — The Central Trade-off</h2><h3 id=fan-out-on-write-push>Fan-out on write (push)</h3><p>When a user posts, immediately write that post&rsquo;s ID into every friend&rsquo;s cached timeline. The feed is <strong>pre-computed</strong> — reading it is a single cache lookup.</p><pre class=mermaid>flowchart TD
+    P["Alice posts"] --> F["Fanout worker<br>reads Alice's friend list"]
+    F --> T1["Bob's timeline<br>+ post ID"]
+    F --> T2["Carol's timeline<br>+ post ID"]
+    F --> T3["...5,000 more writes"]
+    T1 --> R["Bob opens the app:<br>one cache read, done"]
+
+    style P fill:#2DD4BF,stroke:#0F766E,color:#fff
+    style F fill:#EC4899,stroke:#BE185D,color:#fff
+    style T1 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style T2 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style T3 fill:#EF4444,stroke:#B91C1C,color:#fff
+    style R fill:#10B981,stroke:#047857,color:#fff
+</pre><p><strong>Good:</strong> reads are as fast as they can possibly be — one lookup of a pre-built list. Posts appear in real time.</p><p><strong>Bad:</strong> writes are amplified by the friend count. And you do this work for <strong>every</strong> friend, including the ones who have not opened the app in eight months. At 10M DAU, a large fraction of fan-out work is delivering posts to feeds nobody will ever load.</p><h3 id=fan-out-on-read-pull>Fan-out on read (pull)</h3><p>Write nothing at post time. When a user opens the app, fetch their friend list, query recent posts from each, merge, sort, return.</p><pre class=mermaid>flowchart TD
+    R["Bob opens the app"] --> FL["Fetch Bob's friend list"]
+    FL --> Q["Query recent posts<br>from each of 5,000 friends"]
+    Q --> M["Merge and sort by time"]
+    M --> OUT["Return the feed"]
+    P["Alice posts"] --> DB["Write once. That is all."]
+
+    style R fill:#818CF8,stroke:#4338CA,color:#fff
+    style FL fill:#818CF8,stroke:#4338CA,color:#fff
+    style Q fill:#EF4444,stroke:#B91C1C,color:#fff
+    style M fill:#F59E0B,stroke:#B45309,color:#fff
+    style OUT fill:#10B981,stroke:#047857,color:#fff
+    style P fill:#2DD4BF,stroke:#0F766E,color:#fff
+    style DB fill:#10B981,stroke:#047857,color:#fff
+</pre><p><strong>Good:</strong> writing a post is one write. Dormant users cost nothing. No hot-key problem.</p><p><strong>Bad:</strong> every feed load becomes hundreds or thousands of queries plus a merge — and this happens on the read path, which is the path with a user waiting on it, and which we established is <strong>5x more frequent than writes</strong>.</p><h3 id=side-by-side>Side by side</h3><table><thead><tr><th></th><th>Fan-out on write (push)</th><th>Fan-out on read (pull)</th></tr></thead><tbody><tr><td>Work at post time</td><td><strong>High</strong> — one write per follower</td><td>One write</td></tr><tr><td>Work at read time</td><td>One cache read</td><td><strong>High</strong> — fan-in and merge</td></tr><tr><td>Feed latency</td><td>Excellent</td><td>Poor</td></tr><tr><td>Wasted effort</td><td>Fanning out to dormant users</td><td>None</td></tr><tr><td>Breaks when</td><td>An account has millions of followers</td><td>Everyone has many friends</td></tr><tr><td>Best suited to</td><td>Ordinary accounts</td><td>Celebrity accounts</td></tr></tbody></table><p>The last row gives away the answer.</p><hr><h2 id=the-celebrity-problem>The Celebrity Problem</h2><p>This is the part to be able to derive on the spot, because the arithmetic makes the argument for you.</p><p>An account with <strong>50 million followers</strong> posts once. Under fan-out on write:</p><pre tabindex=0><code>1 post  x  50,000,000 followers  =  50,000,000 timeline writes
+</code></pre><p>For <strong>one</strong> post. Post ten times a day and that single account generates <strong>500 million writes</strong> daily. Now consider that a platform has thousands of such accounts.</p><pre class=mermaid>flowchart TD
+    C["Celebrity posts once"] --> FO{"Fan-out on write?"}
+    FO -->|Yes| BOOM["50,000,000 cache writes<br>for a single post"]
+    BOOM --> B1["Fanout workers saturated<br>for minutes"]
+    BOOM --> B2["Ordinary users' posts stuck<br>behind the celebrity in the queue"]
+    BOOM --> B3["Followers at the end of the list<br>see the post minutes late"]
+    FO -->|"No — skip fan-out"| SKIP["Write once to the celebrity's<br>own post store"]
+    SKIP --> PULL["Followers pull it<br>when they open the app"]
+
+    style C fill:#EC4899,stroke:#BE185D,color:#fff
+    style FO fill:#F59E0B,stroke:#B45309,color:#fff
+    style BOOM fill:#EF4444,stroke:#B91C1C,color:#fff
+    style B1 fill:#EF4444,stroke:#B91C1C,color:#fff
+    style B2 fill:#EF4444,stroke:#B91C1C,color:#fff
+    style B3 fill:#EF4444,stroke:#B91C1C,color:#fff
+    style SKIP fill:#10B981,stroke:#047857,color:#fff
+    style PULL fill:#10B981,stroke:#047857,color:#fff
+</pre><p>The damage is not confined to the celebrity. Because fan-out workers are shared, <strong>one celebrity post delays every ordinary user&rsquo;s post</strong> sitting behind it in the queue. A single account degrades the product for everyone — the same head-of-line blocking we saw with notification queues in <a href=/2026/05/design-notification-system/>Chapter 10</a>, wearing a different hat.</p><h3 id=the-hybrid>The hybrid</h3><p>Split accounts by follower count and treat them differently:</p><pre class=mermaid>flowchart TD
+    POST["A post is published"] --> CHK{"Follower count<br>above the threshold?"}
+    CHK -->|"No — ordinary account"| PUSH["Fan out on write<br>into each follower's timeline"]
+    CHK -->|"Yes — celebrity"| STORE["Skip fan-out.<br>Store on the author's own timeline"]
+    PUSH --> CACHE[("Pre-computed timelines")]
+    STORE --> CELEB[("Celebrity post store")]
+    READ["User opens the app"] --> MERGE["Read pre-computed timeline<br>+ pull posts from the few<br>celebrities they follow"]
+    CACHE --> MERGE
+    CELEB --> MERGE
+    MERGE --> SORT["Merge, sort, return"]
+
+    style POST fill:#2DD4BF,stroke:#0F766E,color:#fff
+    style CHK fill:#F59E0B,stroke:#B45309,color:#fff
+    style PUSH fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style STORE fill:#818CF8,stroke:#4338CA,color:#fff
+    style CACHE fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style CELEB fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style READ fill:#2DD4BF,stroke:#0F766E,color:#fff
+    style MERGE fill:#EC4899,stroke:#BE185D,color:#fff
+    style SORT fill:#10B981,stroke:#047857,color:#fff
+</pre><p>Why this works is a distribution argument, and it is worth stating explicitly:</p><ul><li><strong>Almost every account is ordinary.</strong> The overwhelming majority of posts take the cheap push path.</li><li><strong>Almost every user follows only a handful of celebrities.</strong> So the read-time merge pulls from perhaps five or ten sources, not five thousand. The expensive path stays small <em>because celebrities are rare</em>.</li></ul><p>The threshold is a tuning knob, commonly somewhere around <strong>10,000 followers</strong>. It is not a constant of nature — it is where, on your infrastructure, the cost of fanning out exceeds the cost of merging at read time.</p><p>Two refinements that show operational thinking:</p><ul><li><strong>Do not fan out to dormant accounts.</strong> If a user has not opened the app in 30 days, skip their timeline and rebuild it on demand when they return. On a mature platform this removes a large share of all fan-out work.</li><li><strong>The threshold should be dynamic.</strong> An account that crosses it mid-crisis should switch modes automatically, not wait for someone to notice.</li></ul><hr><h2 id=step-4--design-deep-dive>Step 4 — Design Deep Dive</h2><h3 id=inside-the-fan-out-service>Inside the fan-out service</h3><pre class=mermaid>flowchart TD
+    NEW["New post"] --> G["Graph DB<br>fetch follower IDs"]
+    G --> FILT["Filter: muted, blocked,<br>restricted audience, dormant"]
+    FILT --> MQ["Message queue"]
+    MQ --> W["Fanout workers"]
+    W --> NF[("Feed cache<br>post_id per user_id")]
+
+    style NEW fill:#2DD4BF,stroke:#0F766E,color:#fff
+    style G fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style FILT fill:#F59E0B,stroke:#B45309,color:#fff
+    style MQ fill:#38BDF8,stroke:#0284C7,color:#fff
+    style W fill:#10B981,stroke:#047857,color:#fff
+    style NF fill:#EC4899,stroke:#BE185D,color:#fff
+</pre><p>Three details that matter:</p><ul><li><strong>A graph database holds the social graph.</strong> Friend-of-friend traversals are painful in SQL and natural in a graph store.</li><li><strong>Filtering happens before the queue, not after.</strong> Muted users, blocked users and restricted-audience posts are removed up front, so you never pay to write a post into a timeline that must not show it.</li><li><strong>Store IDs only, and cap the list.</strong> The feed cache holds post IDs, not post bodies — storing full objects would multiply memory by the number of followers. Cap each timeline at a few hundred entries: nobody scrolls to post 3,000, and the cap makes memory predictable. In Redis this is <code>LPUSH</code> followed by <code>LTRIM</code>.</li></ul><h3 id=retrieval-and-hydration>Retrieval and hydration</h3><pre class=mermaid>flowchart TD
+    REQ["GET /v1/me/feed"] --> IDS["Feed cache:<br>list of post IDs"]
+    IDS --> HYD["Hydration:<br>fetch the actual objects"]
+    HYD --> PC[("Post cache<br>content")]
+    HYD --> UC[("User cache<br>names, avatars")]
+    HYD --> AC[("Action cache<br>liked? commented?")]
+    HYD --> CT[("Counter cache<br>like and reply counts")]
+    PC --> JSON["Assemble JSON"]
+    UC --> JSON
+    AC --> JSON
+    CT --> JSON
+    JSON --> CDN["Media served from CDN"]
+
+    style REQ fill:#2DD4BF,stroke:#0F766E,color:#fff
+    style IDS fill:#EC4899,stroke:#BE185D,color:#fff
+    style HYD fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style PC fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style UC fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style AC fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style CT fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style JSON fill:#10B981,stroke:#047857,color:#fff
+    style CDN fill:#F59E0B,stroke:#B45309,color:#fff
+</pre><p><strong>Hydration is the step people forget.</strong> The timeline is a list of IDs; the screen needs author names, avatars, text, counts, and whether <em>you</em> liked each post. That is several cache lookups per post, batched — and it is why the cache tier is layered rather than monolithic:</p><table><thead><tr><th>Layer</th><th>Holds</th><th>Why separate</th></tr></thead><tbody><tr><td><strong>Feed</strong></td><td>Post IDs per user</td><td>Small, hot, written by fan-out</td></tr><tr><td><strong>Content</strong></td><td>Post bodies</td><td>Large; popular posts in a hot subset</td></tr><tr><td><strong>Social graph</strong></td><td>Follower and following lists</td><td>Read on every fan-out</td></tr><tr><td><strong>Action</strong></td><td>Did this user like this post</td><td>Per user-post pair, huge cardinality</td></tr><tr><td><strong>Counter</strong></td><td>Like and reply totals</td><td>Write-heavy, updated constantly</td></tr></tbody></table><p>They are separated because their access patterns and update rates differ by orders of magnitude. Counters change constantly; post bodies almost never do. Sharing one cache would force the worst policy on all of them.</p><p><strong>Media never passes through your servers.</strong> Images and video go to a CDN, and the feed JSON carries URLs. Serving a video through your application tier is a classic and expensive mistake.</p><hr><h2 id=beyond-the-book>Beyond the Book</h2><h3 id=real-feeds-are-ranked-not-chronological>Real feeds are ranked, not chronological</h3><p>The interviewer&rsquo;s &ldquo;reverse chronological&rdquo; simplification has not matched a production feed since roughly 2015. Real feeds score every candidate post and sort by predicted engagement.</p><p>That changes where the work goes: fan-out still assembles the <strong>candidate set</strong>, but a ranking service scores it at read time before returning. The architecture above survives — you insert a scoring step between hydration and response — but two things shift:</p><ul><li><strong>The timeline cap must be generous.</strong> Ranking needs candidates to choose among, so you keep more than the 20 you will display.</li><li><strong>Ranking is on the read path</strong>, so it has a latency budget. This is where feed systems actually spend their milliseconds today.</li></ul><p>Say this out loud even when the interviewer specified chronological. It shows you know the simplification is a simplification.</p><h3 id=edits-deletes-and-the-cost-of-denormalisation>Edits, deletes, and the cost of denormalisation</h3><p>Fan-out on write is denormalisation: one post now exists in millions of timelines. So what happens when it is deleted?</p><p>You do not chase it through millions of timelines. Because <strong>the timeline stores only IDs</strong>, you delete the post from the content store, and hydration simply finds nothing and skips it. This is the quiet payoff of storing IDs rather than bodies — it turns a distributed deletion problem into a no-op.</p><p>The same logic covers edits, blocks applied after the fact, and privacy changes: <strong>resolve at hydration, not at fan-out</strong>.</p><h3 id=what-to-monitor>What to monitor</h3><ul><li><strong>Fan-out lag</strong> — time from publish to the post landing in the last follower&rsquo;s timeline. This is the number that degrades first under load.</li><li><strong>Feed load p99</strong>, not the mean. Means hide the users with 5,000 friends and twelve celebrity follows.</li><li><strong>Cache hit rate per layer.</strong> A drop in the counter cache and a drop in the feed cache mean completely different things.</li></ul><hr><h2 id=interview-quick-reference>Interview Quick Reference</h2><p><strong>The core question:</strong> build the feed at write time or read time?</p><table><thead><tr><th></th><th>Push (write)</th><th>Pull (read)</th><th><strong>Hybrid</strong></th></tr></thead><tbody><tr><td>Post cost</td><td>High</td><td>Low</td><td>Low for celebrities, high for the rest</td></tr><tr><td>Read cost</td><td>Low</td><td>High</td><td>Low, plus a small merge</td></tr><tr><td>Celebrity safe</td><td>No</td><td>Yes</td><td><strong>Yes</strong></td></tr><tr><td>Used in production</td><td>Rarely alone</td><td>Rarely alone</td><td><strong>Yes</strong></td></tr></tbody></table><p><strong>The celebrity arithmetic:</strong> 1 post x 50M followers = 50M writes. Ten posts a day = 500M writes for one account — and the shared fan-out workers delay everyone else&rsquo;s posts too.</p><p><strong>The hybrid, in one line:</strong> push for ordinary accounts, skip fan-out for celebrities, merge both at read time. It works because celebrities are rare, so the expensive path stays small.</p><p><strong>Details that mark out a strong answer:</strong></p><ul><li><strong>Cursor pagination, not offsets</strong> — feeds shift under you between requests.</li><li><strong>Store post IDs, not post bodies</strong>, and cap timeline length.</li><li><strong>Filter before the queue</strong> — never fan out a post that must not be shown.</li><li><strong>Skip dormant users</strong> and rebuild their feed on return.</li><li><strong>Hydration is a real step</strong>, and it drives the five-layer cache split.</li><li><strong>Deletion is free</strong> because timelines hold IDs — resolve at hydration.</li><li><strong>Real feeds rank at read time</strong>; chronological is the interviewer&rsquo;s simplification.</li></ul><hr><h2 id=summary>Summary</h2><table><thead><tr><th>Idea</th><th>Why it matters</th></tr></thead><tbody><tr><td>Two choices only</td><td>Precompute at write, or assemble at read</td></tr><tr><td>Write amplification</td><td>20M posts becomes billions of timeline writes</td></tr><tr><td>Neither pure model works</td><td>Push breaks on celebrities, pull breaks on latency</td></tr><tr><td>The hybrid works on distribution</td><td>Celebrities are rare, so the costly path stays small</td></tr><tr><td>Store IDs, not objects</td><td>Bounds memory and makes deletion trivial</td></tr><tr><td>Hydration is the hidden cost</td><td>A timeline of IDs is not a screen</td></tr><tr><td>Resolve at read, not at write</td><td>Edits, deletes and privacy stay correct without rewriting history</td></tr></tbody></table><hr><h2 id=references-and-further-reading>References and Further Reading</h2><p><strong>The primary sources</strong></p><ul><li><a href=https://www.facebook.com/help/1155510281178725/>How News Feed Works</a> — Facebook&rsquo;s own explanation of what a feed is meant to do</li><li><a href=https://blog.twitter.com/engineering/en_us/topics/infrastructure/2017/the-infrastructure-behind-twitter-scale>The Infrastructure Behind Twitter: Scale</a> — the timeline architecture, from the team that built it</li><li><a href=https://engineering.fb.com/2013/06/25/core-infra/tao-the-power-of-the-graph/>Facebook&rsquo;s TAO: The Power of the Graph</a> — the graph store behind the social graph</li></ul><p><strong>Fan-out in depth</strong></p><ul><li><a href=https://dev.to/gabrielanhaia/twitters-fanout-strategy-at-scale-the-trade-off-most-designs-miss-55oa>Twitter&rsquo;s fan-out strategy at scale</a> — the hybrid and the threshold, with numbers</li><li><a href=https://wittycoder.in/courses/news-feed/fan-out-strategies>Fan-out on write vs fan-out on read</a> — the trade-off laid out plainly</li><li><a href=https://redis.io/docs/latest/develop/data-types/lists/>Redis lists</a> — <code>LPUSH</code> and <code>LTRIM</code>, the two commands a timeline cache is built from</li></ul><p><strong>Related chapters</strong></p><ul><li><a href=/2026/05/design-notification-system/>Chapter 10: Design a Notification System</a> — the same head-of-line blocking problem, in a different guise</li><li><a href=/2026/05/scale-from-zero-to-millions/>Chapter 1: Scale From Zero to Millions of Users</a> — the caching and CDN tiers this design assumes</li><li><a href=/2026/05/design-consistent-hashing/>Chapter 5: Design Consistent Hashing</a> — distributing the hot keys fan-out creates</li></ul><p><strong>Books</strong></p><ul><li><em>System Design Interview – An Insider&rsquo;s Guide</em> — Alex Xu. The chapter this article follows.</li><li><em>Designing Data-Intensive Applications</em> — Martin Kleppmann. Chapter 1 works through this exact Twitter fan-out example as its opening case study, and is the best treatment in print.</li></ul><hr><h2 id=whats-next>What&rsquo;s Next?</h2><p>In <strong>Chapter 12</strong> we design a <strong>chat system</strong> — where the constraint inverts. A feed can be seconds stale and nobody minds; a chat message that arrives late, twice, or out of order is a visible bug. That pushes the design towards long-lived connections, per-conversation ordering, and delivery state that both participants can see.</p><p><em>The move in this chapter generalises. When one workload is cheap for almost everyone and ruinous for a rare few, do not design for the average — classify, and run two strategies. The threshold between them is a tuning knob, not an architecture.</em></p></div><div class=social-share-bar><span class=share-label>Share:</span>
+<a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f06%2fdesign-news-feed-system%2f&title=Design+a+News+Feed+System" target=_blank rel=noopener class="share-btn share-linkedin" title="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i> LinkedIn
+</a><a href="https://twitter.com/intent/tweet?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f06%2fdesign-news-feed-system%2f&text=Design+a+News+Feed+System" target=_blank rel=noopener class="share-btn share-twitter" title="Share on Twitter / X"><i class="fa-brands fa-x-twitter"></i> X
+</a><a href="https://www.reddit.com/submit?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f06%2fdesign-news-feed-system%2f&title=Design+a+News+Feed+System" target=_blank rel=noopener class="share-btn share-reddit" title="Share on Reddit"><i class="fa-brands fa-reddit-alien"></i> Reddit</a></div></div></article><nav class="navigation post-navigation" role=navigation><h2 class=screen-reader-text>Post navigation</h2><div class=nav-links><div class=nav-next><a href=/2026/05/design-notification-system/ rel=prev><span class=post-title>Design a Notification System
+<i class="fa fa-chevron-right"></i></span></a></div></div></nav></main></section><section id=secondary class="sidebar widget-area clearfix" role=complementary><aside id=search class="widget clearfix"><div class=widget-header><h3 class=widget-title>Search</h3></div><form onsubmit=return!1><input id=search-query type=text placeholder="Search posts..." autocomplete=off>
+<button id=search-btn type=button><i class="fa-solid fa-magnifying-glass"></i></button></form><div id=search-results></div></aside><aside id=rss-subscribe class="widget clearfix"><div class=widget-header><h3 class=widget-title>Subscribe</h3></div><a href=/index.xml class=rss-subscribe-btn target=_blank rel=noopener><i class="fa-solid fa-rss"></i> Subscribe via RSS</a></aside><aside id=recent-posts class="widget clearfix"><div class=widget-header><h3 class=widget-title>Recent Posts</h3></div><ul><li class=widget__item><a class=widget__link href=/2026/06/design-news-feed-system/>Design a News Feed System</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-notification-system/>Design a Notification System</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-web-crawler/>Design a Web Crawler</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-url-shortener/>Design a URL Shortener</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-unique-id-generator/>Design a Unique ID Generator in Distributed Systems</a></li></ul></aside><aside id=categories class="widget clearfix"><div class=widget-header><h3 class=widget-title>Categories</h3></div><ul><li><a href=/categories/case-studies/ title="case studies">case studies</a></li><li><a href=/categories/fundamentals/ title=fundamentals>fundamentals</a></li></ul></aside><aside id=tag_cloud class="widget widget_tag_cloud clearfix"><div class=widget-header><h3 class=widget-title>Tags</h3></div><div class=tagcloud><div class=widget__content><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/algorithms/ title=algorithms>algorithms
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/api/ title=api>api
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/architecture/ title=architecture>architecture
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/base62/ title=base62>base62
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/caching/ title=caching>caching
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/cap-theorem/ title=cap-theorem>cap-theorem
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/cassandra/ title=cassandra>cassandra
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/consistent-hashing/ title=consistent-hashing>consistent-hashing
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/databases/ title=databases>databases
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/distributed-systems/ title=distributed-systems>distributed-systems
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/dynamo/ title=dynamo>dynamo
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/dynamodb/ title=dynamodb>dynamodb
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/estimation/ title=estimation>estimation
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/interviews/ title=interviews>interviews
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/key-value-store/ title=key-value-store>key-value-store
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/load-balancing/ title=load-balancing>load-balancing
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/message-queues/ title=message-queues>message-queues
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/news-feed/ title=news-feed>news-feed
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/notifications/ title=notifications>notifications
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/performance/ title=performance>performance
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/rate-limiter/ title=rate-limiter>rate-limiter
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/redis/ title=redis>redis
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/reliability/ title=reliability>reliability
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/scalability/ title=scalability>scalability
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/snowflake/ title=snowflake>snowflake
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/system-design/ title=system-design>system-design
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/unique-id/ title=unique-id>unique-id
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/url-shortener/ title=url-shortener>url-shortener
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/uuid/ title=uuid>uuid
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/web-crawler/ title=web-crawler>web-crawler</a></div></div></aside></section></div><div id=footer class=footer-wrap><footer id=colophon class="site-footer container clearfix" role=contentinfo><div id=footer-text class=site-info><span class=credit-link><a href=/>System Design by Abhay</a>
+Copyright © 2026
+</span><span class=footer-rss><a href=/index.xml title="RSS Feed" target=_blank rel=noopener><i class="fa-solid fa-rss"></i> RSS Feed</a></span></div></footer></div></div><script type=text/javascript src=/assets/js/custom.js></script></body></html>
