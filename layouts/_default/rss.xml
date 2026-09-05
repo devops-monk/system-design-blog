@@ -1,0 +1,62 @@
+{{- /*
+  Custom RSS feed.
+
+  Fixes three things the built-in template got wrong for this site:
+    1. The home feed included About, Contact and the Guide. A blog feed
+       should carry articles, so it is filtered to the posts section.
+    2. No item limit, so every article is present rather than a recent slice.
+    3. Items used an auto-generated summary. Each article has a hand-written
+       `description` in its front matter, which reads far better in a reader,
+       and the cover image is attached so items are not a wall of text.
+*/ -}}
+{{- /* Taxonomy term pages expose their members via .Pages, not
+       .RegularPages, so use .Pages as the base and special-case only home. */ -}}
+{{- $pages := .Pages -}}
+{{- if .IsHome -}}
+  {{- $pages = where .Site.RegularPages "Section" "posts" -}}
+{{- end -}}
+{{- $title := .Site.Title -}}
+{{- if not .IsHome -}}
+  {{- $title = printf "%s | %s" .Title .Site.Title -}}
+{{- end -}}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>{{ $title }}</title>
+    <link>{{ .Permalink }}</link>
+    <description>{{ .Site.Params.description }}</description>
+    <language>{{ .Site.LanguageCode | default "en-us" }}</language>
+    {{- with .Site.Params.author }}
+    <managingEditor>{{ $.Site.Params.email }} ({{ . }})</managingEditor>
+    <webMaster>{{ $.Site.Params.email }} ({{ . }})</webMaster>
+    {{- end }}
+    <lastBuildDate>{{ now.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</lastBuildDate>
+    <atom:link href="{{ .Permalink }}index.xml" rel="self" type="application/rss+xml" />
+    {{- range $pages }}
+    {{- $img := "" -}}
+    {{- with .Params.image -}}
+      {{- $img = printf "%s%s" $.Site.BaseURL (strings.TrimPrefix "/" .) -}}
+    {{- end }}
+    <item>
+      <title>{{ .Title }}</title>
+      <link>{{ .Permalink }}</link>
+      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+      <guid isPermaLink="true">{{ .Permalink }}</guid>
+      {{- with .Params.author | default .Site.Params.author }}
+      <author>{{ $.Site.Params.email }} ({{ . }})</author>
+      {{- end }}
+      {{- range .Params.categories }}
+      <category>{{ . }}</category>
+      {{- end }}
+      {{- $desc := .Description -}}
+      {{- if not $desc }}{{ $desc = .Summary | plainify }}{{ end -}}
+      {{- $cover := "" -}}
+      {{- if $img }}{{ $cover = printf "<p><img src=\"%s\" alt=\"%s\" /></p>" $img .Title }}{{ end -}}
+      <description>{{ $desc }}</description>
+      {{- if $img }}
+      <enclosure url="{{ $img }}" type="image/webp" length="0" />
+      {{- end }}
+      <content:encoded>{{ printf "<![CDATA[%s<p>%s</p><p><a href=\"%s\">Read the full article &rarr;</a></p>]]>" $cover $desc .Permalink | safeHTML }}</content:encoded>
+    </item>
+    {{- end }}
+  </channel>
+</rss>
