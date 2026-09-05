@@ -2437,3 +2437,97 @@ a.cert-card:hover .cert-verify { opacity: 1; }
   .rs-grid { grid-template-columns: 1fr; }
   .rs-num { font-size: 1.3rem; }
 }
+
+/* ==========================================================================
+   Deliverability checker (posts/2026/design-distributed-email-service)
+   ========================================================================== */
+
+.deliv-check {
+  margin: 1.75rem 0;
+  padding: 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.dc-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  margin-bottom: 0.55rem;
+}
+
+.dc-toggles { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem; }
+
+.dc-toggles button {
+  padding: 0.38rem 0.8rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dc-toggles button::before { content: "✕ "; opacity: 0.7; }
+.dc-toggles button.on::before { content: "✓ "; opacity: 1; }
+.dc-toggles button.on { color: #fff; background: #16a34a; border-color: #16a34a; font-weight: 600; }
+
+.dc-row { margin-bottom: 1.1rem; }
+.dc-row label { display: block; margin-bottom: 0.3rem; font-size: 0.82rem; color: var(--text-muted); }
+.dc-row label b { font-family: var(--mono); color: var(--primary-dark); font-weight: 700; }
+.dc-row input[type="range"] { width: 100%; accent-color: var(--primary); }
+
+.dc-verdict {
+  padding: 0.8rem 0.9rem;
+  margin-bottom: 0.9rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.dc-ok   { color: #166534; background: rgba(22,163,74,0.1);  border-color: rgba(22,163,74,0.32); }
+.dc-warn { color: #92400e; background: rgba(217,119,6,0.1);  border-color: rgba(217,119,6,0.32); }
+.dc-bad  { color: #991b1b; background: rgba(220,38,38,0.1);  border-color: rgba(220,38,38,0.32); }
+
+.dc-list { margin: 0; padding: 0; list-style: none; }
+
+.dc-list li {
+  padding: 0.5rem 0.7rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.83rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  border-left: 3px solid var(--border);
+  background: var(--bg);
+  border-radius: 0 6px 6px 0;
+}
+
+.dc-list li b { color: var(--text); font-weight: 600; }
+.dc-f { border-left-color: #dc2626 !important; }
+.dc-w { border-left-color: #d97706 !important; }
+.dc-p { border-left-color: #16a34a !important; }
+
+[data-theme="dark"] .deliv-check { background: #1e293b !important; border-color: #334155 !important; }
+[data-theme="dark"] .dc-toggles button,
+[data-theme="dark"] .dc-list li { background: #0f172a !important; border-color: #334155 !important; }
+[data-theme="dark"] .dc-toggles button { color: #94a3b8 !important; }
+[data-theme="dark"] .dc-toggles button.on { background: #16a34a !important; border-color: #16a34a !important; color: #fff !important; }
+[data-theme="dark"] .dc-row label b { color: var(--primary-light) !important; }
+[data-theme="dark"] .dc-list li b { color: #e2e8f0 !important; }
+[data-theme="dark"] .dc-ok   { color: #4ade80 !important; border-color: rgba(74,222,128,0.32) !important; }
+[data-theme="dark"] .dc-warn { color: #fbbf24 !important; border-color: rgba(251,191,36,0.32) !important; }
+[data-theme="dark"] .dc-bad  { color: #fca5a5 !important; border-color: rgba(248,113,113,0.35) !important; }
+
+@media only screen and (max-width: 40em) {
+  .deliv-check { padding: 1rem; }
+  .dc-verdict { font-size: 0.88rem; }
+}
