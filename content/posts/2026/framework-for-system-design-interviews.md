@@ -91,17 +91,17 @@ gantt
 
 ```mermaid
 flowchart TD
-    START(["🎯 Question given\n'Design Twitter'"])
+    START(["Question given\n'Design Twitter'"])
 
-    S1["📋 STEP 1\nUnderstand the Problem\n& Establish Design Scope\n\n3–10 minutes\nAsk questions\nWrite assumptions\nDefine scope"]
+    S1["STEP 1\nUnderstand the Problem\n& Establish Design Scope\n\n3–10 minutes\nAsk questions\nWrite assumptions\nDefine scope"]
 
-    S2["🏗️ STEP 2\nPropose High-Level Design\n& Get Buy-In\n\n10–15 minutes\nDraw boxes & arrows\nSketch APIs\nBack-of-envelope math"]
+    S2["STEP 2\nPropose High-Level Design\n& Get Buy-In\n\n10–15 minutes\nDraw boxes & arrows\nSketch APIs\nBack-of-envelope math"]
 
-    S3["🔬 STEP 3\nDesign Deep Dive\n\n10–25 minutes\nZoom into critical components\nDiscuss trade-offs\nHandle bottlenecks"]
+    S3["STEP 3\nDesign Deep Dive\n\n10–25 minutes\nZoom into critical components\nDiscuss trade-offs\nHandle bottlenecks"]
 
-    S4["🎁 STEP 4\nWrap Up\n\n3–5 minutes\nSummarise design\nMention bottlenecks\nPropose improvements"]
+    S4["STEP 4\nWrap Up\n\n3–5 minutes\nSummarise design\nMention bottlenecks\nPropose improvements"]
 
-    HIRED(["✅ Strong signal\nshown to interviewer"])
+    HIRED(["✓ Strong signal\nshown to interviewer"])
 
     START --> S1 --> S2 --> S3 --> S4 --> HIRED
 
@@ -184,8 +184,8 @@ Here is what a strong candidate conversation looks like:
 
 ```mermaid
 sequenceDiagram
-    actor C as 🧑‍💻 Candidate
-    actor I as 👩‍💼 Interviewer
+    actor C as ‍ Candidate
+    actor I as ‍ Interviewer
 
     C->>I: Is this a mobile app, web app, or both?
     I->>C: Both
@@ -250,11 +250,11 @@ You've established scope. Now it's time to sketch the architecture. The goal her
 
 ```mermaid
 flowchart LR
-    A["📦 Draw the boxes\nIdentify major components:\nClients, APIs, Services,\nDatabases, Caches, CDN,\nMessage Queues"]
+    A["Draw the boxes\nIdentify major components:\nClients, APIs, Services,\nDatabases, Caches, CDN,\nMessage Queues"]
 
-    B["🔗 Connect the arrows\nShow data flow.\nWhere do reads go?\nWhere do writes go?\nWhat calls what?"]
+    B["Connect the arrows\nShow data flow.\nWhere do reads go?\nWhere do writes go?\nWhat calls what?"]
 
-    C["🧮 Sanity check with math\nBack-of-envelope estimates.\nDoes 1 DB handle\nour write QPS?\nDo we need sharding?"]
+    C["Sanity check with math\nBack-of-envelope estimates.\nDoes 1 DB handle\nour write QPS?\nDo we need sharding?"]
 
     A --> B --> C
 
@@ -269,25 +269,25 @@ Every system design is composed of some combination of these:
 
 ```mermaid
 flowchart TD
-    subgraph Client["📱 Client Layer"]
+    subgraph Client["Client Layer"]
         WEB["Web Browser"]
         MOB["Mobile App"]
     end
 
-    subgraph Edge["🌐 Edge Layer"]
+    subgraph Edge["Edge Layer"]
         DNS["DNS"]
         CDN["CDN\n(static assets)"]
         LB["Load Balancer\n(traffic distribution)"]
     end
 
-    subgraph API["⚙️ API Layer"]
+    subgraph API["API Layer"]
         GW["API Gateway\n(auth, rate limiting, routing)"]
         SVC1["Service A"]
         SVC2["Service B"]
         SVC3["Service C"]
     end
 
-    subgraph Data["💾 Data Layer"]
+    subgraph Data["Data Layer"]
         SQL["Relational DB\n(MySQL / PostgreSQL)"]
         NOSQL["NoSQL DB\n(Cassandra / DynamoDB)"]
         CACHE["Cache\n(Redis / Memcached)"]
@@ -312,18 +312,18 @@ Let's continue our news feed example. Feed publishing = when a user creates a po
 
 ```mermaid
 flowchart TD
-    U["👤 User posts\n'Hello World + photo'"]
-    LB["⚖️ Load Balancer"]
-    WS["🖥️ Web Servers\nAuthentication\nRate Limiting"]
-    PS["📝 Post Service\nValidates & stores post"]
-    FS["📡 Fanout Service\nPushes post to followers' feeds"]
-    NS["🔔 Notification Service\nSends push notifications"]
-    PC["⚡ Post Cache\n(Redis)"]
-    PDB["🗄️ Post DB\n(MySQL)"]
-    MQ["📬 Message Queue\n(Kafka)"]
-    FW["⚙️ Fanout Workers\n(async)"]
-    NFC["📦 News Feed Cache\n(Redis — per user)"]
-    GDB["🌐 Graph DB\n(Neo4j — friend graph)"]
+    U["User posts\n'Hello World + photo'"]
+    LB["Load Balancer"]
+    WS["Web Servers\nAuthentication\nRate Limiting"]
+    PS["Post Service\nValidates & stores post"]
+    FS["Fanout Service\nPushes post to followers' feeds"]
+    NS["Notification Service\nSends push notifications"]
+    PC["Post Cache\n(Redis)"]
+    PDB["Post DB\n(MySQL)"]
+    MQ["Message Queue\n(Kafka)"]
+    FW["Fanout Workers\n(async)"]
+    NFC["News Feed Cache\n(Redis — per user)"]
+    GDB["Graph DB\n(Neo4j — friend graph)"]
 
     U --> LB --> WS
     WS --> PS
@@ -352,14 +352,14 @@ When a user opens their app and loads their feed:
 
 ```mermaid
 sequenceDiagram
-    actor U as 👤 User
-    participant LB as ⚖️ Load Balancer
-    participant WS as 🖥️ Web Server
-    participant NFS as 📰 News Feed Service
-    participant NFC as ⚡ Feed Cache (Redis)
-    participant UC as 👥 User Cache
-    participant PC as 📝 Post Cache
-    participant DB as 🗄️ Database
+    actor U as  User
+    participant LB as  Load Balancer
+    participant WS as  Web Server
+    participant NFS as  News Feed Service
+    participant NFC as  Feed Cache (Redis)
+    participant UC as  User Cache
+    participant PC as  Post Cache
+    participant DB as  Database
 
     U->>LB: GET /v1/me/feed
     LB->>WS: route request
@@ -382,7 +382,7 @@ sequenceDiagram
 
     NFS-->>WS: assembled feed (20 posts)
     WS-->>LB: HTTP 200 + JSON
-    LB-->>U: render feed 🎉
+    LB-->>U: render feed 
 ```
 
 This sequence diagram shows something important: the **feed is pre-computed and cached** (the Fanout Service populates it when posts are created). Reading the feed is just a cache lookup — it doesn't need to touch the database at all on the hot path. This is why Facebook, Instagram, and Twitter all use this pattern.
@@ -456,7 +456,7 @@ This is a classic deep-dive topic for any social feed system. Let's explore both
 
 ```mermaid
 flowchart LR
-    subgraph FOW["📤 Fanout-on-WRITE\n(Push model)"]
+    subgraph FOW["Fanout-on-WRITE\n(Push model)"]
         direction TB
         W1["User posts"]
         W2["Immediately push\nto all N followers'feed caches"]
@@ -464,7 +464,7 @@ flowchart LR
         W1 --> W2 --> W3
     end
 
-    subgraph FOR["📥 Fanout-on-READ\n(Pull model)"]
+    subgraph FOR["Fanout-on-READ\n(Pull model)"]
         direction TB
         R1["User posts"]
         R2["Store in your\nown timeline only"]
@@ -472,7 +472,7 @@ flowchart LR
         R1 --> R2 --> R3
     end
 
-    subgraph HYBRID["🔀 Hybrid\n(Best of both)"]
+    subgraph HYBRID["Hybrid\n(Best of both)"]
         direction TB
         H1["Normal users:\nfanout-on-write"]
         H2["Celebrity users\n(10M+ followers):\nfanout-on-read"]
@@ -531,10 +531,7 @@ erDiagram
         timestamp created_at
     }
 
-    USER ||--o{ POST : "creates"
-    USER ||--o{ FRIENDSHIP : "has"
-    USER ||--o{ NEWSFEED : "sees"
-    POST ||--o{ NEWSFEED : "appears in"
+    USER ||--o{ POST : "creates"USER ||--o{ FRIENDSHIP : "has"USER ||--o{ NEWSFEED : "sees"POST ||--o{ NEWSFEED : "appears in"
 ```
 
 Key design decisions to discuss:
@@ -552,13 +549,13 @@ Don't just stop and say "I'm done." The wrap-up is an opportunity to leave a str
 
 ```mermaid
 flowchart LR
-    W1["📊 Recap the design\n\nQuickly walk through\nwhat you built.\nHelps interviewer remember\nyour key decisions."]
+    W1["Recap the design\n\nQuickly walk through\nwhat you built.\nHelps interviewer remember\nyour key decisions."]
 
-    W2["🔍 Identify bottlenecks\n\nNever say the design\nis perfect.\nAlways mention what\nyou'd improve next."]
+    W2["Identify bottlenecks\n\nNever say the design\nis perfect.\nAlways mention what\nyou'd improve next."]
 
-    W3["🚨 Mention failure modes\n\nWhat happens if the\nDB goes down?\nIf the cache is cold?\nIf a datacenter fails?"]
+    W3["Mention failure modes\n\nWhat happens if the\nDB goes down?\nIf the cache is cold?\nIf a datacenter fails?"]
 
-    W4["📈 Discuss scale curve\n\nIf we go from\n1M → 10M → 100M users,\nwhat changes?"]
+    W4["Discuss scale curve\n\nIf we go from\n1M → 10M → 100M users,\nwhat changes?"]
 
     W1 --> W2 --> W3 --> W4
 
@@ -597,41 +594,22 @@ Here's the full flow from start to finish, including how the two sides of the co
 
 ```mermaid
 sequenceDiagram
-    actor C as 🧑‍💻 Candidate
-    actor I as 👩‍💼 Interviewer
+    actor C as ‍ Candidate
+    actor I as ‍ Interviewer
 
-    Note over C,I: ⏱️ 0:00 — Question given
+    Note over C,I: ⏱ 0:00 — Question given
 
-    I->>C: "Design a news feed system like Facebook"
-
-    Note over C,I: ⏱️ 0:00–0:10 — Step 1: Clarify
+    I->>C: "Design a news feed system like Facebook"Note over C,I: ⏱ 0:00–0:10 — Step 1: Clarify
     C->>I: Ask 5–7 targeted questions
     I->>C: Answer each one
-    C->>I: "Let me write down my assumptions..."
-    C->>I: "Recap: 10M DAU, chronological feed, media posts. Correct?"
-    I->>C: "Yes, let's proceed"
+    C->>I: "Let me write down my assumptions..."C->>I: "Recap: 10M DAU, chronological feed, media posts. Correct?"I->>C: "Yes, let's proceed"Note over C,I: ⏱ 0:10–0:25 — Step 2: High-Level Design
+    C->>I: "I'll start with the high-level components..."C->>I: Draws boxes on whiteboard
+    C->>I: "For feed publishing, I'm thinking a Fanout Service..."I->>C: "Interesting, tell me more about the fanout"C->>I: Quick back-of-envelope: "230 write QPS — single DB is fine"I->>C: "Good. What about the read path?"Note over C,I: ⏱ 0:25–0:40 — Step 3: Deep Dive
+    C->>I: "Let me deep dive into the fanout trade-offs..."C->>I: Explains push vs pull vs hybrid
+    I->>C: "How do you handle the celebrity problem?"C->>I: "Great question — for users with 1M+ followers we..."I->>C: "What does your data model look like?"C->>I: Draws schema, discusses indexes and ID generation
 
-    Note over C,I: ⏱️ 0:10–0:25 — Step 2: High-Level Design
-    C->>I: "I'll start with the high-level components..."
-    C->>I: Draws boxes on whiteboard
-    C->>I: "For feed publishing, I'm thinking a Fanout Service..."
-    I->>C: "Interesting, tell me more about the fanout"
-    C->>I: Quick back-of-envelope: "230 write QPS — single DB is fine"
-    I->>C: "Good. What about the read path?"
-
-    Note over C,I: ⏱️ 0:25–0:40 — Step 3: Deep Dive
-    C->>I: "Let me deep dive into the fanout trade-offs..."
-    C->>I: Explains push vs pull vs hybrid
-    I->>C: "How do you handle the celebrity problem?"
-    C->>I: "Great question — for users with 1M+ followers we..."
-    I->>C: "What does your data model look like?"
-    C->>I: Draws schema, discusses indexes and ID generation
-
-    Note over C,I: ⏱️ 0:40–0:45 — Step 4: Wrap Up
-    C->>I: "Let me quickly recap what we've built..."
-    C->>I: "Main bottleneck is fanout at scale, here's how I'd handle it..."
-    C->>I: "If we scaled to 100M DAU, first change would be..."
-    I->>C: "Great, thank you — any questions for me?"
+    Note over C,I: ⏱ 0:40–0:45 — Step 4: Wrap Up
+    C->>I: "Let me quickly recap what we've built..."C->>I: "Main bottleneck is fanout at scale, here's how I'd handle it..."C->>I: "If we scaled to 100M DAU, first change would be..."I->>C: "Great, thank you — any questions for me?"
 ```
 
 ---
@@ -644,7 +622,7 @@ These are the exact behaviours that separate candidates who get offers from thos
 
 ```mermaid
 flowchart TD
-    subgraph DOS["✅ DOs"]
+    subgraph DOS["✓ DOs"]
         D1["Always ask for clarification\nDon't assume your assumption is correct"]
         D2["Understand requirements\nbefore touching the design"]
         D3["Think out loud\nLet the interviewer follow your reasoning"]
@@ -662,7 +640,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    subgraph DONTS["❌ DON'Ts"]
+    subgraph DONTS["✗ DON'Ts"]
         X1["Jump into solution immediately\nwithout clarifying requirements"]
         X2["Think in silence\nInterviewers can't evaluate what they can't hear"]
         X3["Go too deep on one component early\nCover the system breadth first"]
@@ -700,7 +678,7 @@ Before your interview, make sure you can do all of these from memory:
 
 ```mermaid
 flowchart TD
-    subgraph KNOW["📚 Know These Building Blocks"]
+    subgraph KNOW["Know These Building Blocks"]
         K1["Load balancer — algorithms, health checks"]
         K2["SQL vs NoSQL — when to use each"]
         K3["Database replication — master/slave, failover"]
@@ -711,7 +689,7 @@ flowchart TD
         K8["CAP theorem — consistency vs availability"]
     end
 
-    subgraph PRACTICE["🏋️ Practice These Skills"]
+    subgraph PRACTICE["Practice These Skills"]
         P1["Back-of-envelope estimation — QPS, storage, bandwidth"]
         P2["Drawing clear architecture diagrams"]
         P3["Thinking out loud while designing"]
@@ -719,7 +697,7 @@ flowchart TD
         P5["Data modelling — schemas, indexes, ID generation"]
     end
 
-    subgraph COMMON["🎯 Common Interview Questions"]
+    subgraph COMMON["Common Interview Questions"]
         C1["Design Twitter / News Feed"]
         C2["Design a URL Shortener"]
         C3["Design WhatsApp / Chat System"]
@@ -744,30 +722,30 @@ Print this. Internalize it. Use it in every mock interview until it's automatic:
 ```mermaid
 flowchart LR
     subgraph STEP1["Step 1 · 3–10 min"]
-        A1["❓ Ask: features, scale,\nnon-functional requirements"]
-        A2["📝 Write assumptions\non whiteboard"]
-        A3["🔁 Recap + confirm\nwith interviewer"]
+        A1["Ask: features, scale,\nnon-functional requirements"]
+        A2["Write assumptions\non whiteboard"]
+        A3["Recap + confirm\nwith interviewer"]
         A1 --> A2 --> A3
     end
 
     subgraph STEP2["Step 2 · 10–15 min"]
-        B1["📦 Draw major\ncomponents"]
-        B2["🔗 Show data flow\n(reads and writes)"]
-        B3["🧮 Sanity check\nwith math"]
+        B1["Draw major\ncomponents"]
+        B2["Show data flow\n(reads and writes)"]
+        B3["Sanity check\nwith math"]
         B1 --> B2 --> B3
     end
 
     subgraph STEP3["Step 3 · 10–25 min"]
-        C1["🔬 Zoom into\ncritical components"]
-        C2["⚖️ Discuss trade-offs\nfor every choice"]
-        C3["🚨 Handle edge cases\nand failures"]
+        C1["Zoom into\ncritical components"]
+        C2["Discuss trade-offs\nfor every choice"]
+        C3["Handle edge cases\nand failures"]
         C1 --> C2 --> C3
     end
 
     subgraph STEP4["Step 4 · 3–5 min"]
-        D1["📊 Recap design"]
-        D2["🔍 Name bottlenecks"]
-        D3["📈 Scale next steps"]
+        D1["Recap design"]
+        D2["Name bottlenecks"]
+        D3["Scale next steps"]
         D1 --> D2 --> D3
     end
 

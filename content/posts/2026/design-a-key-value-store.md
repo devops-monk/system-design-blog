@@ -66,10 +66,10 @@ The simplest key-value store is just a hash table in memory on a single server:
 
 ```mermaid
 flowchart TD
-    CLIENT["👤 Client"] -->|"get(key) / put(key, val)"| SINGLE["🖥️ Single Server\nHash Table in RAM"]
+    CLIENT["Client"] -->|"get(key) / put(key, val)"| SINGLE["Single Server\nHash Table in RAM"]
     SINGLE -->|"return value"| CLIENT
 
-    subgraph SINGLE_LIMITS["❌ Single Server Limitations"]
+    subgraph SINGLE_LIMITS["✗ Single Server Limitations"]
         L1["Memory capacity: 256 GB max\nThen you're stuck"]
         L2["Single point of failure\nServer dies → data gone"]
         L3["Cannot handle global traffic\nLatency for distant users"]
@@ -98,9 +98,9 @@ Before designing any distributed system, you must understand the **CAP theorem**
 ```mermaid
 graph TD
     subgraph CAP["CAP Theorem — Pick Any Two"]
-        C["🔵 Consistency\n\nAll clients see the\nsame data at the same time,\nno matter which node they hit."]
-        A["🟢 Availability\n\nEvery request gets a response\n— even if some nodes are down.\nNo timeouts. No errors."]
-        P["🟡 Partition Tolerance\n\nThe system keeps working\neven when the network splits\nand nodes can't talk to each other."]
+        C["Consistency\n\nAll clients see the\nsame data at the same time,\nno matter which node they hit."]
+        A["Availability\n\nEvery request gets a response\n— even if some nodes are down.\nNo timeouts. No errors."]
+        P["Partition Tolerance\n\nThe system keeps working\neven when the network splits\nand nodes can't talk to each other."]
 
         C --- CA["CA\nSystems"]
         C --- CP["CP\nSystems"]
@@ -109,6 +109,9 @@ graph TD
         P --- CP
         P --- AP
     end
+    style C fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style A fill:#10B981,stroke:#047857,color:#fff
+    style P fill:#F59E0B,stroke:#B45309,color:#fff
 ```
 
 **The cruel truth:** In any real distributed system, **network partitions are unavoidable**. Cables fail. Data centers lose connectivity. Network switches malfunction. You cannot build a system that pretends partitions don't happen.
@@ -120,7 +123,7 @@ flowchart LR
     subgraph SCENARIO["Network Partition Occurs"]
         N1["Node 1\n(US East)"] 
         N2["Node 2\n(US West)"]
-        N1 -. "❌ partition\ncannot communicate" .- N2
+        N1 -. "✗ partition\ncannot communicate" .- N2
     end
 
     subgraph CP_CHOICE["CP System Choice"]
@@ -155,13 +158,13 @@ Our first core problem: how do we decide which server stores which key?
 graph LR
     subgraph RING["Hash Ring — Data Partitioned Across 4 Nodes"]
         direction LR
-        N0["🖥️ Node 0"]
-        N1["🖥️ Node 1"]
-        N2["🖥️ Node 2"]
-        N3["🖥️ Node 3"]
-        K_USER["🔑 user:1001\nhashes here → Node 1"]
-        K_SESS["🔑 session:abc\nhashes here → Node 2"]
-        K_PROD["🔑 product:42\nhashes here → Node 0"]
+        N0["Node 0"]
+        N1["Node 1"]
+        N2["Node 2"]
+        N3["Node 3"]
+        K_USER["user:1001\nhashes here → Node 1"]
+        K_SESS["session:abc\nhashes here → Node 2"]
+        K_PROD["product:42\nhashes here → Node 0"]
 
         N3 -->|"clockwise"| N0
         N0 -->|"clockwise"| N1
@@ -193,12 +196,7 @@ The solution: **replicate every key on N servers** (where N is a configurable re
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Coord as "Coordinator (Node 0)"
-    participant N1 as "Node 1 (Primary)"
-    participant N2 as "Node 2 (Replica 1)"
-    participant N3 as "Node 3 (Replica 2)"
-
-    Client->>Coord: put("user:1001", "Alice")
+    participant Coord as "Coordinator (Node 0)"participant N1 as "Node 1 (Primary)"participant N2 as "Node 2 (Replica 1)"participant N3 as "Node 3 (Replica 2)"Client->>Coord: put("user:1001", "Alice")
     Note over Coord: Hash key → Node 1 position
     Note over Coord: Walk clockwise for N=3 unique servers
     Coord->>N1: store("user:1001", "Alice")
@@ -207,7 +205,7 @@ sequenceDiagram
     N1-->>Coord: ACK
     N2-->>Coord: ACK
     N3-->>Coord: ACK
-    Coord-->>Client: Write successful ✅
+    Coord-->>Client: Write successful ✓
 
     Note over N1,N3: Data now lives on 3 independent servers
     Note over N1,N3: If N1 crashes, N2 and N3 still have it
@@ -232,20 +230,15 @@ Here's where things get truly interesting. With 3 replicas of every key, how do 
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Coord as "Coordinator"
-    participant S0 as "Server 0"
-    participant S1 as "Server 1"
-    participant S2 as "Server 2"
-
-    Note over Coord,S2: N=3, W=2 (write quorum)
+    participant Coord as "Coordinator"participant S0 as "Server 0"participant S1 as "Server 1"participant S2 as "Server 2"Note over Coord,S2: N=3, W=2 (write quorum)
     Client->>Coord: put(key1, val1)
     Coord->>S0: put(key1, val1)
     Coord->>S1: put(key1, val1)
     Coord->>S2: put(key1, val1)
-    S0-->>Coord: ACK ✅
-    S1-->>Coord: ACK ✅
+    S0-->>Coord: ACK ✓
+    S1-->>Coord: ACK ✓
     Note over Coord: Got W=2 ACKs — write is successful!
-    Coord-->>Client: Write confirmed ✅
+    Coord-->>Client: Write confirmed ✓
     Note over S2: S2 might still be writing... that's OK
 ```
 
@@ -256,9 +249,7 @@ sequenceDiagram
 ```mermaid
 quadrantChart
     title Consistency vs Latency Tradeoffs
-    x-axis "Low Latency" --> "High Latency"
-    y-axis "Eventual Consistency" --> "Strong Consistency"
-    quadrant-1 Strong but slow
+    x-axis "Low Latency" --> "High Latency"y-axis "Eventual Consistency" --> "Strong Consistency"quadrant-1 Strong but slow
     quadrant-2 Strong AND fast - impossible
     quadrant-3 Weak and fast - good for reads
     quadrant-4 Medium tradeoff
@@ -288,20 +279,23 @@ Three levels of consistency exist in the distributed systems world:
 
 ```mermaid
 flowchart TD
-    subgraph STRONG["🔵 Strong Consistency"]
+    subgraph STRONG["Strong Consistency"]
         SC["Any read always returns\nthe most recently written value.\n\nA client NEVER sees stale data.\n\nAchieved by: blocking new reads/writes\nuntil ALL replicas agree.\n\nCost: High latency. Bad for availability.\nExample: HBase, Zookeeper"]
     end
 
-    subgraph EVENTUAL["🟢 Eventual Consistency"]
+    subgraph EVENTUAL["Eventual Consistency"]
         EC["Given enough time,\nall replicas will converge\nto the same value.\n\nIn the short term, different\nreplicas may have different values.\n\nCost: Client must handle conflicts.\nExample: DynamoDB, Cassandra, DNS, Amazon S3"]
     end
 
-    subgraph WEAK["🟡 Weak Consistency"]
+    subgraph WEAK["Weak Consistency"]
         WC["After a write, reads\nMAY NOT see the new value.\nBest-effort only.\n\nExample: Real-time video calls\n(stale frame is OK, better than rebuffering)\nMemcached in some configs"]
     end
 
     STRONG -->|"relax guarantee"| EVENTUAL
     EVENTUAL -->|"relax further"| WEAK
+    style STRONG fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style EVENTUAL fill:#10B981,stroke:#047857,color:#fff
+    style WEAK fill:#F59E0B,stroke:#B45309,color:#fff
 ```
 
 For our key-value store, we recommend **eventual consistency** — the same choice made by Dynamo and Cassandra. Here's the reasoning:
@@ -320,16 +314,7 @@ With eventual consistency, here's the nightmare scenario: two clients update the
 
 ```mermaid
 sequenceDiagram
-    participant Client1 as "Client 1"
-    participant Client2 as "Client 2"
-    participant N1 as "Node n1"
-    participant N2 as "Node n2"
-
-    Note over N1,N2: Initial state — name: "john"
-    Client1->>N1: get("name") → "john"
-    Client2->>N2: get("name") → "john"
-
-    Note over Client1,Client2: Both read "john". Now both update simultaneously.
+    participant Client1 as "Client 1"participant Client2 as "Client 2"participant N1 as "Node n1"participant N2 as "Node n2"Note over N1,N2: Initial state — name: "john"Client1->>N1: get("name") → "john"Client2->>N2: get("name") → "john"Note over Client1,Client2: Both read "john". Now both update simultaneously.
 
     Client1->>N1: put("name", "johnSanFrancisco")
     Client2->>N2: put("name", "johnNewYork")
@@ -364,7 +349,7 @@ flowchart TD
 
     D3["D3([Sx, 2], [Sy, 1])\n\nClient A updates to 'Alice Chen-SF'\nHandled by Sy this time\nSy adds: [Sy, 1]\nSx entry unchanged"]
 
-    D4["D4([Sx, 2], [Sz, 1])\n\nClient B ALSO updates from D2\nto 'Alice Chen-NY'\nHandled by Sz\n⚠️ CONFLICT with D3!"]
+    D4["D4([Sx, 2], [Sz, 1])\n\nClient B ALSO updates from D2\nto 'Alice Chen-NY'\nHandled by Sz\n CONFLICT with D3!"]
 
     D5["D5([Sx, 3], [Sy, 1], [Sz, 1])\n\nClient detects conflict\nReconciles D3 and D4\nWrites final value via Sx\nSx increments to 3"]
 
@@ -404,21 +389,10 @@ In a distributed system, you can't trust a single node's report that another nod
 
 ```mermaid
 sequenceDiagram
-    participant S0 as "Server 0"
-    participant S1 as "Server 1"
-    participant S2 as "Server 2 (suspect)"
-    participant S3 as "Server 3"
-
-    Note over S0,S3: Each server keeps a membership table
+    participant S0 as "Server 0"participant S1 as "Server 1"participant S2 as "Server 2 (suspect)"participant S3 as "Server 3"Note over S0,S3: Each server keeps a membership table
     Note over S0: S0's table shows S2's heartbeat stuck at 12:00 old
 
-    S0->>S1: Gossip: "S2 heartbeat hasn't moved!"
-    S0->>S3: Gossip: "S2 heartbeat hasn't moved!"
-
-    S1->>S3: Gossip: "S0 says S2 looks dead"
-    S3->>S1: Confirm: "I also haven't heard S2 heartbeat"
-
-    Note over S0,S3: Multiple nodes confirm S2 is silent
+    S0->>S1: Gossip: "S2 heartbeat hasn't moved!"S0->>S3: Gossip: "S2 heartbeat hasn't moved!"S1->>S3: Gossip: "S0 says S2 looks dead"S3->>S1: Confirm: "I also haven't heard S2 heartbeat"Note over S0,S3: Multiple nodes confirm S2 is silent
     S0->>S0: Mark S2 as OFFLINE
     S1->>S1: Mark S2 as OFFLINE
     S3->>S3: Mark S2 as OFFLINE
@@ -457,26 +431,18 @@ Imagine server S2 goes offline temporarily. With strict quorum (W=2, N=3), write
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Coord as "Coordinator"
-    participant S0 as "Server 0 ✅"
-    participant S1 as "Server 1 ✅"
-    participant S2 as "Server 2 ❌ offline"
-    participant S3 as "Server 3 ✅ (substitute)"
-
-    Client->>Coord: put(key1, val1)
+    participant Coord as "Coordinator"participant S0 as "Server 0 ✓"participant S1 as "Server 1 ✓"participant S2 as "Server 2 ✗ offline"participant S3 as "Server 3 ✓ (substitute)"Client->>Coord: put(key1, val1)
     Note over Coord: Normal replicas: S0, S1, S2
     Note over Coord: S2 is offline! Use sloppy quorum.
     Coord->>S0: put(key1, val1) — normal replica
     Coord->>S1: put(key1, val1) — normal replica
     Coord->>S3: put(key1, val1) — temporary substitute for S2
-    S0-->>Coord: ACK ✅
-    S1-->>Coord: ACK ✅
-    S3-->>Coord: ACK ✅ (hints: this belongs to S2)
-    Coord-->>Client: Write successful ✅
+    S0-->>Coord: ACK ✓
+    S1-->>Coord: ACK ✓
+    S3-->>Coord: ACK ✓ (hints: this belongs to S2)
+    Coord-->>Client: Write successful ✓
 
-    Note over S3: S3 stores a hint: "this data belongs to S2"
-
-    Note over S2: Later — S2 comes back online!
+    Note over S3: S3 stores a hint: "this data belongs to S2"Note over S2: Later — S2 comes back online!
     S3->>S2: Hinted handoff — send S2's data back
     S2-->>S3: Received, thanks
     S3->>S3: Delete the hint copy
@@ -591,10 +557,10 @@ graph LR
     EU_N <-->|"async replication"| AP_N
     AP_N <-->|"async replication"| US_N
 
-    OUTAGE["⚡ US East goes dark\n(power failure)"]
+    OUTAGE["US East goes dark\n(power failure)"]
     US_N -. "offline" .- OUTAGE
 
-    RESULT["✅ EU West and AP take over\nUsers experience zero downtime\nData is safe on 2 other continents"]
+    RESULT["✓ EU West and AP take over\nUsers experience zero downtime\nData is safe on 2 other continents"]
     EU_N & AP_N -->|"continue serving traffic"| RESULT
 ```
 
@@ -608,17 +574,17 @@ Now let's look at the complete architecture. The beautiful thing about our desig
 
 ```mermaid
 graph TD
-    CLIENT["👤 Client\n\nSends get(key) and put(key, val)\nvia simple API"] 
+    CLIENT["Client\n\nSends get(key) and put(key, val)\nvia simple API"] 
 
     subgraph RING["Distributed Node Ring — Consistent Hashing"]
-        COORD["🟢 Node 6\n(Coordinator)\n\nActs as proxy between\nclient and cluster.\nAny node can be coordinator."]
+        COORD["Node 6\n(Coordinator)\n\nActs as proxy between\nclient and cluster.\nAny node can be coordinator."]
         N0["Node 0"]
-        N1["🟡 Node 1\n(replica)"]
-        N2["🟡 Node 2\n(replica)"]
+        N1["Node 1\n(replica)"]
+        N2["Node 2\n(replica)"]
         N3["Node 3"]
         N4["Node 4"]
         N5["Node 5"]
-        N7["🟡 Node 7\n(replica)"]
+        N7["Node 7\n(replica)"]
 
         COORD --> N0 --> N7 --> COORD
         N0 --> N1 --> N2 --> N3 --> N4 --> N5 --> COORD
@@ -627,13 +593,17 @@ graph TD
     CLIENT -->|"read / write request"| COORD
     COORD -->|"replicate to n0, n1, n2"| N0 & N1 & N2
     COORD -->|"response"| CLIENT
+    style COORD fill:#10B981,stroke:#047857,color:#fff
+    style N1 fill:#F59E0B,stroke:#B45309,color:#fff
+    style N2 fill:#F59E0B,stroke:#B45309,color:#fff
+    style N7 fill:#F59E0B,stroke:#B45309,color:#fff
 ```
 
 **Every node is responsible for:**
 
 ```mermaid
 graph TD
-    subgraph NODE["🖥️ Every Node in the Cluster"]
+    subgraph NODE["Every Node in the Cluster"]
         direction LR
         API["Client API\nget / put"]
         FD["Failure Detection\nGossip protocol"]
@@ -657,12 +627,7 @@ When a client writes `put("user:1001", "Alice Chen")`, what happens inside the n
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Node as "Node (Coordinator)"
-    participant CommitLog as "💾 Commit Log (disk)"
-    participant MemCache as "🟢 Memory Cache (MemTable)"
-    participant SSTable as "📦 SSTable Files (disk)"
-
-    Client->>Node: put("user:1001", "Alice Chen")
+    participant Node as "Node (Coordinator)"participant CommitLog as "Commit Log (disk)"participant MemCache as "Memory Cache (MemTable)"participant SSTable as "SSTable Files (disk)"Client->>Node: put("user:1001", "Alice Chen")
 
     Node->>CommitLog: ① Write to commit log first!
     CommitLog-->>Node: written to disk (durable)
@@ -670,7 +635,7 @@ sequenceDiagram
     Node->>MemCache: ② Write to memory cache
     MemCache-->>Node: stored in RAM (fast)
 
-    Node-->>Client: ✅ Write acknowledged
+    Node-->>Client: ✓ Write acknowledged
 
     Note over MemCache,SSTable: Background: when MemTable is full...
     MemCache->>SSTable: ③ Flush to SSTable on disk
@@ -691,11 +656,11 @@ Reading involves checking multiple layers, from fastest (memory) to slowest (dis
 
 ```mermaid
 flowchart TD
-    CLIENT["👤 Client: get('user:1001')"]
+    CLIENT["Client: get('user:1001')"]
 
     STEP1["① Check Memory Cache\n(MemTable — microseconds)"]
-    HIT["✅ Cache hit!\nReturn value immediately"]
-    MISS["❌ Not in memory\nGo to disk"]
+    HIT["✓ Cache hit!\nReturn value immediately"]
+    MISS["✗ Not in memory\nGo to disk"]
 
     STEP2["② Check Bloom Filter\n(a probabilistic filter that\ntells us which SSTables\nMIGHT contain this key)"]
     BLOOM_NO["Bloom filter says: definitely NOT in this SSTable\nSkip it — save disk reads"]
@@ -754,7 +719,7 @@ Every technique connects to every other. This is not a collection of independent
 
 ```mermaid
 graph TD
-    subgraph DYNAMO["☁️ Amazon DynamoDB"]
+    subgraph DYNAMO["Amazon DynamoDB"]
         D1["AP system — availability first"]
         D2["Consistent hashing with virtual nodes"]
         D3["N=3 replication across 3 AZs"]
@@ -765,7 +730,7 @@ graph TD
         D1 --- D2 --- D3 --- D4 --- D5 --- D6 --- D7
     end
 
-    subgraph CASSANDRA["🔵 Apache Cassandra"]
+    subgraph CASSANDRA["Apache Cassandra"]
         C1["AP system — tunable to CP"]
         C2["Token ring with vnodes (256 default)"]
         C3["Configurable replication factor"]
@@ -776,7 +741,7 @@ graph TD
         C1 --- C2 --- C3 --- C4 --- C5 --- C6 --- C7
     end
 
-    subgraph BIGTABLE["🟡 Google Bigtable"]
+    subgraph BIGTABLE["Google Bigtable"]
         B1["CP system — consistency first"]
         B2["Range-based partitioning (tablets)"]
         B3["Strong consistency via Chubby lock service"]
@@ -784,6 +749,8 @@ graph TD
         B5["No eventual consistency — always consistent"]
         B1 --- B2 --- B3 --- B4 --- B5
     end
+    style CASSANDRA fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style BIGTABLE fill:#F59E0B,stroke:#B45309,color:#fff
 ```
 
 ---

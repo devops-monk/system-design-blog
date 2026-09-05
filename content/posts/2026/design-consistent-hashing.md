@@ -49,13 +49,13 @@ This works beautifully when `N` is fixed. Each server gets about 2 keys each. Ba
 ```mermaid
 graph TD
     subgraph CLUSTER["4-Server Cache Cluster (N=4)"]
-        S0["🖥️ Server 0\nkey1, key3"]
-        S1["🖥️ Server 1\nkey0, key4"]
-        S2["🖥️ Server 2\nkey2, key6"]
-        S3["🖥️ Server 3\nkey5, key7"]
+        S0["Server 0\nkey1, key3"]
+        S1["Server 1\nkey0, key4"]
+        S2["Server 2\nkey2, key6"]
+        S3["Server 3\nkey5, key7"]
     end
 
-    CLIENT["👤 Client\nhash(key) % 4"] --> S0 & S1 & S2 & S3
+    CLIENT["Client\nhash(key) % 4"] --> S0 & S1 & S2 & S3
 ```
 
 ### The Catastrophe: What Happens When N Changes
@@ -90,11 +90,11 @@ flowchart LR
         A0["Server 0: key0, key1, key5, key7"]
         A1["Server 1: key2, key4, key6"]
         A2["Server 2: key3"]
-        A3["❌ Server 1: gone"]
+        A3["✗ Server 1: gone"]
     end
 
     subgraph IMPACT["Impact"]
-        NOTE["😱 7 of 8 keys remapped to new servers\nEvery remapped key = cache miss\nEvery cache miss = database query\nDatabase overloaded instantly!"]
+        NOTE["7 of 8 keys remapped to new servers\nEvery remapped key = cache miss\nEvery cache miss = database query\nDatabase overloaded instantly!"]
     end
 
     BEFORE -->|"N changes from 4 to 3"| AFTER
@@ -158,16 +158,20 @@ We apply the same hash function to each server's IP address or name. Each server
 ```mermaid
 graph LR
     subgraph RING["Hash Ring — 4 Servers Placed"]
-        S0["🟣 Server 0\n(hashed IP)"]
-        S1["🔵 Server 1\n(hashed IP)"]
-        S2["🟠 Server 2\n(hashed IP)"]
-        S3["🟢 Server 3\n(hashed IP)"]
+        S0["Server 0\n(hashed IP)"]
+        S1["Server 1\n(hashed IP)"]
+        S2["Server 2\n(hashed IP)"]
+        S3["Server 3\n(hashed IP)"]
 
         S0 -->|"clockwise →"| S1
         S1 -->|"clockwise →"| S2
         S2 -->|"clockwise →"| S3
         S3 -->|"clockwise →\n(wraps around)"| S0
     end
+    style S0 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style S1 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style S2 fill:#F97316,stroke:#C2410C,color:#fff
+    style S3 fill:#10B981,stroke:#047857,color:#fff
 ```
 
 ### Step 4: Place Keys on the Ring Too
@@ -178,14 +182,14 @@ We hash each data key with the exact same hash function. The key lands at some p
 graph LR
     subgraph RING["Hash Ring — Servers + Keys"]
         direction LR
-        K0["⭕ key0\n(top)"]
-        S0["🟣 Server 0"]
-        K1["⭕ key1"]
-        S1["🔵 Server 1"]
-        K2["⭕ key2\n(bottom)"]
-        S2["🟠 Server 2"]
-        K3["⭕ key3\n(left)"]
-        S3["🟢 Server 3"]
+        K0["key0\n(top)"]
+        S0["Server 0"]
+        K1["key1"]
+        S1["Server 1"]
+        K2["key2\n(bottom)"]
+        S2["Server 2"]
+        K3["key3\n(left)"]
+        S3["Server 3"]
 
         K0 --> S0
         S0 --> K1
@@ -196,6 +200,14 @@ graph LR
         K3 --> S3
         S3 -->|wraps| K0
     end
+    style S0 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style S1 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style S2 fill:#F97316,stroke:#C2410C,color:#fff
+    style S3 fill:#10B981,stroke:#047857,color:#fff
+    style K0 fill:#64748B,stroke:#475569,color:#fff
+    style K1 fill:#64748B,stroke:#475569,color:#fff
+    style K2 fill:#64748B,stroke:#475569,color:#fff
+    style K3 fill:#64748B,stroke:#475569,color:#fff
 ```
 
 ### Step 5: The Lookup Rule — Go Clockwise
@@ -205,8 +217,7 @@ To find which server a key belongs to: **start at the key's position on the ring
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Ring as "Hash Ring"
-    participant Result
+    participant Ring as "Hash Ring"participant Result
 
     Note over Ring: Servers at positions: S0(top-right), S1(right), S2(bottom), S3(left)
     Note over Ring: Keys at positions: k0(top), k1(right-ish), k2(bottom-ish), k3(left-ish)
@@ -215,25 +226,25 @@ sequenceDiagram
     Ring->>Ring: Hash key0 → lands at top
     Ring->>Ring: Walk clockwise from top...
     Ring->>Ring: First server hit: Server 0
-    Ring-->>Result: key0 → Server 0 ✅
+    Ring-->>Result: key0 → Server 0 ✓
 
     Client->>Ring: Where does key1 go?
     Ring->>Ring: Hash key1 → lands between S0 and S1
     Ring->>Ring: Walk clockwise...
     Ring->>Ring: First server hit: Server 1
-    Ring-->>Result: key1 → Server 1 ✅
+    Ring-->>Result: key1 → Server 1 ✓
 
     Client->>Ring: Where does key2 go?
     Ring->>Ring: Hash key2 → lands between S1 and S2
     Ring->>Ring: Walk clockwise...
     Ring->>Ring: First server hit: Server 2
-    Ring-->>Result: key2 → Server 2 ✅
+    Ring-->>Result: key2 → Server 2 ✓
 
     Client->>Ring: Where does key3 go?
     Ring->>Ring: Hash key3 → lands between S2 and S3
     Ring->>Ring: Walk clockwise...
     Ring->>Ring: First server hit: Server 3
-    Ring-->>Result: key3 → Server 3 ✅
+    Ring-->>Result: key3 → Server 3 ✓
 ```
 
 Simple rule: **clockwise to the nearest server.**
@@ -252,24 +263,31 @@ Let's say we add **Server 4** to the ring. It lands between Server 3 and Server 
 flowchart TD
     subgraph BEFORE["Before: Adding Server 4"]
         direction LR
-        bS3["🟢 Server 3"]
-        bS0["🟣 Server 0"]
-        bK0["⭕ key0\n(was going to Server 0)"]
+        bS3["Server 3"]
+        bS0["Server 0"]
+        bK0["key0\n(was going to Server 0)"]
         bS3 -->|clockwise| bK0 -->|clockwise| bS0
     end
 
     subgraph AFTER["After: Server 4 Added Between S3 and S0"]
         direction LR
-        aS3["🟢 Server 3"]
-        aS4["🟡 Server 4 ← NEW"]
-        aS0["🟣 Server 0"]
-        aK0["⭕ key0\n(now goes to Server 4!)"]
+        aS3["Server 3"]
+        aS4["Server 4 ← NEW"]
+        aS0["Server 0"]
+        aK0["key0\n(now goes to Server 4!)"]
         aS3 -->|clockwise| aK0 -->|clockwise| aS4 -->|clockwise| aS0
     end
 
     BEFORE -->|"Server 4 joins"| AFTER
 
-    RESULT["✅ Only key0 moved!\nkey1, key2, key3 stay on their original servers.\nAll other keys: zero disruption."]
+    RESULT["✓ Only key0 moved!\nkey1, key2, key3 stay on their original servers.\nAll other keys: zero disruption."]
+    style bS0 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style aS0 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style bS3 fill:#10B981,stroke:#047857,color:#fff
+    style aS3 fill:#10B981,stroke:#047857,color:#fff
+    style aS4 fill:#F59E0B,stroke:#B45309,color:#fff
+    style bK0 fill:#64748B,stroke:#475569,color:#fff
+    style aK0 fill:#64748B,stroke:#475569,color:#fff
 ```
 
 **Only key0 is affected** — because Server 4 inserted itself between Server 3 and Server 0, intercepting only the keys that were previously in that arc.
@@ -287,25 +305,32 @@ Now let's remove **Server 1** from the ring.
 flowchart LR
     subgraph BEFORE["Before: Server 1 exists"]
         direction TB
-        bS0["🟣 Server 0"]
-        bS1["🔵 Server 1\n(owns key1)"]
-        bS2["🟠 Server 2"]
-        bK1["⭕ key1"]
+        bS0["Server 0"]
+        bS1["Server 1\n(owns key1)"]
+        bS2["Server 2"]
+        bK1["key1"]
         bS0 --> bK1 --> bS1 --> bS2
     end
 
     subgraph AFTER["After: Server 1 removed"]
         direction TB
-        aS0["🟣 Server 0"]
-        aS1["❌ Server 1\n(gone)"]
-        aS2["🟠 Server 2\n(now owns key1)"]
-        aK1["⭕ key1\n(moved here)"]
+        aS0["Server 0"]
+        aS1["✗ Server 1\n(gone)"]
+        aS2["Server 2\n(now owns key1)"]
+        aK1["key1\n(moved here)"]
         aS0 --> aK1 --> aS2
     end
 
     BEFORE -->|"Server 1 crashes"| AFTER
 
-    RESULT["✅ Only key1 moved to Server 2!\nkey0, key2, key3 completely unaffected."]
+    RESULT["✓ Only key1 moved to Server 2!\nkey0, key2, key3 completely unaffected."]
+    style bS0 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style aS0 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style bS1 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style bS2 fill:#F97316,stroke:#C2410C,color:#fff
+    style aS2 fill:#F97316,stroke:#C2410C,color:#fff
+    style bK1 fill:#64748B,stroke:#475569,color:#fff
+    style aK1 fill:#64748B,stroke:#475569,color:#fff
 ```
 
 **Only key1 is affected.** Since Server 1 is gone, key1 now walks clockwise and lands on Server 2 instead. Every other key was never in Server 1's arc — they're untouched.
@@ -328,16 +353,19 @@ But in practice, because server positions are determined by hashing their IP add
 graph LR
     subgraph UNEQUAL["After Server 1 is removed — Unequal Partitions"]
         direction LR
-        S0["🟣 Server 0\nlarge partition"]
-        S2["🟠 Server 2\nsmall partition"]
-        S3["🟢 Server 3\nmedium partition"]
-        WARN["⚠️ Server 0 handles far more traffic\nthan Server 2 or Server 3.\nLoad imbalance!"]
+        S0["Server 0\nlarge partition"]
+        S2["Server 2\nsmall partition"]
+        S3["Server 3\nmedium partition"]
+        WARN["Server 0 handles far more traffic\nthan Server 2 or Server 3.\nLoad imbalance!"]
         
         S0 -->|"Large arc — was S0 to S1 to S2"| S2
         S2 -->|"Small arc"| S3
         S3 -->|"Medium arc — wraps to S0"| S0
         S0 --- WARN
     end
+    style S0 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style S2 fill:#F97316,stroke:#C2410C,color:#fff
+    style S3 fill:#10B981,stroke:#047857,color:#fff
 ```
 
 When Server 1 is removed, Server 2's partition grows to include Server 1's old arc. Server 0's partition is now twice as large as Server 3's. Server 2's partition is tiny. **Unbalanced load, hot servers, slow responses.**
@@ -349,11 +377,11 @@ Even without removing servers, if servers happen to hash to positions that are c
 ```mermaid
 graph LR
     subgraph CLUSTERED["Servers Clustered Together — Key Distribution Skewed"]
-        S0["🟣 Server 0"]
-        S1["🔵 Server 1"]
-        S2["🟠 Server 2\nhugest partition — most keys land here"]
-        S3["🟢 Server 3"]
-        WARN["⚠️ Server 2 handles 70% of keys\nServer 1 handles only 5%\nMassively unbalanced system!"]
+        S0["Server 0"]
+        S1["Server 1"]
+        S2["Server 2\nhugest partition — most keys land here"]
+        S3["Server 3"]
+        WARN["Server 2 handles 70% of keys\nServer 1 handles only 5%\nMassively unbalanced system!"]
 
         S3 -->|"tiny arc"| S0
         S0 -->|"tiny arc"| S1
@@ -361,6 +389,10 @@ graph LR
         S2 -->|"HUGE arc"| S3
         S2 --- WARN
     end
+    style S0 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style S1 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style S2 fill:#F97316,stroke:#C2410C,color:#fff
+    style S3 fill:#10B981,stroke:#047857,color:#fff
 ```
 
 The book gives a real, relatable example:
@@ -387,23 +419,31 @@ Instead of mapping `server0` to one position, we create multiple virtual nodes:
 graph LR
     subgraph VNODE_RING["Hash Ring with Virtual Nodes (3 vnodes each)"]
         direction LR
-        S1_0["🔵 s1_0"]
-        S0_0["🟣 s0_0"]
-        S1_1["🔵 s1_1"]
-        S0_1["🟣 s0_1"]
-        S1_2["🔵 s1_2"]
-        S0_2["🟣 s0_2"]
+        S1_0["s1_0"]
+        S0_0["s0_0"]
+        S1_1["s1_1"]
+        S0_1["s0_1"]
+        S1_2["s1_2"]
+        S0_2["s0_2"]
 
         S1_0 -->|cw| S0_0 -->|cw| S1_1 -->|cw| S0_1 -->|cw| S1_2 -->|cw| S0_2 -->|cw| S1_0
     end
 
     subgraph PHYSICAL["Physical Servers"]
-        P0["🟣 Server 0\n(owns all s0_* nodes)"]
-        P1["🔵 Server 1\n(owns all s1_* nodes)"]
+        P0["Server 0\n(owns all s0_* nodes)"]
+        P1["Server 1\n(owns all s1_* nodes)"]
     end
 
     S0_0 & S0_1 & S0_2 -.->|"all route to"| P0
     S1_0 & S1_1 & S1_2 -.->|"all route to"| P1
+    style S0_0 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style S0_1 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style S0_2 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style P0 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style S1_0 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style S1_1 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style S1_2 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style P1 fill:#3B82F6,stroke:#1D4ED8,color:#fff
 ```
 
 **The lookup still works the same way:** go clockwise from the key, find the first virtual node, then map that virtual node to its physical server.
@@ -412,14 +452,14 @@ graph LR
 
 ```mermaid
 graph TD
-    subgraph BALANCED["✅ Virtual Nodes = Balanced Distribution"]
+    subgraph BALANCED["✓ Virtual Nodes = Balanced Distribution"]
         direction LR
         A["Ring with 3 vnodes per server\n\nServer 0 scattered at: 12°, 132°, 252°\nServer 1 scattered at: 60°, 180°, 300°\n\nResult: alternating, evenly spaced"]
         B["Each server owns\n~3 non-contiguous arcs\n\nTotal arc per server ≈ equal\nLoad is balanced!"]
         A --> B
     end
 
-    subgraph HOTSPOT["✅ Hotspot Problem Solved"]
+    subgraph HOTSPOT["✓ Hotspot Problem Solved"]
         direction LR
         C["Celebrity users hash to\ndifferent positions"]
         D["With many vnodes, they land on\ndifferent physical servers\n\nKaty Perry → Server 2\nJustin Bieber → Server 0\nLady Gaga → Server 3"]
@@ -448,10 +488,10 @@ Virtual nodes give you a powerful bonus: you can allocate proportionally based o
 graph TD
     subgraph HETERO["Heterogeneous Cluster — Proportional Virtual Nodes"]
         direction LR
-        STRONG["💪 Strong Server\n32 cores / 256GB RAM\n300 virtual nodes\nhandles 3x traffic"]
-        MEDIUM["🖥️ Medium Server\n16 cores / 128GB RAM\n150 virtual nodes\nhandles 1.5x traffic"]
-        WEAK["📟 Weak Server\n8 cores / 32GB RAM\n50 virtual nodes\nhandles baseline traffic"]
-        RULE["✅ No special routing logic.\nMore virtual nodes on ring\n= more keys assigned\n= proportional load automatically."]
+        STRONG["Strong Server\n32 cores / 256GB RAM\n300 virtual nodes\nhandles 3x traffic"]
+        MEDIUM["Medium Server\n16 cores / 128GB RAM\n150 virtual nodes\nhandles 1.5x traffic"]
+        WEAK["Weak Server\n8 cores / 32GB RAM\n50 virtual nodes\nhandles baseline traffic"]
+        RULE["✓ No special routing logic.\nMore virtual nodes on ring\n= more keys assigned\n= proportional load automatically."]
         STRONG --- MEDIUM --- WEAK --- RULE
     end
 ```
@@ -470,12 +510,7 @@ To find which keys move to the new server, start at the **new server's position*
 
 ```mermaid
 sequenceDiagram
-    participant Admin as "👤 Admin"
-    participant Ring as "Hash Ring"
-    participant S3 as "Server 3 (previous owner)"
-    participant S4 as "Server 4 (new)"
-
-    Admin->>Ring: Add Server 4 between S3 and S0
+    participant Admin as "Admin"participant Ring as "Hash Ring"participant S3 as "Server 3 (previous owner)"participant S4 as "Server 4 (new)"Admin->>Ring: Add Server 4 between S3 and S0
     Ring->>Ring: Server 4 lands at position P4
     Ring->>Ring: Scan anticlockwise from P4...
     Ring->>Ring: Hit Server 3 at position P3
@@ -484,7 +519,7 @@ sequenceDiagram
     Note over S3,S4: S3 transfers keys in that arc to S4
     S3->>S4: Transfer key0, key_a, key_b (in the arc)
 
-    Note over Ring: All other keys untouched ✅
+    Note over Ring: All other keys untouched ✓
 ```
 
 ### When a Server is Removed
@@ -493,19 +528,14 @@ When a server fails, start at the **removed server's position** and scan **antic
 
 ```mermaid
 sequenceDiagram
-    participant Ring as "Hash Ring"
-    participant S0 as "Server 0"
-    participant S1 as "Server 1 (failing)"
-    participant S2 as "Server 2 (inheritor)"
-
-    Note over S1: Server 1 goes down!
+    participant Ring as "Hash Ring"participant S0 as "Server 0"participant S1 as "Server 1 (failing)"participant S2 as "Server 2 (inheritor)"Note over S1: Server 1 goes down!
     Ring->>Ring: Scan anticlockwise from S1's position...
     Ring->>Ring: Hit Server 0 at position P0
     Ring-->>S2: Keys in arc [P0 → P1] must move to Server 2
 
     Note over S1,S2: S1's data must be read from replicas
     S2->>S2: Now owns key1 (and others in the arc)
-    Note over Ring: key0, key2, key3 completely unaffected ✅
+    Note over Ring: key0, key2, key3 completely unaffected ✓
 ```
 
 This is beautiful in its simplicity: **only the adjacent arc is ever affected**. The rest of the ring is immune.
@@ -523,17 +553,22 @@ The replication strategy is elegant:
 ```mermaid
 graph LR
     subgraph REPLICATION["Replication Factor N=3"]
-        K0["⭕ key0\n(hashed position)"]
-        S0["🟤 Server 0"]
-        S1["🟢 Server 1 ← 1st replica"]
-        S2["🔵 Server 2 ← 2nd replica"]
-        S3["🟣 Server 3 ← 3rd replica"]
-        S4["🟠 Server 4"]
+        K0["key0\n(hashed position)"]
+        S0["Server 0"]
+        S1["Server 1 ← 1st replica"]
+        S2["Server 2 ← 2nd replica"]
+        S3["Server 3 ← 3rd replica"]
+        S4["Server 4"]
 
         K0 -->|"walk clockwise"| S0 -->|"skip same-physical"| S1 -->|"replica 1"| S2 -->|"replica 2"| S3
-        STORED["✅ key0 stored on Server 1, Server 2, Server 3\nIf Server 1 goes down, Server 2 and 3 still have the data!"]
+        STORED["✓ key0 stored on Server 1, Server 2, Server 3\nIf Server 1 goes down, Server 2 and 3 still have the data!"]
         S3 --- STORED
     end
+    style S3 fill:#8B5CF6,stroke:#6D28D9,color:#fff
+    style S2 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style S4 fill:#F97316,stroke:#C2410C,color:#fff
+    style S1 fill:#10B981,stroke:#047857,color:#fff
+    style K0 fill:#64748B,stroke:#475569,color:#fff
 ```
 
 **Important:** With virtual nodes, you must skip virtual nodes that belong to the same physical server. If `s1_0` and `s1_1` are both for Server 1, you skip the second one — otherwise the same physical machine stores two "replicas," which defeats the purpose.
@@ -586,20 +621,12 @@ When a new node joins a Cassandra cluster, here's what happens:
 
 ```mermaid
 sequenceDiagram
-    participant Admin as "👤 Admin"
-    participant NewNode as "🆕 New Cassandra Node"
-    participant Ring as "Token Ring"
-    participant OldNode as "📦 Old Node (neighbour)"
-    participant Client as "👤 Client"
-
-    Admin->>NewNode: Join cluster
+    participant Admin as "Admin"participant NewNode as "🆕 New Cassandra Node"participant Ring as "Token Ring"participant OldNode as "Old Node (neighbour)"participant Client as "Client"Admin->>NewNode: Join cluster
     NewNode->>Ring: Generate 256 virtual node positions
     Ring->>Ring: Insert all 256 tokens into ring
-    Ring->>OldNode: "These key ranges now belong to NewNode"
-    OldNode->>NewNode: Stream only the affected data
+    Ring->>OldNode: "These key ranges now belong to NewNode"OldNode->>NewNode: Stream only the affected data
     Note over OldNode,NewNode: Only ~1/N of data moves\nN = total nodes in cluster
-    NewNode-->>Ring: "Ready to serve traffic"
-    Client->>NewNode: Can now route requests here ✅
+    NewNode-->>Ring: "Ready to serve traffic"Client->>NewNode: Can now route requests here ✓
 
     Note over Ring: Zero downtime, zero reconfiguration\nCluster just got bigger seamlessly
 ```
@@ -616,9 +643,8 @@ Imagine 3 darts thrown randomly at a circular dartboard. You'll likely get a lum
 
 ```mermaid
 xychart-beta
-    title "Load Imbalance vs Number of Virtual Nodes"
-    x-axis ["1 vnode", "10 vnodes", "50 vnodes", "100 vnodes", "200 vnodes", "500 vnodes"]
-    y-axis "Standard Deviation of Load (%)" 0 --> 45
+    title "Load Imbalance vs Number of Virtual Nodes"x-axis ["1 vnode", "10 vnodes", "50 vnodes", "100 vnodes", "200 vnodes", "500 vnodes"]
+    y-axis "Standard Deviation of Load (%)"0 --> 45
     line [42, 28, 16, 10, 5, 2]
 ```
 
@@ -634,21 +660,21 @@ How does consistent hashing compare to other ways of routing keys to servers?
 
 ```mermaid
 graph TD
-    subgraph NAIVE["❌ Naive Modular Hashing\nhash(key) % N"]
+    subgraph NAIVE["✗ Naive Modular Hashing\nhash(key) % N"]
         N1["Pro: Dead simple to implement"]
         N2["Con: N changes → most keys remap"]
         N3["Con: Requires downtime to rescale"]
         N4["Con: Cache miss storm on any resize"]
     end
 
-    subgraph RANGE["🟡 Range-Based Partitioning\nA-M → Server 1, N-Z → Server 2"]
+    subgraph RANGE["Range-Based Partitioning\nA-M → Server 1, N-Z → Server 2"]
         R1["Pro: Easy to reason about"]
         R2["Con: Hotspots if keys aren't uniform"]
         R3["Con: Manual rebalancing required"]
         R4["Used by: HBase, MongoDB (early)"]
     end
 
-    subgraph CONSISTENT["✅ Consistent Hashing"]
+    subgraph CONSISTENT["✓ Consistent Hashing"]
         C1["Pro: Only k/n keys move on resize"]
         C2["Pro: Automatic load balancing via vnodes"]
         C3["Pro: Proportional capacity via vnode count"]
@@ -658,6 +684,7 @@ graph TD
 
     NAIVE --> CONSISTENT
     RANGE --> CONSISTENT
+    style RANGE fill:#F59E0B,stroke:#B45309,color:#fff
 ```
 
 ---
@@ -668,24 +695,24 @@ Let's bring it all together. Why is consistent hashing so important?
 
 ```mermaid
 graph LR
-    CH["⭕ Consistent\nHashing"]
+    CH["Consistent\nHashing"]
 
-    CH --> B1["🔄 Minimal Key Redistribution\n\nOnly k/n keys move when\na server joins or leaves.\nWith 100 servers, adding 1\nmoves only 1% of keys."]
+    CH --> B1["Minimal Key Redistribution\n\nOnly k/n keys move when\na server joins or leaves.\nWith 100 servers, adding 1\nmoves only 1% of keys."]
 
-    CH --> B2["⚖️ Horizontal Scaling\n\nAdd servers at any time\nwithout downtime or\nmanual data migration.\nThe ring self-balances."]
+    CH --> B2["Horizontal Scaling\n\nAdd servers at any time\nwithout downtime or\nmanual data migration.\nThe ring self-balances."]
 
-    CH --> B3["🌡️ Hotspot Mitigation\n\nVirtual nodes spread\npopular keys across\nmany physical servers.\nNo more celebrity data\noverloading one shard."]
+    CH --> B3["Hotspot Mitigation\n\nVirtual nodes spread\npopular keys across\nmany physical servers.\nNo more celebrity data\noverloading one shard."]
 
-    CH --> B4["📊 Heterogeneous Clusters\n\nPowerful servers get more\nvirtual nodes and serve\nmore traffic naturally.\nNo custom routing code."]
+    CH --> B4["Heterogeneous Clusters\n\nPowerful servers get more\nvirtual nodes and serve\nmore traffic naturally.\nNo custom routing code."]
 
-    CH --> B5["🔁 Automatic Replication\n\nN-replica replication\nfollows the same ring.\nFailure recovery is\nautomatically bounded."]
+    CH --> B5["Automatic Replication\n\nN-replica replication\nfollows the same ring.\nFailure recovery is\nautomatically bounded."]
 
     style CH fill:#6366f1,color:#fff
-    style B1 fill:#dbeafe
+    style B1 fill:#3B82F6,stroke:#1D4ED8,color:#fff
     style B2 fill:#10B981,stroke:#047857,color:#fff
-    style B3 fill:#fef9c3
-    style B4 fill:#fce7f3
-    style B5 fill:#ede9fe
+    style B3 fill:#F59E0B,stroke:#B45309,color:#fff
+    style B4 fill:#EC4899,stroke:#BE185D,color:#fff
+    style B5 fill:#8B5CF6,stroke:#6D28D9,color:#fff
 ```
 
 ---

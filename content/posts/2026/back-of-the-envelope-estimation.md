@@ -169,13 +169,12 @@ CA→Netherlands    │                        │ 150,000,000 seconds (4.75 YEA
 
 ```mermaid
 graph TD
-    subgraph "Speed Tiers — What's Fast vs Slow"
-        A["🚀 L1/L2 Cache\n0.5 – 7 ns\nInstant"]
-        B["⚡ RAM\n100 ns\nVery Fast"]
-        C["🌐 Same Datacenter Network\n500 μs\nFast"]
-        D["💾 SSD Read\n~150 μs\nModerate"]
-        E["🐌 HDD Disk Seek\n10 ms\nSlow — avoid if possible"]
-        F["🌍 Cross-continent Network\n150 ms\nVery Slow"]
+    subgraph "Speed Tiers — What's Fast vs Slow"A["L1/L2 Cache\n0.5 – 7 ns\nInstant"]
+        B["RAM\n100 ns\nVery Fast"]
+        C["Same Datacenter Network\n500 μs\nFast"]
+        D["SSD Read\n~150 μs\nModerate"]
+        E["HDD Disk Seek\n10 ms\nSlow — avoid if possible"]
+        F["Cross-continent Network\n150 ms\nVery Slow"]
     end
     A --> B --> C --> D --> E --> F
 
@@ -219,11 +218,10 @@ Uptime is measured in **nines**. More nines = more availability = less downtime:
 
 ```mermaid
 graph LR
-    subgraph "What does 99% mean in practice?"
-        A["99%\n3.65 days/year down\n❌ Not acceptable\nfor production"]
-        B["99.9%\n8.77 hours/year down\n⚠️ Minimum bar\nfor most services"]
-        C["99.99%\n52 min/year down\n✅ Good target\nfor user-facing APIs"]
-        D["99.999%\n5 min/year down\n🏆 Five nines\nPayments / Banking"]
+    subgraph "What does 99% mean in practice?"A["99%\n3.65 days/year down\n✗ Not acceptable\nfor production"]
+        B["99.9%\n8.77 hours/year down\n Minimum bar\nfor most services"]
+        C["99.99%\n52 min/year down\n✓ Good target\nfor user-facing APIs"]
+        D["99.999%\n5 min/year down\n Five nines\nPayments / Banking"]
     end
     A --> B --> C --> D
 
@@ -257,10 +255,10 @@ Every good estimation follows the same structure. Don't skip steps.
 
 ```mermaid
 flowchart LR
-    S1["📋 Step 1\nState Your\nAssumptions"]
-    S2["📐 Step 2\nCalculate\nQPS"]
-    S3["💾 Step 3\nCalculate\nStorage"]
-    S4["🌐 Step 4\nCalculate\nBandwidth\n& Memory"]
+    S1["Step 1\nState Your\nAssumptions"]
+    S2["Step 2\nCalculate\nQPS"]
+    S3["Step 3\nCalculate\nStorage"]
+    S4["Step 4\nCalculate\nBandwidth\n& Memory"]
 
     S1 --> S2 --> S3 --> S4
 
@@ -390,8 +388,7 @@ With replication ×3  = ~165 PB
 ```
 
 ```mermaid
-pie title "5-Year Storage Breakdown (before replication)"
-    "Media storage (images/video)" : 54750
+pie title "5-Year Storage Breakdown (before replication)" "Media storage (images/video)" : 54750
     "Text & metadata" : 109
 ```
 
@@ -408,9 +405,8 @@ Write bandwidth = 7,000 QPS × (200 bytes text + 10% chance × 1 MB)
 
 ```mermaid
 flowchart LR
-    subgraph "Storage Insight"
-        T["📝 Text\n200 bytes/tweet\n~109 TB over 5 years\n(tiny)"]
-        M["📸 Media\n1 MB / 10% of tweets\n~55 PB over 5 years\n(massive)"]
+    subgraph "Storage Insight"T["Text\n200 bytes/tweet\n~109 TB over 5 years\n(tiny)"]
+        M["Media\n1 MB / 10% of tweets\n~55 PB over 5 years\n(massive)"]
     end
     T --- M
 
@@ -494,8 +490,7 @@ Understanding where data lives is critical for latency decisions. Here's the ful
 
 ```mermaid
 graph TD
-    subgraph "Fastest → Slowest"
-        L1["L1 Cache\n~32 KB per core\n0.5 ns\nInside the CPU chip"]
+    subgraph "Fastest → Slowest"L1["L1 Cache\n~32 KB per core\n0.5 ns\nInside the CPU chip"]
         L2["L2 Cache\n~256 KB per core\n7 ns\nStill on the chip"]
         L3["L3 Cache\n~8–32 MB shared\n~30 ns\nShared across cores"]
         RAM["RAM / Main Memory\n16 GB – 1 TB\n100 ns\nDIMM sticks"]
@@ -536,11 +531,11 @@ Back-of-the-envelope estimation is **all about the process**. Solving the proble
 
 ```mermaid
 flowchart TD
-    T1["✅ Round generously\n99,987 → 100,000\n86,400 seconds/day → just say 10^5"]
-    T2["✅ State assumptions first\nWrite them down.\n'I'll assume 150M DAU...'"]
-    T3["✅ Label your units\nDon't write '5' — write '5 MB'\nUnit confusion kills estimates"]
-    T4["✅ Use scientific notation\n300,000,000 = 3 × 10^8\nMuch easier to multiply"]
-    T5["✅ Check your answer\nDoes this make intuitive sense?\nIs Twitter really 55 PB? Yes — plausible."]
+    T1["✓ Round generously\n99,987 → 100,000\n86,400 seconds/day → just say 10^5"]
+    T2["✓ State assumptions first\nWrite them down.\n'I'll assume 150M DAU...'"]
+    T3["✓ Label your units\nDon't write '5' — write '5 MB'\nUnit confusion kills estimates"]
+    T4["✓ Use scientific notation\n300,000,000 = 3 × 10^8\nMuch easier to multiply"]
+    T5["✓ Check your answer\nDoes this make intuitive sense?\nIs Twitter really 55 PB? Yes — plausible."]
 
     style T1 fill:#10B981,stroke:#047857,color:#fff
     style T2 fill:#3B82F6,stroke:#1D4ED8,color:#fff

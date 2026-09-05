@@ -42,15 +42,15 @@ There are three core reasons, and they're all compelling:
 
 ```mermaid
 graph TD
-    RL["🛡️ Rate Limiter"]
+    RL["Rate Limiter"]
 
-    RL --> R1["🔴 Prevent DoS Attacks\n\nAlmost all APIs at large tech companies\nenforce rate limiting. Even an unintentional\nbug in a client that fires 500 req/sec\ncan take down your entire system."]
-    RL --> R2["💰 Reduce Cost\n\nIf you call a paid third-party API\nlike Stripe, Twilio, or AWS Rekognition,\neach call costs money.\nRate limiting prevents runaway bills."]
-    RL --> R3["⚡ Prevent Server Overload\n\nFilter out excess requests from bots,\nscrapers, and badly-written clients.\nProtect your database and keep the\nexperience fast for legitimate users."]
+    RL --> R1["Prevent DoS Attacks\n\nAlmost all APIs at large tech companies\nenforce rate limiting. Even an unintentional\nbug in a client that fires 500 req/sec\ncan take down your entire system."]
+    RL --> R2["Reduce Cost\n\nIf you call a paid third-party API\nlike Stripe, Twilio, or AWS Rekognition,\neach call costs money.\nRate limiting prevents runaway bills."]
+    RL --> R3["Prevent Server Overload\n\nFilter out excess requests from bots,\nscrapers, and badly-written clients.\nProtect your database and keep the\nexperience fast for legitimate users."]
 
     style RL fill:#6366f1,color:#fff
     style R1 fill:#EF4444,stroke:#B91C1C,color:#fff
-    style R2 fill:#fef9c3
+    style R2 fill:#F59E0B,stroke:#B45309,color:#fff
     style R3 fill:#10B981,stroke:#047857,color:#fff
 ```
 
@@ -85,7 +85,7 @@ sequenceDiagram
     C->>I: Do we need to inform users when they're throttled?
     I-->>C: Yes.
 
-    Note over C,I: Requirements now locked ✅
+    Note over C,I: Requirements now locked ✓
 ```
 
 After clarifying, here's the requirements summary we're designing for:
@@ -107,20 +107,20 @@ This is the first real architectural decision, and it has more nuance than most 
 
 ```mermaid
 flowchart TD
-    USER["👤 Client\nMobile / Web / API consumer"]
+    USER["Client\nMobile / Web / API consumer"]
 
-    USER -->|Option A| CLIENT_RL["❌ Client-side Rate Limiter\n\nUnreliable! Clients can be forged.\nA malicious actor can simply\nbypass or spoof the client.\nNEVER depend on this alone."]
+    USER -->|Option A| CLIENT_RL["✗ Client-side Rate Limiter\n\nUnreliable! Clients can be forged.\nA malicious actor can simply\nbypass or spoof the client.\nNEVER depend on this alone."]
 
-    USER -->|Option B| SERVER_RL["✅ Server-side Rate Limiter\n\nThe rate limiter sits inside\nyour API server code.\nFull control, but adds complexity\nto each individual service."]
+    USER -->|Option B| SERVER_RL["✓ Server-side Rate Limiter\n\nThe rate limiter sits inside\nyour API server code.\nFull control, but adds complexity\nto each individual service."]
 
-    USER -->|Option C| MIDDLEWARE["✅✅ Rate Limiter Middleware\n\nActs as a wall between clients\nand your API servers.\nBest choice for most architectures.\nRequests pass through only if allowed."]
+    USER -->|Option C| MIDDLEWARE["✓✓ Rate Limiter Middleware\n\nActs as a wall between clients\nand your API servers.\nBest choice for most architectures.\nRequests pass through only if allowed."]
 
-    USER -->|Option D| GATEWAY["✅✅✅ API Gateway\n\nFully managed service.\nSupports rate limiting, SSL termination,\nauthentication, IP whitelisting.\nBest if you're already using microservices.\nExamples: AWS API Gateway, Kong, Apigee"]
+    USER -->|Option D| GATEWAY["✓✓✓ API Gateway\n\nFully managed service.\nSupports rate limiting, SSL termination,\nauthentication, IP whitelisting.\nBest if you're already using microservices.\nExamples: AWS API Gateway, Kong, Apigee"]
 
     style CLIENT_RL fill:#EF4444,stroke:#B91C1C,color:#fff
-    style SERVER_RL fill:#fef9c3
+    style SERVER_RL fill:#F59E0B,stroke:#B45309,color:#fff
     style MIDDLEWARE fill:#10B981,stroke:#047857,color:#fff
-    style GATEWAY fill:#dbeafe
+    style GATEWAY fill:#3B82F6,stroke:#1D4ED8,color:#fff
 ```
 
 **The practical guidance from the book:**
@@ -149,22 +149,22 @@ Here's the visual of the bucket itself:
 
 ```mermaid
 flowchart TD
-    subgraph REFILLER["🔄 Refiller: 4 tokens/minute"]
-        T1["🪙"] 
-        T2["🪙"]
+    subgraph REFILLER["Refiller: 4 tokens/minute"]
+        T1[""] 
+        T2[""]
     end
 
     REFILLER -->|adds tokens| BUCKET
 
-    subgraph BUCKET["🪣 Token Bucket\nCapacity: 4"]
+    subgraph BUCKET["Token Bucket\nCapacity: 4"]
         direction LR
-        TOK1["🪙"] 
-        TOK2["🪙"]
-        TOK3["🪙"]
-        TOK4["🪙"]
+        TOK1[""] 
+        TOK2[""]
+        TOK3[""]
+        TOK4[""]
     end
 
-    OVERFLOW["Overflow: extra tokens\nare discarded 🗑️"]
+    OVERFLOW["Overflow: extra tokens\nare discarded "]
     BUCKET -.->|if full| OVERFLOW
 ```
 
@@ -172,9 +172,9 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    REQ["📨 Request arrives"] --> CHECK{"🔍 Enough\ntokens\nin bucket?"}
-    CHECK -->|"✅ Yes: take 1 token"| FORWARD["Forward to\nAPI Server ✅"]
-    CHECK -->|"❌ No tokens left"| DROP["Drop request\nHTTP 429 ❌"]
+    REQ["Request arrives"] --> CHECK{"Enough\ntokens\nin bucket?"}
+    CHECK -->|"✓ Yes: take 1 token"| FORWARD["Forward to\nAPI Server ✓"]
+    CHECK -->|"✗ No tokens left"| DROP["Drop request\nHTTP 429 ✗"]
     FORWARD --> PROCESS["API processes\nand responds"]
 ```
 
@@ -185,32 +185,31 @@ The bucket size is 4. Refill rate is 4 tokens per minute.
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Bucket as "🪣 Bucket (capacity=4)"
-    participant API
+    participant Bucket as "Bucket (capacity=4)"participant API
 
-    Note over Bucket: 🕐 1:00:00 — Start with 4 tokens
+    Note over Bucket:  1:00:00 — Start with 4 tokens
     Client->>Bucket: Request arrives
-    Bucket->>Bucket: tokens=4 ≥ 1 ✅ → take 1 token → tokens=3
+    Bucket->>Bucket: tokens=4 ≥ 1 ✓ → take 1 token → tokens=3
     Bucket->>API: Forward request
-    API-->>Client: 200 OK ✅
+    API-->>Client: 200 OK ✓
 
-    Note over Bucket: 🕐 1:00:05 — 3 simultaneous requests
+    Note over Bucket:  1:00:05 — 3 simultaneous requests
     Client->>Bucket: 3 requests at once
-    Bucket->>Bucket: tokens=3 ≥ 3 ✅ → take 3 tokens → tokens=0
+    Bucket->>Bucket: tokens=3 ≥ 3 ✓ → take 3 tokens → tokens=0
     Bucket->>API: Forward all 3
-    API-->>Client: 200 OK × 3 ✅
+    API-->>Client: 200 OK × 3 ✓
 
-    Note over Bucket: 🕐 1:00:20 — Bucket is empty!
+    Note over Bucket:  1:00:20 — Bucket is empty!
     Client->>Bucket: New request arrives
-    Bucket->>Bucket: tokens=0 ❌ Not enough!
-    Bucket-->>Client: HTTP 429 Too Many Requests ❌
+    Bucket->>Bucket: tokens=0 ✗ Not enough!
+    Bucket-->>Client: HTTP 429 Too Many Requests ✗
 
-    Note over Bucket: 🕐 1:01:00 — Refiller kicks in
+    Note over Bucket:  1:01:00 — Refiller kicks in
     Bucket->>Bucket: Refill: tokens = 4 (full again)
     Client->>Bucket: New request
-    Bucket->>Bucket: tokens=4 ≥ 1 ✅ → take 1 → tokens=3
+    Bucket->>Bucket: tokens=4 ≥ 1 ✓ → take 1 → tokens=3
     Bucket->>API: Forward request
-    API-->>Client: 200 OK ✅
+    API-->>Client: 200 OK ✓
 ```
 
 **The two parameters you tune:**
@@ -257,19 +256,19 @@ The key difference from Token Bucket: requests are processed at a **fixed, const
 
 ```mermaid
 flowchart TD
-    REQUESTS["📨 Incoming Requests\n(can be bursty)"]
+    REQUESTS["Incoming Requests\n(can be bursty)"]
     
     REQUESTS --> CHECK{"Bucket\nfull?"}
     CHECK -->|"No — add to queue"| QUEUE
 
-    subgraph QUEUE["🪣 FIFO Queue (size = 4)\nRequests wait here in order"]
+    subgraph QUEUE["FIFO Queue (size = 4)\nRequests wait here in order"]
         direction LR
         R1["Req 1"] --> R2["Req 2"] --> R3["Req 3"] --> R4["Req 4"]
     end
 
-    CHECK -->|"Yes — overflow ❌"| DROP["Drop request\nHTTP 429 ❌"]
+    CHECK -->|"Yes — overflow ✗"| DROP["Drop request\nHTTP 429 ✗"]
 
-    QUEUE -->|"Drips out at fixed rate\n e.g. 1 request/second"| API["🖥️ API Server\nProcesses at steady pace"]
+    QUEUE -->|"Drips out at fixed rate\n e.g. 1 request/second"| API["API Server\nProcesses at steady pace"]
 ```
 
 **The crucial difference, illustrated:**
@@ -279,7 +278,7 @@ graph LR
     subgraph TOKEN["Token Bucket behaviour"]
         direction TB
         T_IN["5 requests arrive\nat once"]
-        T_PROCESS["All 5 processed\nimmediately\n(burst allowed ✅)"]
+        T_PROCESS["All 5 processed\nimmediately\n(burst allowed ✓)"]
         T_IN --> T_PROCESS
     end
 
@@ -321,19 +320,19 @@ gantt
     axisFormat  Second %S
 
     section Second :00
-    ✅ Request 1  : done, 0, 1
-    ✅ Request 2  : done, 1, 1
-    ✅ Request 3  : done, 2, 1
+    ✓ Request 1  : done, 0, 1
+    ✓ Request 2  : done, 1, 1
+    ✓ Request 3  : done, 2, 1
 
     section Second :01
-    ✅ Request 4  : done, 3, 1
-    ✅ Request 5  : done, 4, 1
-    ❌ Request 6 (dropped)  : crit, 5, 1
-    ❌ Request 7 (dropped)  : crit, 6, 1
+    ✓ Request 4  : done, 3, 1
+    ✓ Request 5  : done, 4, 1
+    ✗ Request 6 (dropped)  : crit, 5, 1
+    ✗ Request 7 (dropped)  : crit, 6, 1
 
     section Second :02
-    ✅ Request 8  : done, 7, 1
-    ✅ Request 9  : done, 8, 1
+    ✓ Request 8  : done, 7, 1
+    ✓ Request 9  : done, 8, 1
 ```
 
 The implementation is dead simple. In Redis: `INCR user:123:window:1685484000` with an `EXPIRE` matching the window size.
@@ -352,9 +351,8 @@ config:
     height: 300
 ---
 xychart-beta
-    title "Boundary Burst — 10 requests sneak through in 60 seconds (limit is 5/min)"
-    x-axis ["2:00:00", "2:00:30", "2:01:00 (reset!)", "2:01:30", "2:02:00"]
-    y-axis "Requests" 0 --> 6
+    title "Boundary Burst — 10 requests sneak through in 60 seconds (limit is 5/min)"x-axis ["2:00:00", "2:00:30", "2:01:00 (reset!)", "2:01:30", "2:02:00"]
+    y-axis "Requests"0 --> 6
     bar [0, 5, 0, 5, 0]
 ```
 
@@ -387,35 +385,33 @@ xychart-beta
 sequenceDiagram
     participant C as Client
     participant RL as Rate Limiter
-    participant LOG as "📋 Timestamp Log\n(limit: 2 req/min)"
-
-    Note over LOG: Log = [ ]
+    participant LOG as "Timestamp Log\n(limit: 2 req/min)"Note over LOG: Log = []
 
     C->>RL: Request at 1:00:01
     RL->>LOG: Purge old entries (none to purge)
     RL->>LOG: Add timestamp 1:00:01
-    Note over LOG: Log = [1:00:01] → size=1 ≤ 2 ✅
-    RL-->>C: ✅ Allowed
+    Note over LOG: Log = [1:00:01] → size=1 ≤ 2 ✓
+    RL-->>C: ✓ Allowed
 
     C->>RL: Request at 1:00:30
     RL->>LOG: Purge old entries (none to purge)
     RL->>LOG: Add timestamp 1:00:30
-    Note over LOG: Log = [1:00:01, 1:00:30] → size=2 ≤ 2 ✅
-    RL-->>C: ✅ Allowed
+    Note over LOG: Log = [1:00:01, 1:00:30] → size=2 ≤ 2 ✓
+    RL-->>C: ✓ Allowed
 
     C->>RL: Request at 1:00:50
     RL->>LOG: Purge entries older than 12:59:50 (none)
     RL->>LOG: Add timestamp 1:00:50
-    Note over LOG: Log = [1:00:01, 1:00:30, 1:00:50] → size=3 > 2 ❌
-    RL-->>C: ❌ HTTP 429 Rejected
+    Note over LOG: Log = [1:00:01, 1:00:30, 1:00:50] → size=3 > 2 ✗
+    RL-->>C: ✗ HTTP 429 Rejected
     Note over LOG: Rejected, but 1:00:50 stays in log!
 
     C->>RL: Request at 1:01:40
     RL->>LOG: Purge entries older than 1:00:40
     Note over LOG: Removed: 1:00:01, 1:00:30 (older than 1:00:40)
     RL->>LOG: Add timestamp 1:01:40
-    Note over LOG: Log = [1:00:50, 1:01:40] → size=2 ≤ 2 ✅
-    RL-->>C: ✅ Allowed (rolling window is accurate!)
+    Note over LOG: Log = [1:00:50, 1:01:40] → size=2 ≤ 2 ✓
+    RL-->>C: ✓ Allowed (rolling window is accurate!)
 ```
 
 Notice that at **1:01:40**, the entries from **1:00:01 and 1:00:30** were purged because they fall outside the 1-minute rolling window. The rolling window always stays accurate.
@@ -481,7 +477,7 @@ flowchart LR
         CURSOR["▲ Current time\n= 30% into\ncurrent window"]
     end
 
-    FORMULA["Rolling window estimate:\n\n3 + 5 × 70% = 3 + 3.5 = 6.5\n\nRounded down → 6\nLimit = 7 → ✅ Request ALLOWED"]
+    FORMULA["Rolling window estimate:\n\n3 + 5 × 70% = 3 + 3.5 = 6.5\n\nRounded down → 6\nLimit = 7 → ✓ Request ALLOWED"]
 
     PREV --> FORMULA
     CURR --> FORMULA
@@ -527,14 +523,7 @@ This algorithm assumes requests in the previous window were evenly distributed a
 ```mermaid
 quadrantChart
     title Algorithm Tradeoffs — Accuracy vs Memory Efficiency
-    x-axis "Low Memory Efficiency" --> "High Memory Efficiency"
-    y-axis "Low Accuracy" --> "High Accuracy"
-    quadrant-1 "Best: High accuracy + Low memory"
-    quadrant-2 "Accurate but expensive"
-    quadrant-3 "Avoid: Low quality"
-    quadrant-4 "Simple but inaccurate"
-
-    Sliding Window Counter: [0.87, 0.88]
+    x-axis "Low Memory Efficiency" --> "High Memory Efficiency"y-axis "Low Accuracy" --> "High Accuracy"quadrant-1 "Best: High accuracy + Low memory"quadrant-2 "Accurate but expensive"quadrant-3 "Avoid: Low quality"quadrant-4 "Simple but inaccurate"Sliding Window Counter: [0.87, 0.88]
     Token Bucket: [0.82, 0.72]
     Leaky Bucket: [0.78, 0.62]
     Fixed Window Counter: [0.92, 0.28]
@@ -577,12 +566,12 @@ Redis is different:
 
 ```mermaid
 graph LR
-    CLIENT["👤 Client"] -->|HTTP Request| RL["🚦 Rate Limiter\nMiddleware"]
+    CLIENT["Client"] -->|HTTP Request| RL["Rate Limiter\nMiddleware"]
     
-    RL <-->|"① INCR user:123:counter\n② check vs limit\n③ EXPIRE if new key"| REDIS[("🔴 Redis\nIn-memory counter store")]
+    RL <-->|"① INCR user:123:counter\n② check vs limit\n③ EXPIRE if new key"| REDIS[("Redis\nIn-memory counter store")]
     
-    RL -->|"✅ Under limit\nForward request"| API["🖥️ API Servers"]
-    RL -->|"❌ Over limit\nHTTP 429 + headers"| CLIENT
+    RL -->|"✓ Under limit\nForward request"| API["API Servers"]
+    RL -->|"✗ Over limit\nHTTP 429 + headers"| CLIENT
     
     API -->|Response| CLIENT
 ```
@@ -639,20 +628,20 @@ descriptors:
 
 ```mermaid
 flowchart TD
-    DISK[("📁 Config files\nstored on disk")] 
-    WORKERS["⚙️ Background Workers\n(pull rules periodically)"]
-    CACHE[("🗄️ Rules Cache\n(fast in-memory read)")]
+    DISK[("Config files\nstored on disk")] 
+    WORKERS["Background Workers\n(pull rules periodically)"]
+    CACHE[("Rules Cache\n(fast in-memory read)")]
 
     DISK -->|"workers pull every ~60s"| WORKERS
     WORKERS -->|"update cache"| CACHE
 
-    REQ["📨 Incoming request\nGET /api/v1/posts\nUser: alice, Tier: free"] --> RL["🚦 Rate Limiter"]
+    REQ["Incoming request\nGET /api/v1/posts\nUser: alice, Tier: free"] --> RL["Rate Limiter"]
     RL -->|"① Load rule for\nfree-tier users"| CACHE
     CACHE -->|"Rule: 60 req/hour"| RL
-    RL -->|"② Check + increment\ncounter in Redis"| REDIS[("🔴 Redis")]
+    RL -->|"② Check + increment\ncounter in Redis"| REDIS[("Redis")]
     REDIS -->|"counter = 47"| RL
-    RL -->|"③ 47 < 60 ✅"| API["🖥️ API Server"]
-    RL -->|"If over limit ❌"| RESP429["HTTP 429 + headers"]
+    RL -->|"③ 47 < 60 ✓"| API["API Server"]
+    RL -->|"If over limit ✗"| RESP429["HTTP 429 + headers"]
 ```
 
 ---
@@ -694,38 +683,38 @@ Now let's put it all together into a production-grade design. This is the system
 ```mermaid
 graph TB
     subgraph CLIENTS["Clients"]
-        C1["📱 Mobile App"]
-        C2["🌐 Web Browser"]
-        C3["🤖 3rd Party API"]
+        C1["Mobile App"]
+        C2["Web Browser"]
+        C3["3rd Party API"]
     end
 
     subgraph INFRA["Your Infrastructure"]
 
         subgraph RL_CLUSTER["Rate Limiter Cluster (stateless)"]
-            RL1["🚦 Rate Limiter 1"]
-            RL2["🚦 Rate Limiter 2"]
-            RL3["🚦 Rate Limiter 3"]
+            RL1["Rate Limiter 1"]
+            RL2["Rate Limiter 2"]
+            RL3["Rate Limiter 3"]
         end
 
         subgraph RULES_LAYER["Rules Layer"]
-            RULES_DISK[("📁 Rules on Disk")]
-            WORKERS["⚙️ Workers"]
-            RULES_CACHE[("🗄️ Cached Rules")]
+            RULES_DISK[("Rules on Disk")]
+            WORKERS["Workers"]
+            RULES_CACHE[("Cached Rules")]
             RULES_DISK --> WORKERS --> RULES_CACHE
         end
 
         subgraph REDIS_LAYER["Redis Cluster (shared counters)"]
-            REDIS[("🔴 Redis")]
+            REDIS[("Redis")]
         end
 
         subgraph API_LAYER["API Servers"]
-            API1["🖥️ Server 1"]
-            API2["🖥️ Server 2"]
+            API1["Server 1"]
+            API2["Server 2"]
         end
 
         subgraph OVERFLOW_HANDLING["Rate-Limited Request Handling"]
-            DROP["🗑️ Drop (Option A)"]
-            MQ["📨 Message Queue\nfor async processing\n(Option B — e.g. orders)"]
+            DROP["Drop (Option A)"]
+            MQ["Message Queue\nfor async processing\n(Option B — e.g. orders)"]
         end
 
     end
@@ -733,9 +722,9 @@ graph TB
     C1 & C2 & C3 --> RL1 & RL2 & RL3
     RL1 & RL2 & RL3 <-->|"read rules"| RULES_CACHE
     RL1 & RL2 & RL3 <-->|"atomic INCR\ncheck counter"| REDIS
-    RL1 & RL2 & RL3 -->|"✅ allowed"| API1 & API2
-    RL1 & RL2 & RL3 -->|"❌ rate-limited\nOption A"| DROP
-    RL1 & RL2 & RL3 -->|"❌ rate-limited\nOption B"| MQ
+    RL1 & RL2 & RL3 -->|"✓ allowed"| API1 & API2
+    RL1 & RL2 & RL3 -->|"✗ rate-limited\nOption A"| DROP
+    RL1 & RL2 & RL3 -->|"✗ rate-limited\nOption B"| MQ
     RL1 & RL2 & RL3 -->|"429 + headers"| C1 & C2 & C3
 ```
 
@@ -774,11 +763,7 @@ In a concurrent system, this sequence can interleave dangerously:
 
 ```mermaid
 sequenceDiagram
-    participant RL1 as "🚦 Rate Limiter 1"
-    participant RL2 as "🚦 Rate Limiter 2"
-    participant R as "🔴 Redis\n(counter = 3, limit = 4)"
-
-    Note over R: Counter = 3
+    participant RL1 as "Rate Limiter 1"participant RL2 as "Rate Limiter 2"participant R as "Redis\n(counter = 3, limit = 4)"Note over R: Counter = 3
 
     RL1->>R: READ counter
     R-->>RL1: counter = 3
@@ -786,13 +771,13 @@ sequenceDiagram
     RL2->>R: READ counter (same instant!)
     R-->>RL2: counter = 3
 
-    Note over RL1: 3 < 4 ✅ Allow request 1
-    Note over RL2: 3 < 4 ✅ Allow request 2
+    Note over RL1: 3 < 4 ✓ Allow request 1
+    Note over RL2: 3 < 4 ✓ Allow request 2
 
     RL1->>R: WRITE counter = 4 (3+1)
     RL2->>R: WRITE counter = 4 (3+1)
 
-    Note over R: ⚠️ Counter = 4, but should be 5!
+    Note over R:  Counter = 4, but should be 5!
     Note over R: Both requests were allowed when only ONE should have been.
     Note over R: We've exceeded our limit!
 ```
@@ -835,7 +820,7 @@ Imagine you have two rate limiter servers. A client sends requests that are load
 
 ```mermaid
 graph LR
-    subgraph BAD["❌ Without Centralized State"]
+    subgraph BAD["✗ Without Centralized State"]
         C1["Client 1"]
         C2["Client 2"]
         RL_A["Rate Limiter A\nMemory: {user1: 3}"]
@@ -845,25 +830,25 @@ graph LR
         C1 -.->|"sometimes routed here"| RL_B
         C2 --> RL_B
 
-        NOTE["❌ Rate Limiter A doesn't know\nClient 1 also hit Rate Limiter B.\nActual count: 5, but\nA thinks it's 3, B thinks it's 2."]
+        NOTE["✗ Rate Limiter A doesn't know\nClient 1 also hit Rate Limiter B.\nActual count: 5, but\nA thinks it's 3, B thinks it's 2."]
     end
 ```
 
 ```mermaid
 graph LR
-    subgraph GOOD["✅ With Centralized Redis"]
+    subgraph GOOD["✓ With Centralized Redis"]
         C3["Client 1"]
         C4["Client 2"]
         RL_C["Rate Limiter A"]
         RL_D["Rate Limiter B"]
-        REDIS[("🔴 Redis\nuser1: 5 ← true count")]
+        REDIS[("Redis\nuser1: 5 ← true count")]
 
         C3 --> RL_C & RL_D
         C4 --> RL_D
         RL_C <-->|"read/write"| REDIS
         RL_D <-->|"read/write"| REDIS
 
-        NOTE2["✅ Both rate limiters share\none source of truth.\nNo matter which server\nthe client hits, the count\nis always accurate."]
+        NOTE2["✓ Both rate limiters share\none source of truth.\nNo matter which server\nthe client hits, the count\nis always accurate."]
     end
 ```
 
@@ -911,9 +896,9 @@ graph TD
         AP_R <-.->|"async replication"| US_R
     end
 
-    USER_JP["👤 User in Tokyo"] --> AP_RL
-    USER_US["👤 User in NY"] --> US_RL
-    USER_EU["👤 User in London"] --> EU_RL
+    USER_JP["User in Tokyo"] --> AP_RL
+    USER_US["User in NY"] --> US_RL
+    USER_EU["User in London"] --> EU_RL
 ```
 
 Cloudflare runs 194 edge server locations worldwide, so every rate limit check happens within a few milliseconds of the client.
@@ -934,17 +919,17 @@ Deploying a rate limiter and forgetting about it is a mistake. You must monitor 
 
 ```mermaid
 flowchart LR
-    RL["🚦 Rate Limiter"]
+    RL["Rate Limiter"]
 
-    RL -->|"Emit metrics"| METRICS[("📊 Prometheus\nMetrics Store")]
-    METRICS --> GRAFANA["📈 Grafana Dashboard"]
-    METRICS --> ALERTS{"🔔 Alert Rules"}
+    RL -->|"Emit metrics"| METRICS[("Prometheus\nMetrics Store")]
+    METRICS --> GRAFANA["Grafana Dashboard"]
+    METRICS --> ALERTS{"Alert Rules"}
 
-    ALERTS -->|"Rejection rate > 15%"| ALERT1["⚠️ Rules too strict!\nLegitimate users being blocked.\nConsider relaxing limits."]
+    ALERTS -->|"Rejection rate > 15%"| ALERT1["Rules too strict!\nLegitimate users being blocked.\nConsider relaxing limits."]
 
-    ALERTS -->|"Rejection rate drops to 0%"| ALERT2["⚠️ Rules too loose?\nOr attack bypassing limiter.\nCheck for anomalies."]
+    ALERTS -->|"Rejection rate drops to 0%"| ALERT2["Rules too loose?\nOr attack bypassing limiter.\nCheck for anomalies."]
 
-    ALERTS -->|"Flash sale detected:\n100× traffic spike"| ALERT3["🚨 Consider switching\nto Token Bucket\nfor burst tolerance."]
+    ALERTS -->|"Flash sale detected:\n100× traffic spike"| ALERT3["Consider switching\nto Token Bucket\nfor burst tolerance."]
 ```
 
 **Two things to validate constantly:**
@@ -967,11 +952,13 @@ These are points you can raise in the "wrap-up" phase of a system design intervi
 
 ```mermaid
 flowchart TD
-    REQ["📨 Request arrives\n(over limit)"]
+    REQ["Request arrives\n(over limit)"]
 
-    REQ --> HARD["🔴 Hard Rate Limiting\n\nCannot exceed threshold.\nPeriod.\n\nHTTP 429 — no exceptions.\n\nBest for: login endpoints,\nbilling APIs, admin actions"]
+    REQ --> HARD["Hard Rate Limiting\n\nCannot exceed threshold.\nPeriod.\n\nHTTP 429 — no exceptions.\n\nBest for: login endpoints,\nbilling APIs, admin actions"]
 
-    REQ --> SOFT["🟡 Soft Rate Limiting\n\nCan temporarily exceed\nfor short bursts.\n\nHTTP 200 with warning header:\nX-RateLimit-Warning: near-limit\n\nBest for: content APIs,\nnon-critical endpoints"]
+    REQ --> SOFT["Soft Rate Limiting\n\nCan temporarily exceed\nfor short bursts.\n\nHTTP 200 with warning header:\nX-RateLimit-Warning: near-limit\n\nBest for: content APIs,\nnon-critical endpoints"]
+    style HARD fill:#EF4444,stroke:#B91C1C,color:#fff
+    style SOFT fill:#F59E0B,stroke:#B45309,color:#fff
 ```
 
 ### Rate Limiting at Different OSI Layers
@@ -980,15 +967,15 @@ Most of this article covers **Layer 7 (HTTP/Application)**. But rate limiting ca
 
 ```mermaid
 graph TD
-    L3["🌐 Layer 3 — Network (IP)\nBlock by source IP packets\nTool: iptables, cloud firewalls\nBest for: volumetric DDoS attacks"]
-    L4["🔌 Layer 4 — Transport (TCP)\nLimit TCP connections per IP\nTool: Load balancer connection limits\nBest for: connection flood attacks"]
-    L7["📡 Layer 7 — Application (HTTP)\nThrottle by user ID, API key, endpoint\nTool: API Gateway, middleware\nBest for: API abuse, scraping"]
+    L3["Layer 3 — Network (IP)\nBlock by source IP packets\nTool: iptables, cloud firewalls\nBest for: volumetric DDoS attacks"]
+    L4["Layer 4 — Transport (TCP)\nLimit TCP connections per IP\nTool: Load balancer connection limits\nBest for: connection flood attacks"]
+    L7["Layer 7 — Application (HTTP)\nThrottle by user ID, API key, endpoint\nTool: API Gateway, middleware\nBest for: API abuse, scraping"]
 
     L3 -->|"Passes to"| L4 -->|"Passes to"| L7
     
-    DDOS["🦹 DDoS Attacker\n(millions of packets)"] -->|"Blocked at L3"| L3
-    BOT["🤖 Scraper Bot\n(many connections)"] -->|"Blocked at L4"| L4
-    USER["😤 Abusive User\n(too many API calls)"] -->|"Blocked at L7"| L7
+    DDOS["DDoS Attacker\n(millions of packets)"] -->|"Blocked at L3"| L3
+    BOT["Scraper Bot\n(many connections)"] -->|"Blocked at L4"| L4
+    USER["Abusive User\n(too many API calls)"] -->|"Blocked at L7"| L7
 ```
 
 **Pro tip:** Layer your defences. A well-architected system uses cloud firewall rules at L3 for volumetric attacks, connection limits at L4, and application-level rate limiting at L7.
@@ -998,7 +985,7 @@ graph TD
 ```mermaid
 flowchart TD
     REQUEST["Make API Call"] --> CHECK_CACHE{"Response\ncached?"}
-    CHECK_CACHE -->|"Yes"| USE_CACHE["Use cached response\n(no API call needed) 🎉"]
+    CHECK_CACHE -->|"Yes"| USE_CACHE["Use cached response\n(no API call needed) "]
     CHECK_CACHE -->|"No"| CALL["Make HTTP request"]
 
     CALL --> RESPONSE{"HTTP\nResponse?"}
@@ -1027,7 +1014,7 @@ Here's everything you need to ace a rate limiter question in one diagram:
 
 ```mermaid
 mindmap
-  root(("🚦 Rate Limiter\nDesign"))
+  root(("Rate Limiter\nDesign"))
     Requirements
       Server-side, not client
       Low latency < 1ms overhead
