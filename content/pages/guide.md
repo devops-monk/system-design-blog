@@ -62,7 +62,7 @@ Full consumer products. Each one takes the building blocks above and pushes them
 
 ## Part 5: Keep Going
 
-16. [What to Read Next](/2026/06/what-to-read-next/) — the book's reading list rebuilt and link-checked for 2026, the engineering blogs still worth a subscription, and a method for reading them that turns links into knowledge.
+16. [What to Read Next](/2026/06/what-to-read-next/) — a method for reading an engineering post so it leaves you something reusable, then the papers, blogs and courses worth your evenings.
 
 ---
 
