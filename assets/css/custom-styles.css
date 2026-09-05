@@ -2837,3 +2837,83 @@ a.cert-card:hover .cert-verify { opacity: 1; }
   .ld-table .ld-n { width: 4.6rem; }
   .ld-check { font-size: 0.74rem; }
 }
+
+/* ==========================================================================
+   Event sourcing replay (posts/2026/design-digital-wallet)
+   ========================================================================== */
+
+.es-demo {
+  margin: 1.75rem 0;
+  padding: 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.es-row { margin-bottom: 1.2rem; }
+.es-row label { display: block; margin-bottom: 0.3rem; font-size: 0.84rem; color: var(--text-muted); }
+.es-row label b { font-family: var(--mono); color: var(--primary-dark); font-weight: 700; }
+.es-row input[type="range"] { width: 100%; accent-color: var(--primary); }
+
+.es-cols { display: grid; grid-template-columns: 1.35fr 1fr; gap: 1.4rem; }
+
+.es-label {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.es-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.es-table tr { border-bottom: 1px solid var(--border); }
+.es-table tr:last-child { border-bottom: none; }
+.es-table td { padding: 0.33rem 0.4rem; font-family: var(--mono); }
+.es-i { width: 1.8rem; color: var(--text-muted); }
+.es-tick { text-align: right; font-size: 0.68rem; letter-spacing: .06em; color: #16a34a; }
+
+.es-on { color: var(--text); }
+.es-off { color: var(--text-muted); opacity: 0.42; }
+
+.es-bal { margin-bottom: 0.7rem; }
+
+.es-acct {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.45rem 0.7rem;
+  margin-bottom: 0.35rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.es-name { font-size: 0.78rem; color: var(--text-muted); }
+.es-amt { font-family: var(--mono); font-size: 1.05rem; font-weight: 700; color: var(--primary-dark); }
+
+.es-total {
+  padding: 0.45rem 0.7rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  border-top: 1px dashed var(--border);
+  margin-top: 0.5rem;
+}
+
+.es-total b { font-family: var(--mono); color: #16a34a; font-size: 0.95rem; }
+.es-note { margin: 0; font-size: 0.76rem; line-height: 1.55; color: var(--text-muted); }
+
+[data-theme="dark"] .es-demo { background: #1e293b !important; border-color: #334155 !important; }
+[data-theme="dark"] .es-acct { background: #0f172a !important; border-color: #334155 !important; }
+[data-theme="dark"] .es-table tr { border-color: #334155 !important; }
+[data-theme="dark"] .es-on { color: #e2e8f0 !important; }
+[data-theme="dark"] .es-amt,
+[data-theme="dark"] .es-row label b { color: var(--primary-light) !important; }
+[data-theme="dark"] .es-tick,
+[data-theme="dark"] .es-total b { color: #4ade80 !important; }
+[data-theme="dark"] .es-total { border-top-color: #334155 !important; }
+
+@media only screen and (max-width: 40em) {
+  .es-demo { padding: 1rem; }
+  .es-cols { grid-template-columns: 1fr; gap: 1rem; }
+}
