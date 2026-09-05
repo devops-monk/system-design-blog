@@ -781,6 +781,33 @@ flowchart LR
 
 ---
 
+## References and Further Reading
+
+The source chapter carries no reference list, so these are the ones worth having.
+
+**Interview practice**
+
+- [System Design Primer](https://github.com/donnemartin/system-design-primer) — the canonical open-source study guide, with worked solutions
+- [Grokking the System Design Interview](https://www.designgurus.io/course/grokking-the-system-design-interview) — the other widely used problem set
+- [Google SRE Book](https://sre.google/sre-book/table-of-contents/) — free online. Chapters on service reliability sharpen the non-functional requirements you should be eliciting in step 1
+
+**Thinking about scope and trade-offs**
+
+- [Implementing SLOs](https://sre.google/workbook/implementing-slos/) — SLI/SLO/SLA precisely. Naming an availability target in step 1 lands well
+- [Latency Numbers Every Programmer Should Know](https://colin-scott.github.io/personal_website/research/interactive_latency.html) — the numbers you need for the estimation step
+- [CAP Theorem](https://en.wikipedia.org/wiki/CAP_theorem) — the trade-off you are expected to name out loud in step 2
+
+**Engineering blogs to read for the deep-dive step**
+
+- [Netflix Technology Blog](https://netflixtechblog.com/), [Uber Engineering](https://www.uber.com/en-GB/blog/engineering/), [Discord Engineering](https://discord.com/category/engineering) — real architectures, and the source of most interview questions
+
+**Books worth owning**
+
+- *System Design Interview – An Insider's Guide* — Alex Xu. The chapter this article follows.
+- *Designing Data-Intensive Applications* — Martin Kleppmann. The single best preparation for the deep-dive step.
+
+---
+
 ## What's Next
 
 Now that you have the framework, the next posts apply it to real systems — starting with the most commonly asked interview question of all time:

@@ -868,6 +868,34 @@ mindmap
 
 ---
 
+## References and Further Reading
+
+**The foundational papers**
+
+- [Dynamo: Amazon's Highly Available Key-value Store](https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf) — SOSP 2007. Consistent hashing, vector clocks, quorums, hinted handoff and Merkle trees all in one paper. If you read one thing, read this
+- [Bigtable: A Distributed Storage System for Structured Data](https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf) — OSDI 2006. Where SSTables and the LSM-tree write path come from
+- [Cassandra: A Decentralized Structured Storage System](https://www.cs.cornell.edu/projects/ladis2009/papers/lakshman-ladis2009.pdf) — Dynamo's ideas plus a Bigtable data model
+
+**Mechanisms in detail**
+
+- [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree) — how anti-entropy compares replicas without shipping the data
+- [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) — how a read skips SSTables that cannot contain the key
+- [SSTable and log-structured storage: LevelDB](https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/) — Ilya Grigorik, the clearest walkthrough of the write path
+- [Cassandra architecture](https://cassandra.apache.org/doc/latest/cassandra/architecture/) — the same ideas as shipped code
+
+**Implementations**
+
+- [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), [Apache Cassandra](https://cassandra.apache.org/), [Redis](https://redis.io/), [memcached](https://memcached.org/)
+- [Amazon DynamoDB: A Scalable, Predictably Performant, and Fully Managed NoSQL Database Service](https://www.usenix.org/system/files/atc22-elhemali.pdf) — USENIX ATC 2022. What Amazon actually changed in the fifteen years after the Dynamo paper, and notably it abandoned vector clocks for a managed, single-leader-per-partition design. Newer than the book and a strong point to raise
+- [RocksDB](https://rocksdb.org/) — the LSM engine underneath a large share of modern stores
+
+**Going deeper**
+
+- *Designing Data-Intensive Applications* — Martin Kleppmann. Chapters 5, 6 and 9 cover replication, partitioning and consistency far more rigorously than any interview guide
+- [Jepsen](https://jepsen.io/analyses) — Kyle Kingsbury's consistency analyses. Sobering reading on what these systems actually guarantee under partition
+
+---
+
 ## What's Next?
 
 In **Chapter 7**, we'll design a **Unique ID Generator in Distributed Systems** — tackling the surprisingly complex problem of generating globally unique, sortable, numeric IDs at 10,000+ IDs per second without any central coordination. We'll look at multi-master replication, UUIDs, ticket servers, and the famous Twitter Snowflake approach.

@@ -766,6 +766,30 @@ mindmap
 
 ---
 
+## References and Further Reading
+
+**The original ideas**
+
+- [Consistent hashing](https://en.wikipedia.org/wiki/Consistent_hashing) — Wikipedia, including Karger's original 1997 paper
+- [Consistent Hashing](https://tom-e-white.com/2007/11/consistent-hashing.html) — Tom White. Still the clearest short explanation with code
+- [CS168: Introduction and Consistent Hashing](http://theory.stanford.edu/~tim/s16/l/l1.pdf) — Tim Roughgarden's Stanford lecture, for the proofs
+
+**Systems built on it**
+
+- [Dynamo: Amazon's Highly Available Key-value Store](https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf) — SOSP 2007. The paper that made consistent hashing standard practice
+- [Cassandra: A Decentralized Structured Storage System](https://www.cs.cornell.edu/projects/ladis2009/papers/lakshman-ladis2009.pdf) — Lakshman and Malik
+- [How Discord scaled Elixir to 5,000,000 concurrent users](https://discord.com/blog/how-discord-scaled-elixir-to-5-000-000-concurrent-users) — consistent hashing in a real product
+
+**The alternatives — worth knowing, and mostly absent from interview prep**
+
+- [Maglev: A Fast and Reliable Software Network Load Balancer](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/44824.pdf) — Google. Better lookup speed and more even distribution than a ring
+- [A Fast, Minimal Memory, Consistent Hash Algorithm](https://arxiv.org/pdf/1406.2294) — Google's jump consistent hash: no ring, no virtual nodes, five lines of code. Ideal when nodes are numbered 0..N-1
+- [Rendezvous hashing](https://en.wikipedia.org/wiki/Rendezvous_hashing) — highest random weight. Predates consistent hashing, simpler to reason about, and gives naturally even distribution without virtual nodes
+
+Being able to say "a ring is the classic answer, but jump hash or rendezvous hashing may suit better here, and here is why" is what separates a memorised answer from an engineering one.
+
+---
+
 ## What's Next?
 
 In **Chapter 6**, we'll design a **Key-Value Store** from scratch — diving into CAP theorem (Consistency, Availability, Partition Tolerance), data replication strategies, consistency models, conflict resolution, and how DynamoDB and Cassandra make these tradeoffs. Consistent hashing will be one of the building blocks!

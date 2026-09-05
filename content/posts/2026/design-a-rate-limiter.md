@@ -428,6 +428,37 @@ Notice that at **1:01:40**, the entries from **1:00:01 and 1:00:30** were purged
 
 **When to use:** Strict compliance APIs where you cannot allow any boundary burst — financial transaction limits, regulatory rate limits.
 
+**How it is actually built: Redis sorted sets.**
+
+The description above sounds expensive, but there is a standard implementation that makes it cheap, and it is what interviewers are hoping you name. A Redis **sorted set** (`ZSET`) per key, with the timestamp used as both member and score, gives you purge-and-count in two O(log n) operations:
+
+```
+ZREMRANGEBYSCORE  ratelimit:user:42   0   (now - window)   # drop what rolled out
+ZCARD             ratelimit:user:42                        # how many remain
+ZADD              ratelimit:user:42   now  now             # record this request
+EXPIRE            ratelimit:user:42   window               # let idle keys die
+```
+
+Run as four separate commands this has the exact race condition described earlier — two concurrent requests can both read a count of 9 against a limit of 10 and both be allowed. Wrap it in a Lua script so Redis executes it atomically:
+
+```lua
+-- KEYS[1] = rate limit key, ARGV = now_ms, window_ms, limit
+local now, window, limit = tonumber(ARGV[1]), tonumber(ARGV[2]), tonumber(ARGV[3])
+redis.call('ZREMRANGEBYSCORE', KEYS[1], 0, now - window)
+local count = redis.call('ZCARD', KEYS[1])
+if count < limit then
+  redis.call('ZADD', KEYS[1], now, now)
+  redis.call('PEXPIRE', KEYS[1], window)
+  return {1, limit - count - 1}          -- allowed, remaining
+end
+return {0, 0}                             -- rejected
+```
+
+Two details worth mentioning out loud, because they are the difference between a textbook answer and a working one:
+
+- **This version does not store rejected requests.** The `ZADD` only runs on the allow path. The book's description keeps rejected timestamps in the log, which means a client being throttled hard keeps its own window permanently full and can never recover. Excluding them is almost always what you want.
+- **Memory is bounded by the limit, not by traffic.** A 100 requests/minute limit stores at most 100 entries per key regardless of how many requests arrive, because everything outside the window is purged on every call. That defuses the "high memory usage" objection in the table above — the real cost is one sorted set per active client, not per request.
+
 ---
 
 ### Algorithm 5: Sliding Window Counter — The Best of Both Worlds 🏆
@@ -1073,6 +1104,36 @@ A rate limiter is one of the most impactful components you can add to a producti
 7. **Always return helpful headers** — `X-RateLimit-Remaining`, `Retry-After` — so well-behaved clients can adapt
 8. **Monitor your rejection rate** — too high means your rules are too strict, too low means they're too loose or you're being bypassed
 9. **Layer your defences** — combine L3 firewall rules for DDoS with L7 application rate limiting for API abuse
+
+---
+
+## References and Further Reading
+
+**How real companies do it**
+
+- [Stripe: Scaling your API with rate limiters](https://stripe.com/blog/rate-limiters) — the clearest production write-up there is, covering four limiter types in use together
+- [Cloudflare: How we built rate limiting capable of scaling to millions of domains](https://blog.cloudflare.com/counting-things-a-lot-of-different-things/) — the sliding window counter at global scale
+- [Better rate limiting with Redis sorted sets](https://engineering.classdojo.com/blog/2015/02/06/rolling-rate-limiter/) — ClassDojo, the canonical sliding-window-log implementation
+- [lyft/ratelimit](https://github.com/lyft/ratelimit) — a production Go service you can read end to end
+- [Scaling your API with rate limiters](https://gist.github.com/ptarjan/e38f45f2dfe601419ca3af937fff574d) — Paul Tarjan's gist, the source most later posts derive from
+
+**Provider documentation and limits**
+
+- [Rate-limiting strategies and techniques](https://cloud.google.com/architecture/rate-limiting-strategies-techniques) — Google Cloud
+- [Throttle API requests for better throughput](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html) — AWS API Gateway
+- [Shopify REST Admin API rate limits](https://shopify.dev/docs/api/usage/rate-limits) — a leaky-bucket limiter in production
+- [Redis](https://redis.io/) — `INCR`, `EXPIRE` and sorted sets, the building blocks
+
+**Standards worth quoting in an interview**
+
+- [RFC 6585](https://www.rfc-editor.org/rfc/rfc6585#section-4) — where HTTP 429 is actually defined
+- [RateLimit header fields for HTTP](https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/) — the IETF draft standardising `RateLimit-Limit` / `RateLimit-Remaining` / `RateLimit-Reset`. Newer than the book, and a good detail to mention
+- [Generic Cell Rate Algorithm](https://en.wikipedia.org/wiki/Generic_cell_rate_algorithm) — GCRA, a leaky bucket needing one stored timestamp per key rather than a counter plus queue
+
+**Lower in the stack**
+
+- [Rate limit requests with iptables](https://blog.programster.org/rate-limit-requests-with-iptables) — limiting at layer 3/4
+- [OSI model](https://en.wikipedia.org/wiki/OSI_model) — for reasoning about which layer to limit at
 
 ---
 
