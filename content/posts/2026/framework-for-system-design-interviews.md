@@ -77,16 +77,16 @@ gantt
     axisFormat %M min
 
     section Step 1
-    Understand & Scope (3–10 min)         :active, s1, 00, 10m
+    Understand & Scope (3–10 min) :active, s1, 00, 10m
 
     section Step 2
-    High-Level Design (10–15 min)         :active, s2, 10, 15m
+    High-Level Design (10–15 min) :active, s2, 10, 15m
 
     section Step 3
-    Design Deep Dive (10–25 min)          :active, s3, 25, 15m
+    Design Deep Dive (10–25 min) :active, s3, 25, 15m
 
     section Step 4
-    Wrap Up (3–5 min)                     :active, s4, 40, 5m
+    Wrap Up (3–5 min) :active, s4, 40, 5m
 ```
 
 ```mermaid
@@ -352,14 +352,14 @@ When a user opens their app and loads their feed:
 
 ```mermaid
 sequenceDiagram
-    actor U as  User
-    participant LB as  Load Balancer
-    participant WS as  Web Server
-    participant NFS as  News Feed Service
-    participant NFC as  Feed Cache (Redis)
-    participant UC as  User Cache
-    participant PC as  Post Cache
-    participant DB as  Database
+    actor U as User
+    participant LB as Load Balancer
+    participant WS as Web Server
+    participant NFS as News Feed Service
+    participant NFC as Feed Cache (Redis)
+    participant UC as User Cache
+    participant PC as Post Cache
+    participant DB as Database
 
     U->>LB: GET /v1/me/feed
     LB->>WS: route request
@@ -531,7 +531,10 @@ erDiagram
         timestamp created_at
     }
 
-    USER ||--o{ POST : "creates"USER ||--o{ FRIENDSHIP : "has"USER ||--o{ NEWSFEED : "sees"POST ||--o{ NEWSFEED : "appears in"
+    USER ||--o{ POST : "creates"
+    USER ||--o{ FRIENDSHIP : "has"
+    USER ||--o{ NEWSFEED : "sees"
+    POST ||--o{ NEWSFEED : "appears in"
 ```
 
 Key design decisions to discuss:
@@ -599,17 +602,36 @@ sequenceDiagram
 
     Note over C,I: ⏱ 0:00 — Question given
 
-    I->>C: "Design a news feed system like Facebook"Note over C,I: ⏱ 0:00–0:10 — Step 1: Clarify
+    I->>C: "Design a news feed system like Facebook"
+
+    Note over C,I: ⏱ 0:00–0:10 — Step 1: Clarify
     C->>I: Ask 5–7 targeted questions
     I->>C: Answer each one
-    C->>I: "Let me write down my assumptions..."C->>I: "Recap: 10M DAU, chronological feed, media posts. Correct?"I->>C: "Yes, let's proceed"Note over C,I: ⏱ 0:10–0:25 — Step 2: High-Level Design
-    C->>I: "I'll start with the high-level components..."C->>I: Draws boxes on whiteboard
-    C->>I: "For feed publishing, I'm thinking a Fanout Service..."I->>C: "Interesting, tell me more about the fanout"C->>I: Quick back-of-envelope: "230 write QPS — single DB is fine"I->>C: "Good. What about the read path?"Note over C,I: ⏱ 0:25–0:40 — Step 3: Deep Dive
-    C->>I: "Let me deep dive into the fanout trade-offs..."C->>I: Explains push vs pull vs hybrid
-    I->>C: "How do you handle the celebrity problem?"C->>I: "Great question — for users with 1M+ followers we..."I->>C: "What does your data model look like?"C->>I: Draws schema, discusses indexes and ID generation
+    C->>I: "Let me write down my assumptions..."
+    C->>I: "Recap: 10M DAU, chronological feed, media posts. Correct?"
+    I->>C: "Yes, let's proceed"
+
+    Note over C,I: ⏱ 0:10–0:25 — Step 2: High-Level Design
+    C->>I: "I'll start with the high-level components..."
+    C->>I: Draws boxes on whiteboard
+    C->>I: "For feed publishing, I'm thinking a Fanout Service..."
+    I->>C: "Interesting, tell me more about the fanout"
+    C->>I: Quick back-of-envelope: "230 write QPS — single DB is fine"
+    I->>C: "Good. What about the read path?"
+
+    Note over C,I: ⏱ 0:25–0:40 — Step 3: Deep Dive
+    C->>I: "Let me deep dive into the fanout trade-offs..."
+    C->>I: Explains push vs pull vs hybrid
+    I->>C: "How do you handle the celebrity problem?"
+    C->>I: "Great question — for users with 1M+ followers we..."
+    I->>C: "What does your data model look like?"
+    C->>I: Draws schema, discusses indexes and ID generation
 
     Note over C,I: ⏱ 0:40–0:45 — Step 4: Wrap Up
-    C->>I: "Let me quickly recap what we've built..."C->>I: "Main bottleneck is fanout at scale, here's how I'd handle it..."C->>I: "If we scaled to 100M DAU, first change would be..."I->>C: "Great, thank you — any questions for me?"
+    C->>I: "Let me quickly recap what we've built..."
+    C->>I: "Main bottleneck is fanout at scale, here's how I'd handle it..."
+    C->>I: "If we scaled to 100M DAU, first change would be..."
+    I->>C: "Great, thank you — any questions for me?"
 ```
 
 ---

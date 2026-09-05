@@ -217,7 +217,8 @@ To find which server a key belongs to: **start at the key's position on the ring
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Ring as "Hash Ring"participant Result
+    participant Ring as Hash Ring
+    participant Result
 
     Note over Ring: Servers at positions: S0(top-right), S1(right), S2(bottom), S3(left)
     Note over Ring: Keys at positions: k0(top), k1(right-ish), k2(bottom-ish), k3(left-ish)
@@ -510,7 +511,11 @@ To find which keys move to the new server, start at the **new server's position*
 
 ```mermaid
 sequenceDiagram
-    participant Admin as "Admin"participant Ring as "Hash Ring"participant S3 as "Server 3 (previous owner)"participant S4 as "Server 4 (new)"Admin->>Ring: Add Server 4 between S3 and S0
+    participant Admin as Admin
+    participant Ring as Hash Ring
+    participant S3 as Server 3 (previous owner)
+    participant S4 as Server 4 (new)
+    Admin->>Ring: Add Server 4 between S3 and S0
     Ring->>Ring: Server 4 lands at position P4
     Ring->>Ring: Scan anticlockwise from P4...
     Ring->>Ring: Hit Server 3 at position P3
@@ -528,7 +533,11 @@ When a server fails, start at the **removed server's position** and scan **antic
 
 ```mermaid
 sequenceDiagram
-    participant Ring as "Hash Ring"participant S0 as "Server 0"participant S1 as "Server 1 (failing)"participant S2 as "Server 2 (inheritor)"Note over S1: Server 1 goes down!
+    participant Ring as Hash Ring
+    participant S0 as Server 0
+    participant S1 as Server 1 (failing)
+    participant S2 as Server 2 (inheritor)
+    Note over S1: Server 1 goes down!
     Ring->>Ring: Scan anticlockwise from S1's position...
     Ring->>Ring: Hit Server 0 at position P0
     Ring-->>S2: Keys in arc [P0 → P1] must move to Server 2
@@ -621,12 +630,19 @@ When a new node joins a Cassandra cluster, here's what happens:
 
 ```mermaid
 sequenceDiagram
-    participant Admin as "Admin"participant NewNode as "🆕 New Cassandra Node"participant Ring as "Token Ring"participant OldNode as "Old Node (neighbour)"participant Client as "Client"Admin->>NewNode: Join cluster
+    participant Admin as Admin
+    participant NewNode as 🆕 New Cassandra Node
+    participant Ring as Token Ring
+    participant OldNode as Old Node (neighbour)
+    participant Client as Client
+    Admin->>NewNode: Join cluster
     NewNode->>Ring: Generate 256 virtual node positions
     Ring->>Ring: Insert all 256 tokens into ring
-    Ring->>OldNode: "These key ranges now belong to NewNode"OldNode->>NewNode: Stream only the affected data
+    Ring->>OldNode: "These key ranges now belong to NewNode"
+    OldNode->>NewNode: Stream only the affected data
     Note over OldNode,NewNode: Only ~1/N of data moves\nN = total nodes in cluster
-    NewNode-->>Ring: "Ready to serve traffic"Client->>NewNode: Can now route requests here ✓
+    NewNode-->>Ring: "Ready to serve traffic"
+    Client->>NewNode: Can now route requests here ✓
 
     Note over Ring: Zero downtime, zero reconfiguration\nCluster just got bigger seamlessly
 ```
@@ -643,8 +659,9 @@ Imagine 3 darts thrown randomly at a circular dartboard. You'll likely get a lum
 
 ```mermaid
 xychart-beta
-    title "Load Imbalance vs Number of Virtual Nodes"x-axis ["1 vnode", "10 vnodes", "50 vnodes", "100 vnodes", "200 vnodes", "500 vnodes"]
-    y-axis "Standard Deviation of Load (%)"0 --> 45
+    title "Load Imbalance vs Number of Virtual Nodes"
+    x-axis ["1 vnode", "10 vnodes", "50 vnodes", "100 vnodes", "200 vnodes", "500 vnodes"]
+    y-axis "Standard Deviation of Load (%)" 0 --> 45
     line [42, 28, 16, 10, 5, 2]
 ```
 

@@ -169,7 +169,8 @@ CA→Netherlands    │                        │ 150,000,000 seconds (4.75 YEA
 
 ```mermaid
 graph TD
-    subgraph "Speed Tiers — What's Fast vs Slow"A["L1/L2 Cache\n0.5 – 7 ns\nInstant"]
+    subgraph "Speed Tiers — What's Fast vs Slow"
+        A["L1/L2 Cache\n0.5 – 7 ns\nInstant"]
         B["RAM\n100 ns\nVery Fast"]
         C["Same Datacenter Network\n500 μs\nFast"]
         D["SSD Read\n~150 μs\nModerate"]
@@ -218,7 +219,8 @@ Uptime is measured in **nines**. More nines = more availability = less downtime:
 
 ```mermaid
 graph LR
-    subgraph "What does 99% mean in practice?"A["99%\n3.65 days/year down\n✗ Not acceptable\nfor production"]
+    subgraph "What does 99% mean in practice?"
+        A["99%\n3.65 days/year down\n✗ Not acceptable\nfor production"]
         B["99.9%\n8.77 hours/year down\n Minimum bar\nfor most services"]
         C["99.99%\n52 min/year down\n✓ Good target\nfor user-facing APIs"]
         D["99.999%\n5 min/year down\n Five nines\nPayments / Banking"]
@@ -388,7 +390,8 @@ With replication ×3  = ~165 PB
 ```
 
 ```mermaid
-pie title "5-Year Storage Breakdown (before replication)" "Media storage (images/video)" : 54750
+pie title "5-Year Storage Breakdown (before replication)"
+    "Media storage (images/video)" : 54750
     "Text & metadata" : 109
 ```
 
@@ -405,7 +408,8 @@ Write bandwidth = 7,000 QPS × (200 bytes text + 10% chance × 1 MB)
 
 ```mermaid
 flowchart LR
-    subgraph "Storage Insight"T["Text\n200 bytes/tweet\n~109 TB over 5 years\n(tiny)"]
+    subgraph "Storage Insight"
+        T["Text\n200 bytes/tweet\n~109 TB over 5 years\n(tiny)"]
         M["Media\n1 MB / 10% of tweets\n~55 PB over 5 years\n(massive)"]
     end
     T --- M
@@ -490,7 +494,8 @@ Understanding where data lives is critical for latency decisions. Here's the ful
 
 ```mermaid
 graph TD
-    subgraph "Fastest → Slowest"L1["L1 Cache\n~32 KB per core\n0.5 ns\nInside the CPU chip"]
+    subgraph "Fastest → Slowest"
+        L1["L1 Cache\n~32 KB per core\n0.5 ns\nInside the CPU chip"]
         L2["L2 Cache\n~256 KB per core\n7 ns\nStill on the chip"]
         L3["L3 Cache\n~8–32 MB shared\n~30 ns\nShared across cores"]
         RAM["RAM / Main Memory\n16 GB – 1 TB\n100 ns\nDIMM sticks"]

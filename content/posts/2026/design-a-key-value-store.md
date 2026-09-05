@@ -196,7 +196,11 @@ The solution: **replicate every key on N servers** (where N is a configurable re
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Coord as "Coordinator (Node 0)"participant N1 as "Node 1 (Primary)"participant N2 as "Node 2 (Replica 1)"participant N3 as "Node 3 (Replica 2)"Client->>Coord: put("user:1001", "Alice")
+    participant Coord as Coordinator (Node 0)
+    participant N1 as Node 1 (Primary)
+    participant N2 as Node 2 (Replica 1)
+    participant N3 as Node 3 (Replica 2)
+    Client->>Coord: put("user:1001", "Alice")
     Note over Coord: Hash key → Node 1 position
     Note over Coord: Walk clockwise for N=3 unique servers
     Coord->>N1: store("user:1001", "Alice")
@@ -230,7 +234,11 @@ Here's where things get truly interesting. With 3 replicas of every key, how do 
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Coord as "Coordinator"participant S0 as "Server 0"participant S1 as "Server 1"participant S2 as "Server 2"Note over Coord,S2: N=3, W=2 (write quorum)
+    participant Coord as Coordinator
+    participant S0 as Server 0
+    participant S1 as Server 1
+    participant S2 as Server 2
+    Note over Coord,S2: N=3, W=2 (write quorum)
     Client->>Coord: put(key1, val1)
     Coord->>S0: put(key1, val1)
     Coord->>S1: put(key1, val1)
@@ -249,7 +257,9 @@ sequenceDiagram
 ```mermaid
 quadrantChart
     title Consistency vs Latency Tradeoffs
-    x-axis "Low Latency" --> "High Latency"y-axis "Eventual Consistency" --> "Strong Consistency"quadrant-1 Strong but slow
+    x-axis "Low Latency" --> "High Latency"
+    y-axis "Eventual Consistency" --> "Strong Consistency"
+    quadrant-1 Strong but slow
     quadrant-2 Strong AND fast - impossible
     quadrant-3 Weak and fast - good for reads
     quadrant-4 Medium tradeoff
@@ -314,7 +324,15 @@ With eventual consistency, here's the nightmare scenario: two clients update the
 
 ```mermaid
 sequenceDiagram
-    participant Client1 as "Client 1"participant Client2 as "Client 2"participant N1 as "Node n1"participant N2 as "Node n2"Note over N1,N2: Initial state — name: "john"Client1->>N1: get("name") → "john"Client2->>N2: get("name") → "john"Note over Client1,Client2: Both read "john". Now both update simultaneously.
+    participant Client1 as Client 1
+    participant Client2 as Client 2
+    participant N1 as Node n1
+    participant N2 as Node n2
+    Note over N1,N2: Initial state — name: "john"
+    Client1->>N1: get("name") → "john"
+    Client2->>N2: get("name") → "john"
+
+    Note over Client1,Client2: Both read "john". Now both update simultaneously.
 
     Client1->>N1: put("name", "johnSanFrancisco")
     Client2->>N2: put("name", "johnNewYork")
@@ -389,10 +407,20 @@ In a distributed system, you can't trust a single node's report that another nod
 
 ```mermaid
 sequenceDiagram
-    participant S0 as "Server 0"participant S1 as "Server 1"participant S2 as "Server 2 (suspect)"participant S3 as "Server 3"Note over S0,S3: Each server keeps a membership table
+    participant S0 as Server 0
+    participant S1 as Server 1
+    participant S2 as Server 2 (suspect)
+    participant S3 as Server 3
+    Note over S0,S3: Each server keeps a membership table
     Note over S0: S0's table shows S2's heartbeat stuck at 12:00 old
 
-    S0->>S1: Gossip: "S2 heartbeat hasn't moved!"S0->>S3: Gossip: "S2 heartbeat hasn't moved!"S1->>S3: Gossip: "S0 says S2 looks dead"S3->>S1: Confirm: "I also haven't heard S2 heartbeat"Note over S0,S3: Multiple nodes confirm S2 is silent
+    S0->>S1: Gossip: "S2 heartbeat hasn't moved!"
+    S0->>S3: Gossip: "S2 heartbeat hasn't moved!"
+
+    S1->>S3: Gossip: "S0 says S2 looks dead"
+    S3->>S1: Confirm: "I also haven't heard S2 heartbeat"
+
+    Note over S0,S3: Multiple nodes confirm S2 is silent
     S0->>S0: Mark S2 as OFFLINE
     S1->>S1: Mark S2 as OFFLINE
     S3->>S3: Mark S2 as OFFLINE
@@ -431,7 +459,12 @@ Imagine server S2 goes offline temporarily. With strict quorum (W=2, N=3), write
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Coord as "Coordinator"participant S0 as "Server 0 ✓"participant S1 as "Server 1 ✓"participant S2 as "Server 2 ✗ offline"participant S3 as "Server 3 ✓ (substitute)"Client->>Coord: put(key1, val1)
+    participant Coord as Coordinator
+    participant S0 as Server 0 ✓
+    participant S1 as Server 1 ✓
+    participant S2 as Server 2 ✗ offline
+    participant S3 as Server 3 ✓ (substitute)
+    Client->>Coord: put(key1, val1)
     Note over Coord: Normal replicas: S0, S1, S2
     Note over Coord: S2 is offline! Use sloppy quorum.
     Coord->>S0: put(key1, val1) — normal replica
@@ -442,7 +475,9 @@ sequenceDiagram
     S3-->>Coord: ACK ✓ (hints: this belongs to S2)
     Coord-->>Client: Write successful ✓
 
-    Note over S3: S3 stores a hint: "this data belongs to S2"Note over S2: Later — S2 comes back online!
+    Note over S3: S3 stores a hint: "this data belongs to S2"
+
+    Note over S2: Later — S2 comes back online!
     S3->>S2: Hinted handoff — send S2's data back
     S2-->>S3: Received, thanks
     S3->>S3: Delete the hint copy
@@ -627,7 +662,11 @@ When a client writes `put("user:1001", "Alice Chen")`, what happens inside the n
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Node as "Node (Coordinator)"participant CommitLog as "Commit Log (disk)"participant MemCache as "Memory Cache (MemTable)"participant SSTable as "SSTable Files (disk)"Client->>Node: put("user:1001", "Alice Chen")
+    participant Node as Node (Coordinator)
+    participant CommitLog as Commit Log (disk)
+    participant MemCache as Memory Cache (MemTable)
+    participant SSTable as SSTable Files (disk)
+    Client->>Node: put("user:1001", "Alice Chen")
 
     Node->>CommitLog: ① Write to commit log first!
     CommitLog-->>Node: written to disk (durable)

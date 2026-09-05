@@ -150,29 +150,35 @@ Here's the visual of the bucket itself:
 ```mermaid
 flowchart TD
     subgraph REFILLER["Refiller: 4 tokens/minute"]
-        T1[""] 
-        T2[""]
+        T1["●"] 
+        T2["●"]
     end
 
     REFILLER -->|adds tokens| BUCKET
 
     subgraph BUCKET["Token Bucket\nCapacity: 4"]
         direction LR
-        TOK1[""] 
-        TOK2[""]
-        TOK3[""]
-        TOK4[""]
+        TOK1["●"] 
+        TOK2["●"]
+        TOK3["●"]
+        TOK4["●"]
     end
 
     OVERFLOW["Overflow: extra tokens\nare discarded "]
     BUCKET -.->|if full| OVERFLOW
+    style T1 fill:#F59E0B,stroke:#B45309,color:#fff
+    style T2 fill:#F59E0B,stroke:#B45309,color:#fff
+    style TOK1 fill:#F59E0B,stroke:#B45309,color:#fff
+    style TOK2 fill:#F59E0B,stroke:#B45309,color:#fff
+    style TOK3 fill:#F59E0B,stroke:#B45309,color:#fff
+    style TOK4 fill:#F59E0B,stroke:#B45309,color:#fff
 ```
 
 **How a request is processed:**
 
 ```mermaid
 flowchart LR
-    REQ["Request arrives"] --> CHECK{"Enough\ntokens\nin bucket?"}
+    REQ["Request arrives"] --> CHECK{" Enough\ntokens\nin bucket?"}
     CHECK -->|"✓ Yes: take 1 token"| FORWARD["Forward to\nAPI Server ✓"]
     CHECK -->|"✗ No tokens left"| DROP["Drop request\nHTTP 429 ✗"]
     FORWARD --> PROCESS["API processes\nand responds"]
@@ -185,26 +191,27 @@ The bucket size is 4. Refill rate is 4 tokens per minute.
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Bucket as "Bucket (capacity=4)"participant API
+    participant Bucket as Bucket (capacity=4)
+    participant API
 
-    Note over Bucket:  1:00:00 — Start with 4 tokens
+    Note over Bucket: 1:00:00 — Start with 4 tokens
     Client->>Bucket: Request arrives
     Bucket->>Bucket: tokens=4 ≥ 1 ✓ → take 1 token → tokens=3
     Bucket->>API: Forward request
     API-->>Client: 200 OK ✓
 
-    Note over Bucket:  1:00:05 — 3 simultaneous requests
+    Note over Bucket: 1:00:05 — 3 simultaneous requests
     Client->>Bucket: 3 requests at once
     Bucket->>Bucket: tokens=3 ≥ 3 ✓ → take 3 tokens → tokens=0
     Bucket->>API: Forward all 3
     API-->>Client: 200 OK × 3 ✓
 
-    Note over Bucket:  1:00:20 — Bucket is empty!
+    Note over Bucket: 1:00:20 — Bucket is empty!
     Client->>Bucket: New request arrives
     Bucket->>Bucket: tokens=0 ✗ Not enough!
     Bucket-->>Client: HTTP 429 Too Many Requests ✗
 
-    Note over Bucket:  1:01:00 — Refiller kicks in
+    Note over Bucket: 1:01:00 — Refiller kicks in
     Bucket->>Bucket: Refill: tokens = 4 (full again)
     Client->>Bucket: New request
     Bucket->>Bucket: tokens=4 ≥ 1 ✓ → take 1 → tokens=3
@@ -316,23 +323,23 @@ graph LR
 ```mermaid
 gantt
     title Fixed Window Counter — Limit: 3 requests/second
-    dateFormat  X
-    axisFormat  Second %S
+    dateFormat X
+    axisFormat Second %S
 
     section Second :00
-    ✓ Request 1  : done, 0, 1
-    ✓ Request 2  : done, 1, 1
-    ✓ Request 3  : done, 2, 1
+    ✓ Request 1 : done, 0, 1
+    ✓ Request 2 : done, 1, 1
+    ✓ Request 3 : done, 2, 1
 
     section Second :01
-    ✓ Request 4  : done, 3, 1
-    ✓ Request 5  : done, 4, 1
-    ✗ Request 6 (dropped)  : crit, 5, 1
-    ✗ Request 7 (dropped)  : crit, 6, 1
+    ✓ Request 4 : done, 3, 1
+    ✓ Request 5 : done, 4, 1
+    ✗ Request 6 (dropped) : crit, 5, 1
+    ✗ Request 7 (dropped) : crit, 6, 1
 
     section Second :02
-    ✓ Request 8  : done, 7, 1
-    ✓ Request 9  : done, 8, 1
+    ✓ Request 8 : done, 7, 1
+    ✓ Request 9 : done, 8, 1
 ```
 
 The implementation is dead simple. In Redis: `INCR user:123:window:1685484000` with an `EXPIRE` matching the window size.
@@ -351,8 +358,9 @@ config:
     height: 300
 ---
 xychart-beta
-    title "Boundary Burst — 10 requests sneak through in 60 seconds (limit is 5/min)"x-axis ["2:00:00", "2:00:30", "2:01:00 (reset!)", "2:01:30", "2:02:00"]
-    y-axis "Requests"0 --> 6
+    title "Boundary Burst — 10 requests sneak through in 60 seconds (limit is 5/min)"
+    x-axis ["2:00:00", "2:00:30", "2:01:00 (reset!)", "2:01:30", "2:02:00"]
+    y-axis "Requests" 0 --> 6
     bar [0, 5, 0, 5, 0]
 ```
 
@@ -385,7 +393,8 @@ xychart-beta
 sequenceDiagram
     participant C as Client
     participant RL as Rate Limiter
-    participant LOG as "Timestamp Log\n(limit: 2 req/min)"Note over LOG: Log = []
+    participant LOG as Timestamp Log\n(limit: 2 req/min)
+    Note over LOG: Log = []
 
     C->>RL: Request at 1:00:01
     RL->>LOG: Purge old entries (none to purge)
@@ -523,7 +532,14 @@ This algorithm assumes requests in the previous window were evenly distributed a
 ```mermaid
 quadrantChart
     title Algorithm Tradeoffs — Accuracy vs Memory Efficiency
-    x-axis "Low Memory Efficiency" --> "High Memory Efficiency"y-axis "Low Accuracy" --> "High Accuracy"quadrant-1 "Best: High accuracy + Low memory"quadrant-2 "Accurate but expensive"quadrant-3 "Avoid: Low quality"quadrant-4 "Simple but inaccurate"Sliding Window Counter: [0.87, 0.88]
+    x-axis "Low Memory Efficiency" --> "High Memory Efficiency"
+    y-axis "Low Accuracy" --> "High Accuracy"
+    quadrant-1 "Best: High accuracy + Low memory"
+    quadrant-2 "Accurate but expensive"
+    quadrant-3 "Avoid: Low quality"
+    quadrant-4 "Simple but inaccurate"
+
+    Sliding Window Counter: [0.87, 0.88]
     Token Bucket: [0.82, 0.72]
     Leaky Bucket: [0.78, 0.62]
     Fixed Window Counter: [0.92, 0.28]
@@ -568,7 +584,7 @@ Redis is different:
 graph LR
     CLIENT["Client"] -->|HTTP Request| RL["Rate Limiter\nMiddleware"]
     
-    RL <-->|"① INCR user:123:counter\n② check vs limit\n③ EXPIRE if new key"| REDIS[("Redis\nIn-memory counter store")]
+    RL <-->|"① INCR user:123:counter\n② check vs limit\n③ EXPIRE if new key"| REDIS[(" Redis\nIn-memory counter store")]
     
     RL -->|"✓ Under limit\nForward request"| API["API Servers"]
     RL -->|"✗ Over limit\nHTTP 429 + headers"| CLIENT
@@ -628,9 +644,9 @@ descriptors:
 
 ```mermaid
 flowchart TD
-    DISK[("Config files\nstored on disk")] 
+    DISK[(" Config files\nstored on disk")] 
     WORKERS["Background Workers\n(pull rules periodically)"]
-    CACHE[("Rules Cache\n(fast in-memory read)")]
+    CACHE[(" Rules Cache\n(fast in-memory read)")]
 
     DISK -->|"workers pull every ~60s"| WORKERS
     WORKERS -->|"update cache"| CACHE
@@ -638,7 +654,7 @@ flowchart TD
     REQ["Incoming request\nGET /api/v1/posts\nUser: alice, Tier: free"] --> RL["Rate Limiter"]
     RL -->|"① Load rule for\nfree-tier users"| CACHE
     CACHE -->|"Rule: 60 req/hour"| RL
-    RL -->|"② Check + increment\ncounter in Redis"| REDIS[("Redis")]
+    RL -->|"② Check + increment\ncounter in Redis"| REDIS[(" Redis")]
     REDIS -->|"counter = 47"| RL
     RL -->|"③ 47 < 60 ✓"| API["API Server"]
     RL -->|"If over limit ✗"| RESP429["HTTP 429 + headers"]
@@ -697,14 +713,14 @@ graph TB
         end
 
         subgraph RULES_LAYER["Rules Layer"]
-            RULES_DISK[("Rules on Disk")]
+            RULES_DISK[(" Rules on Disk")]
             WORKERS["Workers"]
-            RULES_CACHE[("Cached Rules")]
+            RULES_CACHE[(" Cached Rules")]
             RULES_DISK --> WORKERS --> RULES_CACHE
         end
 
         subgraph REDIS_LAYER["Redis Cluster (shared counters)"]
-            REDIS[("Redis")]
+            REDIS[(" Redis")]
         end
 
         subgraph API_LAYER["API Servers"]
@@ -763,7 +779,10 @@ In a concurrent system, this sequence can interleave dangerously:
 
 ```mermaid
 sequenceDiagram
-    participant RL1 as "Rate Limiter 1"participant RL2 as "Rate Limiter 2"participant R as "Redis\n(counter = 3, limit = 4)"Note over R: Counter = 3
+    participant RL1 as Rate Limiter 1
+    participant RL2 as Rate Limiter 2
+    participant R as Redis\n(counter = 3, limit = 4)
+    Note over R: Counter = 3
 
     RL1->>R: READ counter
     R-->>RL1: counter = 3
@@ -777,7 +796,7 @@ sequenceDiagram
     RL1->>R: WRITE counter = 4 (3+1)
     RL2->>R: WRITE counter = 4 (3+1)
 
-    Note over R:  Counter = 4, but should be 5!
+    Note over R: Counter = 4, but should be 5!
     Note over R: Both requests were allowed when only ONE should have been.
     Note over R: We've exceeded our limit!
 ```
@@ -841,7 +860,7 @@ graph LR
         C4["Client 2"]
         RL_C["Rate Limiter A"]
         RL_D["Rate Limiter B"]
-        REDIS[("Redis\nuser1: 5 ← true count")]
+        REDIS[(" Redis\nuser1: 5 ← true count")]
 
         C3 --> RL_C & RL_D
         C4 --> RL_D
@@ -921,9 +940,9 @@ Deploying a rate limiter and forgetting about it is a mistake. You must monitor 
 flowchart LR
     RL["Rate Limiter"]
 
-    RL -->|"Emit metrics"| METRICS[("Prometheus\nMetrics Store")]
+    RL -->|"Emit metrics"| METRICS[(" Prometheus\nMetrics Store")]
     METRICS --> GRAFANA["Grafana Dashboard"]
-    METRICS --> ALERTS{"Alert Rules"}
+    METRICS --> ALERTS{" Alert Rules"}
 
     ALERTS -->|"Rejection rate > 15%"| ALERT1["Rules too strict!\nLegitimate users being blocked.\nConsider relaxing limits."]
 
@@ -1014,7 +1033,7 @@ Here's everything you need to ace a rate limiter question in one diagram:
 
 ```mermaid
 mindmap
-  root(("Rate Limiter\nDesign"))
+  root((" Rate Limiter\nDesign"))
     Requirements
       Server-side, not client
       Low latency < 1ms overhead
