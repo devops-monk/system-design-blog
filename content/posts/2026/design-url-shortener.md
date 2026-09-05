@@ -5,7 +5,7 @@ toc: true
 date: 2026-05-31T14:00:00+00:00
 description: "Design a TinyURL-style service handling 100 million new links a day. Base62 encoding, why 7 characters is exactly right, the 301-versus-302 decision that quietly breaks your analytics, and the abuse problem the textbooks skip."
 tags: ["system-design", "url-shortener", "base62", "caching", "distributed-systems", "databases"]
-categories: ["Fundamentals"]
+categories: ["Case Studies"]
 url: /2026/05/design-url-shortener/
 ---
 

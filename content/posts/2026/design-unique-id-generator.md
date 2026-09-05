@@ -5,7 +5,7 @@ toc: true
 date: 2026-05-31T10:00:00+00:00
 description: "How to generate billions of unique, sortable, 64-bit IDs per day with no central coordination. Multi-master replication, UUIDs, ticket servers and Twitter Snowflake explained from first principles — plus UUIDv7, ULID and how to choose between them in 2026."
 tags: ["system-design", "unique-id", "snowflake", "uuid", "distributed-systems", "databases"]
-categories: ["Fundamentals"]
+categories: ["Case Studies"]
 url: /2026/05/design-unique-id-generator/
 ---
 

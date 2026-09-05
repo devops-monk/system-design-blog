@@ -7,8 +7,7 @@ date: 2026-05-30T00:00:00+00:00
 url: /2026/05/back-of-the-envelope-estimation/
 image: /images/articles/back-of-the-envelope.webp
 toc: true
-categories:
-  - Fundamentals
+categories: ["Fundamentals"]
 tags:
   - scalability
   - estimation

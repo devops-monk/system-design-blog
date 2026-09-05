@@ -5,7 +5,7 @@ toc: true
 date: 2026-05-30T20:00:00+00:00
 description: "A complete beginner-friendly guide to designing a distributed key-value store — covering CAP theorem, quorum consensus, vector clocks, gossip protocol, Merkle trees, and the write/read paths inspired by DynamoDB and Cassandra."
 tags: ["system-design", "key-value-store", "dynamodb", "cassandra", "cap-theorem", "distributed-systems"]
-categories: ["Fundamentals"]
+categories: ["Case Studies"]
 url: /2026/05/design-a-key-value-store/
 ---
 

@@ -7,8 +7,7 @@ date: 2026-05-30T06:00:00+00:00
 url: /2026/05/framework-for-system-design-interviews/
 image: /images/articles/system-design-framework.webp
 toc: true
-categories:
-  - Fundamentals
+categories: ["Fundamentals"]
 tags:
   - system-design
   - interviews
