@@ -2637,3 +2637,97 @@ a.cert-card:hover .cert-verify { opacity: 1; }
   .du-grid { grid-template-columns: repeat(2, 1fr); }
   .du-num { font-size: 1.25rem; }
 }
+
+/* ==========================================================================
+   Live leaderboard (posts/2026/design-gaming-leaderboard)
+   ========================================================================== */
+
+.lb-demo {
+  margin: 1.75rem 0;
+  padding: 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.lb-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1rem; }
+
+.lb-actions button {
+  padding: 0.45rem 0.9rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.lb-actions button:hover { filter: brightness(1.08); }
+
+.lb-actions button:nth-child(2),
+.lb-actions button:nth-child(3) {
+  color: var(--text-muted);
+  background: var(--bg);
+  border-color: var(--border);
+}
+
+.lb-actions button:nth-child(2):hover,
+.lb-actions button:nth-child(3):hover { color: var(--primary-dark); border-color: var(--primary); }
+
+.lb-cmd {
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 1.1rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--primary-dark);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 6px 6px 0;
+  word-break: break-all;
+}
+
+.lb-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  margin-bottom: 0.45rem;
+}
+
+.lb-label b { font-family: var(--mono); color: var(--primary-dark); }
+
+.lb-table { width: 100%; border-collapse: collapse; margin-bottom: 1.2rem; font-size: 0.88rem; }
+.lb-table tr { border-bottom: 1px solid var(--border); }
+.lb-table tr:last-child { border-bottom: none; }
+.lb-table td { padding: 0.42rem 0.5rem; }
+
+.lb-r { width: 3rem; font-family: var(--mono); font-weight: 700; color: var(--text-muted); }
+.lb-m { font-family: var(--mono); color: var(--text); }
+.lb-m i { font-style: normal; font-size: 0.7rem; font-weight: 700; letter-spacing: .08em; color: var(--primary-dark); }
+.lb-s { width: 4rem; text-align: right; font-family: var(--mono); font-weight: 600; color: var(--text); }
+
+.lb-me { background: rgba(14, 165, 233, 0.09); }
+.lb-me .lb-r, .lb-me .lb-m, .lb-me .lb-s { color: var(--primary-dark); font-weight: 700; }
+
+[data-theme="dark"] .lb-demo { background: #1e293b !important; border-color: #334155 !important; }
+[data-theme="dark"] .lb-cmd { background: #0f172a !important; border-color: #334155 !important; border-left-color: var(--primary) !important; color: var(--primary-light) !important; }
+[data-theme="dark"] .lb-actions button:nth-child(2),
+[data-theme="dark"] .lb-actions button:nth-child(3) { background: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
+[data-theme="dark"] .lb-table tr { border-color: #334155 !important; }
+[data-theme="dark"] .lb-m, [data-theme="dark"] .lb-s { color: #e2e8f0 !important; }
+[data-theme="dark"] .lb-me { background: rgba(56,189,248,0.12) !important; }
+[data-theme="dark"] .lb-me .lb-r,
+[data-theme="dark"] .lb-me .lb-m,
+[data-theme="dark"] .lb-me .lb-s,
+[data-theme="dark"] .lb-m i,
+[data-theme="dark"] .lb-label b { color: var(--primary-light) !important; }
+
+@media only screen and (max-width: 40em) {
+  .lb-demo { padding: 1rem; }
+  .lb-cmd { font-size: 0.72rem; }
+}
