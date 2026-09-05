@@ -1,0 +1,22 @@
+{{ define "main" }}
+<section id="primary" class="content-archive content-area post-content-area">
+    <main id="main" class="site-main" role="main">
+        <article class="post type-page static-page">
+            <div class="post-inner-content">
+                {{ if not .Params.hide_title }}
+                <header class="entry-header">
+                    <h2 class="entry-title">{{ .Title }}</h2>
+                </header>
+                {{ end }}
+                <div class="entry-content">
+                    {{ .Content }}
+                </div>
+            </div>
+        </article>
+    </main>
+</section>
+
+<section id="secondary" class="sidebar widget-area clearfix" role="complementary">
+    {{ partial "sidebar.html" . }}
+</section>
+{{ end }}

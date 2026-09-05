@@ -1569,3 +1569,195 @@ a.cert-card:hover .cert-verify { opacity: 1; }
 }
 .diagram svg { display: block; width: 100%; min-width: 620px; height: auto; }
 .entry-content svg text { font-family: var(--font); }
+
+/* ==========================================================================
+   About page
+   The About page uses layouts/page/single.html, which drops the post chrome
+   (generated cover, date, reading time, share buttons). The profile header
+   below replaces the cover image.
+   ========================================================================== */
+
+.static-page .entry-content > h2:first-child { margin-top: 0; }
+
+.about-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  padding: 2rem;
+  margin: 0 0 1.75rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #075985 100%);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+}
+
+.about-avatar {
+  width: 132px;
+  height: 132px;
+  flex: 0 0 132px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255,255,255,0.9);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.28);
+}
+
+.about-hero-body { min-width: 0; }
+
+.about-eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary-light);
+}
+
+.about-name {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  line-height: 1.15;
+  font-weight: 700;
+  color: #fff;
+}
+
+.about-role {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.about-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.about-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #e2e8f0;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.about-links a:hover { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+/* Stat row --------------------------------------------------------------- */
+
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin: 0 0 2rem;
+}
+
+.about-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 1rem 0.5rem;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.about-stat-num { font-size: 1.6rem; font-weight: 700; color: var(--primary-dark); line-height: 1.1; }
+.about-stat-label { font-size: 0.74rem; color: var(--text-muted); letter-spacing: 0.02em; }
+
+/* Skill chips ------------------------------------------------------------ */
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.5rem 0 1.35rem; }
+
+.chips span {
+  padding: 0.32rem 0.75rem;
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: var(--primary-dark);
+  background: rgba(14,165,233,0.09);
+  border: 1px solid rgba(14,165,233,0.22);
+  border-radius: 999px;
+}
+
+/* Certifications --------------------------------------------------------- */
+
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 0.65rem;
+  margin: 1rem 0 1.75rem;
+}
+
+.cert {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.cert i { color: var(--primary); font-size: 1.05rem; flex: 0 0 auto; }
+
+/* Call to action --------------------------------------------------------- */
+
+.about-cta { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0 0.5rem; }
+
+.about-cta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.15rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: filter 0.15s ease, background 0.15s ease;
+}
+
+/* .entry-content a rules in this file carry !important, so CTA and hero link
+   colours are scoped through .entry-content to outrank them in both themes. */
+.entry-content .about-cta-primary { background: var(--primary); color: #fff !important; border: 1px solid var(--primary); }
+.entry-content .about-cta a,
+.entry-content .about-links a { text-decoration: none !important; }
+.entry-content .about-links a { color: #e2e8f0 !important; }
+.entry-content .about-links a:hover { color: #fff !important; }
+.about-cta-primary:hover { filter: brightness(1.08); }
+
+.entry-content .about-cta-secondary {
+  background: var(--surface);
+  color: var(--primary-dark) !important;
+  border: 1px solid var(--border);
+}
+
+.about-cta-secondary:hover { background: rgba(14,165,233,0.08); border-color: var(--primary); }
+
+/* Dark theme ------------------------------------------------------------- */
+
+[data-theme="dark"] .about-stat,
+[data-theme="dark"] .cert,
+[data-theme="dark"] .about-cta-secondary { background: #1e293b !important; border-color: #334155 !important; }
+[data-theme="dark"] .cert { border-left-color: var(--primary) !important; }
+[data-theme="dark"] .about-stat-num { color: var(--primary-light) !important; }
+[data-theme="dark"] .chips span { color: var(--primary-light) !important; background: rgba(56,189,248,0.12) !important; border-color: rgba(56,189,248,0.28) !important; }
+[data-theme="dark"] .entry-content .about-cta-secondary { color: var(--primary-light) !important; }
+[data-theme="dark"] .entry-content .about-cta-primary { color: #fff !important; }
+[data-theme="dark"] .entry-content .about-links a { color: #e2e8f0 !important; }
+
+/* Small screens ---------------------------------------------------------- */
+
+@media only screen and (max-width: 40em) {
+  .about-hero { flex-direction: column; text-align: center; padding: 1.5rem 1.15rem; gap: 1.1rem; }
+  .about-links { justify-content: center; }
+  .about-name { font-size: 1.6rem; }
+  .about-stats { grid-template-columns: repeat(2, 1fr); }
+  .about-cta a { width: 100%; justify-content: center; }
+}
