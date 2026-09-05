@@ -1420,68 +1420,6 @@ a.cert-card:hover .cert-verify { opacity: 1; }
   transition: width 0.4s ease;
 }
 
-/* ---- Series navigation (prev/next) ---- */
-.series-navigation {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 0.75em;
-  align-items: stretch;
-  margin: 2.5em 0 1.5em;
-  border-top: 1px solid var(--border);
-  padding-top: 1.75em;
-}
-
-.series-nav-prev { justify-self: start; }
-.series-nav-next { justify-self: end; text-align: right; }
-.series-nav-toc  { justify-self: center; display: flex; align-items: center; }
-
-.series-nav-link {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2em;
-  padding: 0.75em 1em;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  text-decoration: none !important;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  max-width: 280px;
-}
-
-.series-nav-link:hover {
-  border-color: var(--primary) !important;
-  box-shadow: 0 0 0 3px rgba(14,165,233,0.1) !important;
-}
-
-.series-nav-direction {
-  font-size: 0.73rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-muted);
-}
-
-.series-nav-title {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--primary) !important;
-  line-height: 1.35;
-}
-
-.series-nav-link--toc {
-  flex-direction: row;
-  align-items: center;
-  gap: 0.4em;
-  padding: 0.6em 1em;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text-muted) !important;
-  max-width: none;
-  white-space: nowrap;
-}
-
-.series-nav-link--toc:hover { color: var(--primary) !important; }
-
 /* ---- Tutorial index page ---- */
 .tutorial-index {
   font-size: 0.95rem !important;
@@ -1521,9 +1459,6 @@ a.cert-card:hover .cert-verify { opacity: 1; }
 }
 
 /* ---- Dark mode: tutorial components ---- */
-[data-theme="dark"] .series-navigation { border-color: #334155 !important; }
-[data-theme="dark"] .series-nav-link { background: #1e293b !important; border-color: #334155 !important; }
-[data-theme="dark"] .series-nav-title { color: var(--primary-light) !important; }
 [data-theme="dark"] .tutorial-index h2 { color: #f0f9ff !important; border-color: #334155 !important; }
 
 
@@ -3153,4 +3088,206 @@ a.cert-card:hover .cert-verify { opacity: 1; }
   .tts-speed { flex: 1 1 auto; min-width: 0; }
   .tts-speed button { flex: 1 1 0; min-width: 0; padding: 0.24rem 0.2rem; font-size: 0.66rem; }
   .tts-stop, .tts-play { flex: 0 0 auto; }
+}
+
+/* ==========================================================================
+   Series navigation (layouts/partials/series-badge.html, series-nav.html)
+   ========================================================================== */
+
+.series-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+  padding: 0.3rem 0.7rem 0.3rem 0.55rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-decoration: none;
+  background: rgba(14, 165, 233, 0.09);
+  border: 1px solid rgba(14, 165, 233, 0.28);
+  border-radius: 999px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.series-badge:hover { background: rgba(14, 165, 233, 0.16); border-color: var(--primary); }
+.series-badge-vol { color: var(--primary-dark); font-weight: 700; }
+
+/* Divider between volume and chapter, drawn rather than typed so it stays
+   put when the badge wraps on a narrow screen. */
+.series-badge-ch {
+  padding-left: 0.55rem;
+  color: var(--text-muted);
+  border-left: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+.series-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin: 2.25rem 0 0;
+}
+
+.series-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.9rem 1.05rem;
+  text-decoration: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.series-nav-link:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Placeholder that holds the column open at the first and last chapter, so a
+   lone "Next" stays in the right-hand half instead of sliding left. */
+.series-nav-link.is-empty { background: none; border: none; box-shadow: none; }
+.series-nav-link.is-empty:hover { transform: none; }
+
+.series-nav-next { text-align: right; }
+.series-nav-dir { font-size: 0.72rem; font-weight: 600; color: var(--primary-dark); }
+.series-nav-ch { font-family: var(--mono); font-size: 0.68rem; color: var(--text-muted); }
+.series-nav-title { font-size: 0.92rem; font-weight: 600; line-height: 1.3; color: var(--text); }
+
+[data-theme="dark"] .series-badge { background: rgba(56, 189, 248, 0.1) !important; border-color: rgba(56, 189, 248, 0.3) !important; }
+[data-theme="dark"] .series-badge-vol { color: var(--primary-light) !important; }
+[data-theme="dark"] .series-nav-link { background: #1e293b !important; border-color: #334155 !important; }
+[data-theme="dark"] .series-nav-link:hover { border-color: var(--primary) !important; }
+[data-theme="dark"] .series-nav-dir { color: var(--primary-light) !important; }
+[data-theme="dark"] .series-nav-title { color: #e2e8f0 !important; }
+
+@media only screen and (max-width: 40em) {
+  .series-nav { grid-template-columns: 1fr; }
+  .series-nav-link.is-empty { display: none; }
+  .series-nav-next { text-align: left; }
+}
+
+/* ==========================================================================
+   Diagram zoom (static/assets/js/enhancements.js)
+   ========================================================================== */
+
+/* Affordance. Drawn with ::after rather than an appended element because
+   mermaid replaces each block's innerHTML when it renders and again on every
+   dark-mode toggle — a child node would not survive. */
+pre.mermaid { position: relative; cursor: zoom-in; }
+
+pre.mermaid::after {
+  content: "Expand";
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.2rem 0.55rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+pre.mermaid:hover::after { opacity: 1; }
+
+/* Touch devices have no hover, so the chip would never appear. */
+@media (hover: none) {
+  pre.mermaid::after { opacity: 0.85; }
+}
+
+body.dz-open { overflow: hidden; }
+
+.dz-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(3px);
+}
+
+.dz-overlay[hidden] { display: none !important; }
+
+.dz-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.8rem;
+  background: rgba(15, 23, 42, 0.6);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.dz-btn {
+  min-width: 34px;
+  height: 30px;
+  padding: 0 0.6rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  color: #e2e8f0;
+  background: rgba(148, 163, 184, 0.14);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.dz-btn:hover { background: rgba(148, 163, 184, 0.26); }
+.dz-close { margin-left: auto; font-size: 1.1rem; line-height: 1; }
+
+.dz-level {
+  min-width: 3.4em;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.dz-stage {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;   /* we handle pinch and drag ourselves */
+}
+
+.dz-stage:active { cursor: grabbing; }
+
+.dz-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* The diagrams are drawn for a light page, so they keep their own ground
+   inside the overlay instead of sitting on bare dark. The ground goes on the
+   wrapper, not the <svg> — padding on a replaced element fights the explicit
+   width the script sets. */
+.dz-inner {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.dz-inner svg { display: block; max-width: none; }
+
+[data-theme="dark"] .dz-inner { background: #16233c; }
+
+.dz-hint {
+  padding: 0.5rem 0.8rem 0.7rem;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  text-align: center;
+}
+
+@media only screen and (max-width: 40em) {
+  .dz-hint { font-size: 0.66rem; }
+  .dz-inner svg { padding: 0.6rem; }
 }
