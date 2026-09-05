@@ -46,6 +46,19 @@ preserveTaxonomyNames = true
 
   [[menu.main]]
     name = "Fundamentals"
+    identifier = "fundamentals"
+    url = "/guide/"
+    weight = 2
+
+  [[menu.main]]
+    name = "Complete Guide"
+    parent = "fundamentals"
+    url = "/guide/"
+    weight = 1
+
+  [[menu.main]]
+    name = "All Fundamentals Articles"
+    parent = "fundamentals"
     url = "/categories/fundamentals/"
     weight = 2
 
