@@ -122,36 +122,27 @@ The video is not watchable when the upload finishes — it is watchable when **t
 
 The source file is whatever the creator's camera produced: possibly 4K, possibly an exotic codec, certainly not what a phone on 3G can play. Transcoding converts it into a **ladder** of renditions.
 
-<div class="diagram"><svg viewBox="0 0 740 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;">
+<div class="diagram"><svg viewBox="0 0 740 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;margin:2rem auto;display:block;">
   <text x="370" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-text)">Adaptive bitrate: the player switches rungs mid-playback as bandwidth changes</text>
-
   <rect x="18" y="40" width="150" height="40" rx="8" fill="var(--dg-red)" fill-opacity="0.18" stroke="var(--dg-red)" stroke-width="2"/>
   <text x="93" y="65" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-red-tx)">source 4K</text>
-
-  <text x="200" y="65" font-size="13" font-weight="650" fill="var(--dg-muted)">encode once into</text>
-
+  <text x="248" y="46" text-anchor="middle" font-size="12" font-weight="650" fill="var(--dg-muted)">encode once into</text>
   <rect x="330" y="38" width="392" height="26" rx="5" fill="var(--dg-blue)" fill-opacity="0.30" stroke="var(--dg-blue)"/>
   <text x="342" y="56" font-size="12" font-weight="700" fill="var(--dg-text)">1080p</text>
   <text x="712" y="56" font-size="11" text-anchor="end" fill="var(--dg-muted)">5.0 Mbps</text>
-
   <rect x="330" y="70" width="316" height="26" rx="5" fill="var(--dg-blue)" fill-opacity="0.24" stroke="var(--dg-blue)"/>
   <text x="342" y="88" font-size="12" font-weight="700" fill="var(--dg-text)">720p</text>
   <text x="636" y="88" font-size="11" text-anchor="end" fill="var(--dg-muted)">2.5 Mbps</text>
-
   <rect x="330" y="102" width="240" height="26" rx="5" fill="var(--dg-blue)" fill-opacity="0.18" stroke="var(--dg-blue)"/>
   <text x="342" y="120" font-size="12" font-weight="700" fill="var(--dg-text)">480p</text>
   <text x="560" y="120" font-size="11" text-anchor="end" fill="var(--dg-muted)">1.1 Mbps</text>
-
   <rect x="330" y="134" width="176" height="26" rx="5" fill="var(--dg-blue)" fill-opacity="0.13" stroke="var(--dg-blue)"/>
   <text x="342" y="152" font-size="12" font-weight="700" fill="var(--dg-text)">360p</text>
   <text x="496" y="152" font-size="11" text-anchor="end" fill="var(--dg-muted)">0.6 Mbps</text>
-
   <line x1="176" y1="60" x2="322" y2="60" stroke="var(--dg-muted)" stroke-width="1.5"/>
   <line x1="322" y1="51" x2="322" y2="147" stroke="var(--dg-muted)" stroke-width="1.5"/>
-
   <text x="18" y="196" font-size="13" font-weight="700" fill="var(--dg-text)">Each rendition is cut into 2-6 second segments</text>
   <text x="18" y="216" font-size="12" fill="var(--dg-muted)">A manifest lists what exists; the player picks a rung per segment.</text>
-
   <rect x="18" y="230" width="704" height="34" rx="6" fill="var(--dg-panel)" stroke="var(--dg-border)"/>
   <text x="34" y="252" font-size="12" font-weight="700" fill="var(--dg-green-tx)">720p</text>
   <text x="96" y="252" font-size="12" font-weight="700" fill="var(--dg-green-tx)">720p</text>
@@ -161,9 +152,9 @@ The source file is whatever the creator's camera produced: possibly 4K, possibly
   <text x="344" y="252" font-size="12" font-weight="700" fill="var(--dg-green-tx)">720p</text>
   <text x="406" y="252" font-size="12" font-weight="700" fill="var(--dg-green-tx)">1080p</text>
   <text x="478" y="252" font-size="12" font-weight="700" fill="var(--dg-green-tx)">1080p</text>
-  <text x="560" y="252" font-size="12" fill="var(--dg-muted)">... one choice per segment, made by the player</text>
-
-  <text x="18" y="292" font-size="12" fill="var(--dg-muted)">The viewer sees quality dip on a bad train connection and recover afterwards, without the video ever stopping.</text>
+  <text x="626" y="252" font-size="12" fill="var(--dg-muted)">...</text>
+  <text x="18" y="284" font-size="12" fill="var(--dg-muted)">One choice per segment, made by the player — quality dips on a bad connection, then recovers.</text>
+  
 </svg></div>
 
 That is **adaptive bitrate streaming**. Encode once into many rungs, cut each into short segments, publish a manifest describing them, and let the **player** decide which rung to fetch next based on measured bandwidth. Quality degrades instead of buffering — which viewers tolerate far better.

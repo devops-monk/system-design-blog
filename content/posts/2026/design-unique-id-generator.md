@@ -202,39 +202,30 @@ None of the three fits. So instead of generating an ID as one opaque value, **di
   <line x1="40" y1="40" x2="40" y2="52" stroke="var(--dg-muted)" stroke-width="1.5"/>
   <line x1="700" y1="40" x2="700" y2="52" stroke="var(--dg-muted)" stroke-width="1.5"/>
   <text x="370" y="40" text-anchor="middle" font-size="12" fill="var(--dg-muted)" style="paint-order:stroke" stroke="var(--dg-panel)" stroke-width="6">64 bits total</text>
-
   <rect x="40" y="62" width="26" height="66" rx="6" fill="var(--dg-muted)" fill-opacity="0.18" stroke="var(--dg-muted)" stroke-width="2"/>
   <text x="53" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="var(--dg-muted2)">1</text>
   <text x="53" y="110" text-anchor="middle" font-size="12" fill="var(--dg-muted)">sign</text>
-
   <rect x="70" y="62" width="330" height="66" rx="6" fill="var(--dg-blue)" fill-opacity="0.18" stroke="var(--dg-blue)" stroke-width="2"/>
   <text x="235" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="var(--dg-blue-tx)">41 bits</text>
   <text x="235" y="110" text-anchor="middle" font-size="12" fill="var(--dg-muted)">timestamp — milliseconds since a custom epoch</text>
-
   <rect x="404" y="62" width="80" height="66" rx="6" fill="var(--dg-purple)" fill-opacity="0.18" stroke="var(--dg-purple)" stroke-width="2"/>
   <text x="444" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="var(--dg-purple-tx)">5</text>
   <text x="444" y="110" text-anchor="middle" font-size="12" fill="var(--dg-muted)">datacenter</text>
-
   <rect x="488" y="62" width="80" height="66" rx="6" fill="var(--dg-purple)" fill-opacity="0.18" stroke="var(--dg-purple)" stroke-width="2"/>
   <text x="528" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="var(--dg-purple-tx)">5</text>
   <text x="528" y="110" text-anchor="middle" font-size="12" fill="var(--dg-muted)">machine</text>
-
   <rect x="572" y="62" width="128" height="66" rx="6" fill="var(--dg-orange)" fill-opacity="0.18" stroke="var(--dg-orange)" stroke-width="2"/>
   <text x="636" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="var(--dg-orange-tx)">12 bits</text>
   <text x="636" y="110" text-anchor="middle" font-size="12" fill="var(--dg-muted)">sequence</text>
-
   <line x1="235" y1="136" x2="235" y2="164" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#s7a)"/>
   <text x="235" y="182" text-anchor="middle" font-size="12" font-weight="650" fill="var(--dg-blue-tx)">unique in time</text>
   <text x="235" y="200" text-anchor="middle" font-size="12" fill="var(--dg-muted)">~69 years of milliseconds</text>
-
   <line x1="486" y1="136" x2="486" y2="164" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#s7a)"/>
   <text x="486" y="182" text-anchor="middle" font-size="12" font-weight="650" fill="var(--dg-purple-tx)">unique in space</text>
   <text x="486" y="200" text-anchor="middle" font-size="12" fill="var(--dg-muted)">32 x 32 = 1,024 machines</text>
-
   <line x1="636" y1="136" x2="636" y2="164" stroke="var(--dg-muted)" stroke-width="1.5" marker-end="url(#s7a)"/>
   <text x="636" y="182" text-anchor="middle" font-size="12" font-weight="650" fill="var(--dg-orange-tx)">unique within</text>
   <text x="636" y="200" text-anchor="middle" font-size="12" fill="var(--dg-muted)">one millisecond</text>
-
   <text x="370" y="232" text-anchor="middle" font-size="12" fill="var(--dg-muted)">Two IDs collide only if the same machine emits more than 4,096 in the same millisecond.</text>
 </svg></div>
 
@@ -420,14 +411,12 @@ Recall UUIDv4's problem: it is random, so it destroys B-tree index locality. UUI
   <rect x="18" y="36" width="620" height="34" rx="6" fill="var(--dg-red)" fill-opacity="0.18" stroke="var(--dg-red)" stroke-width="2"/>
   <text x="328" y="58" text-anchor="middle" font-size="13" font-weight="650" fill="var(--dg-red-tx)">random — no ordering, scatters across the index</text>
   <text x="652" y="58" font-size="12" fill="var(--dg-muted)">128 bits</text>
-
   <text x="18" y="102" font-size="13" font-weight="700" fill="var(--dg-text)">UUIDv7 — time-ordered (RFC 9562, 2024)</text>
   <rect x="18" y="112" width="232" height="34" rx="6" fill="var(--dg-blue)" fill-opacity="0.2" stroke="var(--dg-blue)" stroke-width="2"/>
   <text x="134" y="134" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-blue-tx)">48-bit ms timestamp</text>
   <rect x="254" y="112" width="384" height="34" rx="6" fill="var(--dg-green)" fill-opacity="0.18" stroke="var(--dg-green)" stroke-width="2"/>
   <text x="446" y="134" text-anchor="middle" font-size="13" font-weight="650" fill="var(--dg-green-tx)">74 random bits (plus version and variant)</text>
   <text x="652" y="134" font-size="12" fill="var(--dg-muted)">128 bits</text>
-
   <text x="18" y="178" font-size="12" fill="var(--dg-muted)">Same locality benefit as Snowflake, and still zero coordination — but 16 bytes rather than 8,</text>
   <text x="18" y="196" font-size="12" fill="var(--dg-muted)">and it does not identify which machine produced it.</text>
 </svg></div>

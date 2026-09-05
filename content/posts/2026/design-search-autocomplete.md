@@ -89,26 +89,21 @@ A trie (from *retrieval*, and pronounced "try") stores strings by shared prefix.
     </marker>
   </defs>
   <text x="370" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-text)">Every node caches its own top-k — so a lookup never traverses below it</text>
-
   <circle cx="70" cy="120" r="19" fill="var(--dg-panel)" stroke="var(--dg-border2)" stroke-width="2"/>
   <text x="70" y="126" text-anchor="middle" font-size="13" font-weight="700" fill="var(--dg-muted)">root</text>
-
   <line x1="89" y1="120" x2="151" y2="120" stroke="var(--dg-border2)" stroke-width="2" marker-end="url(#t13)"/>
   <circle cx="172" cy="120" r="19" fill="var(--dg-blue)" fill-opacity="0.2" stroke="var(--dg-blue)" stroke-width="2"/>
   <text x="172" y="126" text-anchor="middle" font-size="15" font-weight="800" fill="var(--dg-blue-tx)">t</text>
-
   <line x1="191" y1="120" x2="253" y2="120" stroke="var(--dg-border2)" stroke-width="2" marker-end="url(#t13)"/>
   <circle cx="274" cy="120" r="19" fill="var(--dg-blue)" fill-opacity="0.35" stroke="var(--dg-blue)" stroke-width="2.5"/>
   <text x="274" y="126" text-anchor="middle" font-size="15" font-weight="800" fill="var(--dg-blue-tx)">r</text>
   <text x="274" y="160" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-blue-tx)">prefix "tr"</text>
-
   <rect x="330" y="86" width="188" height="72" rx="9" fill="var(--dg-green)" fill-opacity="0.15" stroke="var(--dg-green)" stroke-width="2"/>
   <text x="424" y="106" text-anchor="middle" font-size="12" font-weight="700" fill="var(--dg-green-tx)">cached top-k at this node</text>
   <text x="346" y="127" font-size="13" font-weight="650" fill="var(--dg-text)">true 35</text>
   <text x="424" y="127" font-size="13" font-weight="650" fill="var(--dg-text)">try 29</text>
   <text x="346" y="147" font-size="13" font-weight="650" fill="var(--dg-text)">tree 10</text>
   <line x1="293" y1="120" x2="326" y2="120" stroke="var(--dg-green)" stroke-width="2.5" marker-end="url(#t13)"/>
-
   <line x1="288" y1="134" x2="330" y2="196" stroke="var(--dg-border)" stroke-width="1.5" stroke-dasharray="4 4"/>
   <line x1="288" y1="134" x2="410" y2="196" stroke="var(--dg-border)" stroke-width="1.5" stroke-dasharray="4 4"/>
   <line x1="288" y1="134" x2="490" y2="196" stroke="var(--dg-border)" stroke-width="1.5" stroke-dasharray="4 4"/>
@@ -119,7 +114,6 @@ A trie (from *retrieval*, and pronounced "try") stores strings by shared prefix.
   <circle cx="490" cy="210" r="16" fill="var(--dg-panel)" stroke="var(--dg-border2)" stroke-width="1.5"/>
   <text x="490" y="215" text-anchor="middle" font-size="12" fill="var(--dg-muted)">e</text>
   <text x="410" y="252" text-anchor="middle" font-size="12" fill="var(--dg-muted)">the subtree below — never visited at query time</text>
-
   <text x="370" y="284" text-anchor="middle" font-size="12" fill="var(--dg-muted)">Walk p characters, read the cached list, return. Both steps are O(1).</text>
 </svg></div>
 
