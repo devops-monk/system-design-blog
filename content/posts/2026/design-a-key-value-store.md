@@ -7,6 +7,8 @@ description: "A complete beginner-friendly guide to designing a distributed key-
 tags: ["system-design", "key-value-store", "dynamodb", "cassandra", "cap-theorem", "distributed-systems"]
 categories: ["Case Studies"]
 url: /2026/05/design-a-key-value-store/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 6
 ---
 
 Amazon DynamoDB stores **hundreds of trillions of items** and handles **tens of millions of requests per second** at peak. Netflix uses it to keep track of what you were watching. Airbnb uses it for availability calendars. Discord uses it for message storage.

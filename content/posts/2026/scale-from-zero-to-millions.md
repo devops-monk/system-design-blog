@@ -5,6 +5,8 @@ author: Abhay
 type: post
 date: 2026-05-29T00:00:00+00:00
 url: /2026/05/scale-from-zero-to-millions/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 1
 image: /images/articles/scale-from-zero-to-millions.webp
 toc: true
 categories: ["Fundamentals"]

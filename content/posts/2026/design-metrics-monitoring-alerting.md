@@ -7,6 +7,8 @@ description: "Ten million metrics, one year of retention, and a write load that 
 tags: ["system-design", "monitoring", "observability", "time-series", "prometheus", "kafka", "alerting"]
 categories: ["Case Studies"]
 url: /2026/06/design-metrics-monitoring-alerting/
+series: "Volume 2 — Advanced Designs"
+series_order: 5
 ---
 
 Monitoring is the system that tells you every *other* system is broken. Which means when it fails, it fails at exactly the moment you need it — and it fails silently, because the thing that would have told you is the thing that's down.

@@ -7,6 +7,8 @@ description: "A complete, beginner-friendly deep dive into designing a rate limi
 tags: ["system-design", "rate-limiter", "redis", "distributed-systems", "api", "algorithms"]
 categories: ["Case Studies"]
 url: /2026/05/design-a-rate-limiter/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 4
 ---
 
 It's 11:59 PM on Black Friday. Your e-commerce platform has been running smoothly all day. Then at midnight, 500,000 shoppers simultaneously hammer your `/checkout` API. Your servers start queuing requests. Then they start dropping requests. Then they crash. Every second of downtime costs thousands of dollars in lost sales.

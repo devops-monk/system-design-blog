@@ -7,6 +7,8 @@ description: "A method for reading an engineering blog post so it leaves you wit
 tags: ["system-design", "learning", "engineering-blogs", "papers", "interviews", "career"]
 categories: ["Fundamentals"]
 url: /2026/06/what-to-read-next/
+series: "Closing"
+series_order: 1
 ---
 
 Twenty-eight designs down. So — what now?

@@ -1,0 +1,45 @@
+{{- /*
+  Previous/next chapter.
+
+  The theme's post_nav.html used .PrevInSection, which is plain chronological
+  order across the whole posts section — so it crossed volumes and dead-ended
+  into the closing essay. Order here is explicit: `series` + `series_order` in
+  each article's front matter, with the volumes themselves sequenced by
+  params.series_sequence in config.toml. The result is one continuous reading
+  order across all 29 articles.
+*/ -}}
+{{- if .Params.series -}}
+{{- $book := slice -}}
+{{- range site.Params.series_sequence -}}
+  {{- range (sort (where site.RegularPages "Params.series" .) "Params.series_order") -}}
+    {{- $book = $book | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- $idx := -1 -}}
+{{- range $i, $p := $book -}}
+  {{- if eq $p.Permalink $.Permalink }}{{ $idx = $i }}{{ end -}}
+{{- end -}}
+{{- $prev := "" -}}{{- $next := "" -}}
+{{- if gt $idx 0 }}{{ $prev = index $book (sub $idx 1) }}{{ end -}}
+{{- if and (ge $idx 0) (lt $idx (sub (len $book) 1)) }}{{ $next = index $book (add $idx 1) }}{{ end -}}
+{{- if or $prev $next }}
+<nav class="series-nav" aria-label="Chapter navigation">
+  {{- if $prev }}
+  <a class="series-nav-link series-nav-prev" href="{{ $prev.RelPermalink }}" rel="prev">
+    <span class="series-nav-dir">&larr; Previous</span>
+    <span class="series-nav-ch">{{ $prev.Params.series }}{{ with $prev.Params.series_order }} · Ch {{ . }}{{ end }}</span>
+    <span class="series-nav-title">{{ $prev.Title }}</span>
+  </a>
+  {{- else }}<span class="series-nav-link is-empty" aria-hidden="true"></span>{{ end }}
+  {{- if $next }}
+  <a class="series-nav-link series-nav-next" href="{{ $next.RelPermalink }}" rel="next">
+    <span class="series-nav-dir">Next &rarr;</span>
+    <span class="series-nav-ch">{{ $next.Params.series }}{{ with $next.Params.series_order }} · Ch {{ . }}{{ end }}</span>
+    <span class="series-nav-title">{{ $next.Title }}</span>
+  </a>
+  {{- else }}<span class="series-nav-link is-empty" aria-hidden="true"></span>{{ end }}
+</nav>
+{{- end }}
+{{- else -}}
+{{- partial "post_nav.html" . -}}
+{{- end -}}

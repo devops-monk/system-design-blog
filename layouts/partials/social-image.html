@@ -1,0 +1,19 @@
+{{- /*
+  Absolute URL of the share card for this page.
+
+  Articles set `image:` (a 1600x640 WebP cover). That is the wrong shape and
+  the wrong format for a social card, so tools/gen_social.py writes a 1200x630
+  JPEG twin under /images/social/ with the same base name. Anything without a
+  cover — About, Contact, the guide, taxonomy pages — falls back to the site
+  card.
+
+  Single source of truth: both the OpenGraph tags and the JSON-LD read this.
+*/ -}}
+{{- $og := "/images/og-default.png" -}}
+{{- with .Params.image -}}
+  {{- $card := printf "/images/social/%s.jpg" (path.BaseName .) -}}
+  {{- if fileExists (printf "static%s" $card) -}}
+    {{- $og = $card -}}
+  {{- end -}}
+{{- end -}}
+{{- $og | absURL -}}

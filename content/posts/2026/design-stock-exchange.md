@@ -7,6 +7,8 @@ description: "The one design in this series that scales in, not out. Why the fas
 tags: ["system-design", "low-latency", "trading", "event-sourcing", "order-book", "raft", "performance"]
 categories: ["Case Studies"]
 url: /2026/06/design-stock-exchange/
+series: "Volume 2 — Advanced Designs"
+series_order: 13
 ---
 
 Every design in this series so far has scaled **out**. More partitions, more replicas, more nodes.

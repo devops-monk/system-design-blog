@@ -7,6 +7,8 @@ description: "A billion clicks a day, and the numbers become invoices. Event tim
 tags: ["system-design", "streaming", "kafka", "flink", "aggregation", "data-engineering", "advertising"]
 categories: ["Case Studies"]
 url: /2026/06/design-ad-click-aggregation/
+series: "Volume 2 — Advanced Designs"
+series_order: 6
 ---
 
 Most systems in this series can lose a little data and survive. A dropped metric leaves a gap on a chart. A missed location update is corrected 30 seconds later.

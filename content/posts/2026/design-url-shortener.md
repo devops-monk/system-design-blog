@@ -7,6 +7,8 @@ description: "Design a TinyURL-style service handling 100 million new links a da
 tags: ["system-design", "url-shortener", "base62", "caching", "distributed-systems", "databases"]
 categories: ["Case Studies"]
 url: /2026/05/design-url-shortener/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 8
 ---
 
 A URL shortener looks like the easiest system design question you will ever get. Store a mapping, hand back a short string, redirect. You could write it in an afternoon.

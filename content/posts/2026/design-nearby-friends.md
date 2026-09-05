@@ -7,6 +7,8 @@ description: "333,000 location updates a second turn into 13.3 million messages 
 tags: ["system-design", "websocket", "pub-sub", "redis", "real-time", "geospatial", "scalability"]
 categories: ["Case Studies"]
 url: /2026/06/design-nearby-friends/
+series: "Volume 2 — Advanced Designs"
+series_order: 2
 ---
 
 In [the last chapter](/2026/06/design-a-proximity-service/) we found restaurants near you. This one looks almost identical — find *friends* near you — and it is a completely different problem.

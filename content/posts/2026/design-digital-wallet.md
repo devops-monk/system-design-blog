@@ -7,6 +7,8 @@ description: "Four designs, each one fixing what the last one broke. In-memory s
 tags: ["system-design", "event-sourcing", "cqrs", "distributed-transactions", "saga", "raft", "fintech"]
 categories: ["Case Studies"]
 url: /2026/06/design-digital-wallet/
+series: "Volume 2 — Advanced Designs"
+series_order: 12
 ---
 
 Move $1 from wallet A to wallet B. A million times a second.

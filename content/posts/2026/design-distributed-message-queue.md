@@ -7,6 +7,8 @@ description: "Why a plain append-only file beats a database, how partitions turn
 tags: ["system-design", "kafka", "message-queue", "distributed-systems", "replication", "storage"]
 categories: ["Case Studies"]
 url: /2026/06/design-distributed-message-queue/
+series: "Volume 2 — Advanced Designs"
+series_order: 4
 ---
 
 A message queue sits between two services so they don't have to know about each other. The producer writes and moves on; the consumer reads when it's ready. Neither has to be up when the other is.

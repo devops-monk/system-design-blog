@@ -5,6 +5,8 @@ author: Abhay
 type: post
 date: 2026-05-30T00:00:00+00:00
 url: /2026/05/back-of-the-envelope-estimation/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 2
 image: /images/articles/back-of-the-envelope.webp
 toc: true
 categories: ["Fundamentals"]

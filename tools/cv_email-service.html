@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{width:1600px;height:640px;overflow:hidden;font-family:'Inter',sans-serif;
+  background:radial-gradient(900px 600px at 12% 105%, rgba(236,72,153,.16), transparent 62%),
+             radial-gradient(900px 620px at 88% -10%, rgba(56,189,248,.14), transparent 60%),
+             linear-gradient(140deg,#0b1220 0%,#0f172a 48%,#111c33 100%)}
+ .grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(148,163,184,.055) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(148,163,184,.055) 1px,transparent 1px);
+  background-size:80px 80px}
+ .edge{position:absolute;left:0;top:0;bottom:0;width:5px;
+  background:linear-gradient(180deg,#38bdf8,#818cf8 55%,#ec4899)}
+ .wrap{position:relative;display:flex;height:100%;align-items:center;padding:0 76px 0 104px;gap:56px}
+ .left{width:600px;flex:0 0 600px}
+ .kicker{display:flex;align-items:center;gap:16px;margin-bottom:28px}
+ .badge{border:1.5px solid rgba(56,189,248,.55);color:#38bdf8;border-radius:7px;
+  padding:8px 15px;font-size:15px;font-weight:700;letter-spacing:.15em}
+ .sub{color:#7c8ba1;font-size:15px;font-weight:600;letter-spacing:.24em}
+ h1{color:#fff;font-size:50px;font-weight:800;line-height:1.07;letter-spacing:-.022em}
+ .rule{width:82px;height:5px;border-radius:3px;margin:28px 0 24px;
+  background:linear-gradient(90deg,#38bdf8,#ec4899)}
+ .tag{color:#b6c2d4;font-size:21px;font-weight:500;line-height:1.5}
+ .right{flex:1;display:flex;align-items:center;justify-content:center}
+ .cap{position:absolute;right:76px;bottom:56px;font-family:'JetBrains Mono',monospace;
+  font-size:17px;color:#8fa0b8;letter-spacing:.01em}
+ .cap i{color:#38bdf8;font-style:normal}
+ text{font-family:'JetBrains Mono',monospace}
+</style></head><body>
+<div class="grid"></div><div class="edge"></div>
+<div class="wrap">
+  <div class="left">
+    <div class="kicker"><span class="badge">VOLUME 2 · CH 7</span><span class="sub">SYSTEM DESIGN</span></div>
+    <h1>Design a Distributed<br>Email Service</h1>
+    <div class="rule"></div>
+    <div class="tag">Protocols from the 1980s, carrying two exabytes a year.</div>
+  </div>
+  <div class="right"><svg width="640" height="420" viewBox="0 0 640 420"><rect x="40" y="110" width="260" height="58" fill="#38bdf8" opacity=".85" rx="4"/><text x="48" y="146" fill="#0b1220" font-size="17" font-weight="700">730 PB</text><text x="40" y="98" fill="#64748b" font-size="14">metadata</text><rect x="40" y="218" width="520" height="58" fill="#ec4899" opacity=".85" rx="4"/><text x="48" y="254" fill="#0b1220" font-size="17" font-weight="700">1460 PB</text><text x="40" y="206" fill="#64748b" font-size="14">attachments</text><rect x="40" y="326" width="520" height="58" fill="none" stroke="#fbbf24" stroke-width="2" stroke-dasharray="6 4" rx="4"/><text x="52" y="362" fill="#fbbf24" font-size="17" font-weight="700">2.2 EB every year</text><text x="40" y="404" fill="#64748b" font-size="15">and nothing is ever deleted</text></svg></div>
+</div>
+<div class="cap">a <i>storage</i> system that sends messages</div>
+</body></html>

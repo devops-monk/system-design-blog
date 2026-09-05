@@ -7,6 +7,8 @@ description: "File sync for 10 million users and 500 petabytes. Delta sync, why 
 tags: ["system-design", "file-sync", "storage", "distributed-systems", "consistency"]
 categories: ["Case Studies"]
 url: /2026/06/design-google-drive/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 15
 ---
 
 You have a 4 GB video file in your Drive folder. You change its title — a few dozen bytes near the start.

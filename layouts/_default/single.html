@@ -5,6 +5,7 @@
             <div class="post-inner-content">
                 {{ partial "post-cover.html" (dict "page" . "variant" "hero") }}
                 {{ partial "post-meta.html" . }}
+                {{ partial "series-badge.html" . }}
                 {{ partial "social-share.html" . }}
                 {{ partial "toc.html" . }}
                 {{ partial "text-to-speech.html" . }}
@@ -14,7 +15,7 @@
                 {{ partial "social-share.html" . }}
             </div>
         </article>
-        {{ partial "post_nav.html" . }}
+        {{ partial "series-nav.html" . }}
         {{ partial "related.html" . }}
         {{ partial "comments.html" . }}
     </main>

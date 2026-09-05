@@ -7,6 +7,8 @@ description: "Eleven nines of durability on drives that fail constantly. Block v
 tags: ["system-design", "storage", "s3", "durability", "erasure-coding", "replication", "distributed-systems"]
 categories: ["Case Studies"]
 url: /2026/06/design-s3-object-storage/
+series: "Volume 2 — Advanced Designs"
+series_order: 8
 ---
 
 Amazon S3 launched in 2006. By 2013 it held two trillion objects; by 2021, **over a hundred trillion**.

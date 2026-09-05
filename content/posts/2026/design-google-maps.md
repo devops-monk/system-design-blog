@@ -7,6 +7,8 @@ description: "One billion daily users, 100 petabytes of map tiles, and a road gr
 tags: ["system-design", "geospatial", "cdn", "graph-algorithms", "kafka", "cassandra", "maps"]
 categories: ["Case Studies"]
 url: /2026/06/design-google-maps/
+series: "Volume 2 — Advanced Designs"
+series_order: 3
 ---
 
 Google Maps has about **a billion daily active users**, covers 99% of the world, and takes in something like 25 million updates a day.

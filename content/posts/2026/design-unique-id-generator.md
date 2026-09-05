@@ -7,6 +7,8 @@ description: "How to generate billions of unique, sortable, 64-bit IDs per day w
 tags: ["system-design", "unique-id", "snowflake", "uuid", "distributed-systems", "databases"]
 categories: ["Case Studies"]
 url: /2026/05/design-unique-id-generator/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 7
 ---
 
 Every row in your database needs a name. For years that name came from one line of SQL:

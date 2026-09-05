@@ -7,6 +7,8 @@ description: "Ten transactions per second, and the hardest correctness problem i
 tags: ["system-design", "payments", "idempotency", "consistency", "ledger", "reconciliation", "fintech"]
 categories: ["Case Studies"]
 url: /2026/06/design-payment-system/
+series: "Volume 2 — Advanced Designs"
+series_order: 11
 ---
 
 Here is the throughput requirement for a payment backend serving an Amazon-sized store:

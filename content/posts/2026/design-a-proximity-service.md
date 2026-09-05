@@ -7,6 +7,8 @@ description: "How does 'restaurants near me' return results in under 100ms from 
 tags: ["system-design", "geospatial", "geohash", "quadtree", "h3", "databases", "caching"]
 categories: ["Case Studies"]
 url: /2026/06/design-a-proximity-service/
+series: "Volume 2 — Advanced Designs"
+series_order: 1
 ---
 
 You open Yelp and tap **restaurants near me**.

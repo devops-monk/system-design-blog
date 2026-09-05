@@ -5,6 +5,8 @@ author: Abhay
 type: post
 date: 2026-05-30T06:00:00+00:00
 url: /2026/05/framework-for-system-design-interviews/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 3
 image: /images/articles/system-design-framework.webp
 toc: true
 categories: ["Fundamentals"]

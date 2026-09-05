@@ -7,6 +7,8 @@ description: "Suggestions in under 100ms, on every keystroke, for 10 million use
 tags: ["system-design", "autocomplete", "trie", "caching", "search"]
 categories: ["Case Studies"]
 url: /2026/06/design-search-autocomplete/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 13
 ---
 
 Autocomplete looks like a lookup. Type a prefix, return matching strings, sort by popularity. A `LIKE 'tr%'` query and an `ORDER BY`.

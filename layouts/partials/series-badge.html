@@ -1,0 +1,11 @@
+{{- /* "Volume 2 · Chapter 10 of 13", linking back to the index. */ -}}
+{{- with .Params.series -}}
+  {{- $peers := where site.RegularPages "Params.series" . -}}
+  {{- $n := $.Params.series_order -}}
+  <a class="series-badge" href="/guide/">
+    <span class="series-badge-vol">{{ . }}</span>
+    {{- if gt (len $peers) 1 }}
+    <span class="series-badge-ch">Chapter {{ $n }} of {{ len $peers }}</span>
+    {{- end }}
+  </a>
+{{- end -}}

@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{width:1600px;height:640px;overflow:hidden;font-family:'Inter',sans-serif;
+  background:radial-gradient(900px 600px at 12% 105%, rgba(236,72,153,.16), transparent 62%),
+             radial-gradient(900px 620px at 88% -10%, rgba(56,189,248,.14), transparent 60%),
+             linear-gradient(140deg,#0b1220 0%,#0f172a 48%,#111c33 100%)}
+ .grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(148,163,184,.055) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(148,163,184,.055) 1px,transparent 1px);
+  background-size:80px 80px}
+ .edge{position:absolute;left:0;top:0;bottom:0;width:5px;
+  background:linear-gradient(180deg,#38bdf8,#818cf8 55%,#ec4899)}
+ .wrap{position:relative;display:flex;height:100%;align-items:center;padding:0 76px 0 104px;gap:56px}
+ .left{width:600px;flex:0 0 600px}
+ .kicker{display:flex;align-items:center;gap:16px;margin-bottom:28px}
+ .badge{border:1.5px solid rgba(56,189,248,.55);color:#38bdf8;border-radius:7px;
+  padding:8px 15px;font-size:15px;font-weight:700;letter-spacing:.15em}
+ .sub{color:#7c8ba1;font-size:15px;font-weight:600;letter-spacing:.24em}
+ h1{color:#fff;font-size:50px;font-weight:800;line-height:1.07;letter-spacing:-.022em}
+ .rule{width:82px;height:5px;border-radius:3px;margin:28px 0 24px;
+  background:linear-gradient(90deg,#38bdf8,#ec4899)}
+ .tag{color:#b6c2d4;font-size:21px;font-weight:500;line-height:1.5}
+ .right{flex:1;display:flex;align-items:center;justify-content:center}
+ .cap{position:absolute;right:76px;bottom:56px;font-family:'JetBrains Mono',monospace;
+  font-size:17px;color:#8fa0b8;letter-spacing:.01em}
+ .cap i{color:#38bdf8;font-style:normal}
+ text{font-family:'JetBrains Mono',monospace}
+</style></head><body>
+<div class="grid"></div><div class="edge"></div>
+<div class="wrap">
+  <div class="left">
+    <div class="kicker"><span class="badge">VOLUME 2 · CH 10</span><span class="sub">SYSTEM DESIGN</span></div>
+    <h1>Design a Hotel<br>Reservation System</h1>
+    <div class="rule"></div>
+    <div class="tag">Three reservations per second — and the hardest design in the series.</div>
+  </div>
+  <div class="right"><svg width="640" height="420" viewBox="0 0 640 420"><rect x="150" y="70" width="54" height="54" fill="#38bdf8" opacity=".22" rx="3"/><rect x="212" y="70" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><rect x="274" y="70" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><rect x="336" y="70" width="54" height="54" fill="#38bdf8" opacity=".22" rx="3"/><rect x="398" y="70" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><rect x="150" y="132" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><rect x="212" y="132" width="54" height="54" fill="#38bdf8" opacity=".22" rx="3"/><rect x="274" y="132" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><rect x="336" y="132" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><rect x="398" y="132" width="54" height="54" fill="#38bdf8" opacity=".22" rx="3"/><rect x="150" y="194" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><rect x="212" y="194" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><rect x="274" y="194" width="54" height="54" fill="#fbbf24" opacity=".95" rx="3"/><rect x="336" y="194" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><rect x="398" y="194" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><rect x="150" y="256" width="54" height="54" fill="#38bdf8" opacity=".22" rx="3"/><rect x="212" y="256" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><rect x="274" y="256" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><rect x="336" y="256" width="54" height="54" fill="#38bdf8" opacity=".22" rx="3"/><rect x="398" y="256" width="54" height="54" fill="#38bdf8" opacity=".14" rx="3"/><path d="M30 40 Q166 221 279 221" stroke="#ec4899" stroke-width="2.6" fill="none" opacity=".9" marker-end="url(#b)"/><path d="M30 370 Q166 221 279 221" stroke="#c084fc" stroke-width="2.6" fill="none" opacity=".9" marker-end="url(#b)"/><defs><marker id="b" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#ec4899"/></marker></defs><circle cx="301" cy="221" r="26" fill="none" stroke="#f87171" stroke-width="2" opacity=".8"/><text x="30" y="404" fill="#64748b" font-size="15">two bookings, one room</text></svg></div>
+</div>
+<div class="cap">every read-then-write is a <i>race</i></div>
+</body></html>

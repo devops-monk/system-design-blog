@@ -7,6 +7,8 @@ description: "Fan-out on write or fan-out on read? Build a Facebook-style feed f
 tags: ["system-design", "news-feed", "caching", "distributed-systems", "scalability"]
 categories: ["Case Studies"]
 url: /2026/06/design-news-feed-system/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 11
 ---
 
 Every social product has the same question at its centre, and it has exactly two answers:

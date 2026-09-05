@@ -7,6 +7,8 @@ description: "Ranking 25 million players in real time. Why SQL cannot do it, how
 tags: ["system-design", "redis", "leaderboard", "sorted-sets", "skip-list", "sharding", "gaming"]
 categories: ["Case Studies"]
 url: /2026/06/design-gaming-leaderboard/
+series: "Volume 2 — Advanced Designs"
+series_order: 9
 ---
 
 "Show me the top 10 players, and tell me where I rank."

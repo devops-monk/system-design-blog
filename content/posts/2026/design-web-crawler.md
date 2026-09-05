@@ -7,6 +7,8 @@ description: "Crawl a billion pages a month without getting banned. The URL fron
 tags: ["system-design", "web-crawler", "distributed-systems", "scalability", "caching"]
 categories: ["Case Studies"]
 url: /2026/05/design-web-crawler/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 9
 ---
 
 The algorithm for a web crawler fits on a napkin:

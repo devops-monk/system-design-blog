@@ -7,6 +7,8 @@ description: "A video platform where the CDN bill dwarfs everything else. Transc
 tags: ["system-design", "video-streaming", "cdn", "transcoding", "scalability"]
 categories: ["Case Studies"]
 url: /2026/06/design-youtube/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 14
 ---
 
 Every previous chapter optimised for latency, throughput or correctness. This one optimises for **money**, and that changes which answers are right.

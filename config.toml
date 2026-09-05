@@ -90,6 +90,14 @@ preserveTaxonomyNames = true
     weight = 5
 
 [Params]
+  # Reading order of the series, used by layouts/partials/series-nav.html to
+  # chain the volumes into one continuous order. Each article names its volume
+  # in `series` and its position in `series_order`.
+  series_sequence = [
+    "Volume 1 — Foundations and Core Designs",
+    "Volume 2 — Advanced Designs",
+    "Closing",
+  ]
   author = "Abhay"
   publisher = "System Design by Abhay"
   subtitle = "Build Systems That Scale"

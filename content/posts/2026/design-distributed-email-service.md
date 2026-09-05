@@ -7,6 +7,8 @@ description: "A billion users, two exabytes a year, and protocols designed in th
 tags: ["system-design", "email", "storage", "cassandra", "search", "elasticsearch", "smtp"]
 categories: ["Case Studies"]
 url: /2026/06/design-distributed-email-service/
+series: "Volume 2 — Advanced Designs"
+series_order: 7
 ---
 
 Email is the oldest system in this series by decades. SMTP was specified in 1982. POP and IMAP followed. Those protocols still carry the world's mail, and they were designed for an internet of a few thousand machines where you downloaded your messages and the server forgot them.

@@ -1,0 +1,21 @@
+{{- /*
+  OpenGraph image and Twitter card.
+
+  Hugo's _internal/opengraph.html reads `.Params.images` (an array). Every
+  article here sets `image` (a string), so nothing matched and not one of the
+  29 covers was ever emitted — shared links rendered as bare text. These tags
+  fill that gap; the internal template still supplies og:title, og:description,
+  og:type and the article metadata.
+*/ -}}
+{{- $img := partial "social-image.html" . -}}
+{{- $desc := .Description | default .Site.Params.description -}}
+<meta property="og:image" content="{{ $img }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ .Title }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ .Title }}">
+<meta name="twitter:description" content="{{ $desc }}">
+<meta name="twitter:image" content="{{ $img }}">
+<meta name="twitter:image:alt" content="{{ .Title }}">
+<link rel="canonical" href="{{ .Permalink }}">

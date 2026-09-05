@@ -7,6 +7,8 @@ description: "Three reservations per second — and it is the hardest design in 
 tags: ["system-design", "databases", "concurrency", "transactions", "microservices", "acid", "booking"]
 categories: ["Case Studies"]
 url: /2026/06/design-hotel-reservation-system/
+series: "Volume 2 — Advanced Designs"
+series_order: 10
 ---
 
 Here is the entire scale of this system:

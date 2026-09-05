@@ -7,6 +7,8 @@ description: "Push, SMS and email at 16 million messages a day. Per-channel queu
 tags: ["system-design", "notifications", "message-queues", "distributed-systems", "reliability"]
 categories: ["Case Studies"]
 url: /2026/05/design-notification-system/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 10
 ---
 
 Sending a notification is one HTTP call to Apple or Google. That is the entire mechanism, and you can demo it in five minutes.

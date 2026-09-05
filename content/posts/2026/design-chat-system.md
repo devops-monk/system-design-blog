@@ -7,6 +7,8 @@ description: "Build a Messenger-style chat system for 50 million daily users. Wh
 tags: ["system-design", "chat", "websocket", "distributed-systems", "real-time"]
 categories: ["Case Studies"]
 url: /2026/06/design-chat-system/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 12
 ---
 
 The [news feed](/2026/06/design-news-feed-system/) we built last chapter can be seconds stale and nobody notices. Chat inverts every one of those assumptions.

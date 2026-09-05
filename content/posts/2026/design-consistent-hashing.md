@@ -7,6 +7,8 @@ description: "A beginner-friendly deep dive into consistent hashing — the algo
 tags: ["system-design", "consistent-hashing", "distributed-systems", "dynamo", "cassandra", "caching"]
 categories: ["Fundamentals"]
 url: /2026/05/design-consistent-hashing/
+series: "Volume 1 — Foundations and Core Designs"
+series_order: 5
 ---
 
 Imagine you are the infrastructure engineer at a hot social media platform. Your system is humming along with 4 cache servers, each holding about 25% of your data. Life is good.
