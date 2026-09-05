@@ -9,7 +9,7 @@ categories: ["Fundamentals"]
 url: /2026/06/what-to-read-next/
 ---
 
-Fifteen designs down. So — what now?
+Twenty-eight designs down. So — what now?
 
 The usual answer is a list of engineering blogs. Here is one, further down the page. But a list on its own will not make you better, and it is worth being honest about why.
 
@@ -248,7 +248,7 @@ That last row is worth more than the other three combined. Reading about consist
 
 ## One last thing
 
-Looking back over fifteen chapters, the striking thing is **how few ideas there actually were.**
+Looking back over twenty-eight designs, the striking thing is **how few ideas there actually were.**
 
 Partition to distribute load. Replicate to survive failure. Cache to avoid repeating work. Queue to decouple producers from consumers. Denormalise to trade write cost for read speed. Batch to amortise. Version to detect conflict.
 
