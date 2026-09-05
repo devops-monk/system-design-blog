@@ -1,6 +1,7 @@
 ---
 title: "Design a Rate Limiter"
 image: /images/articles/design-a-rate-limiter.webp
+toc: true
 date: 2026-05-30T12:00:00+00:00
 description: "A complete, beginner-friendly deep dive into designing a rate limiter — covering all 5 algorithms, Redis architecture, distributed challenges, and real patterns from AWS, Stripe, Shopify & Cloudflare."
 tags: ["system-design", "rate-limiter", "redis", "distributed-systems", "api", "algorithms"]
