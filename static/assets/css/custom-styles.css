@@ -1899,3 +1899,70 @@ a.cert-card:hover .cert-verify { opacity: 1; }
   .gh-hash { font-size: 1.5rem; }
   .gh-bit { width: 1.05rem; font-size: 0.7rem; }
 }
+
+/* ==========================================================================
+   Fan-out calculator (posts/2026/design-nearby-friends)
+   ========================================================================== */
+
+.fanout-calc {
+  margin: 1.75rem 0;
+  padding: 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.fo-row { margin-bottom: 0.85rem; }
+
+.fo-row label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.fo-row label b { font-family: var(--mono); color: var(--primary-dark); font-weight: 700; }
+.fo-row input[type="range"] { width: 100%; accent-color: var(--primary); }
+
+.fo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.7rem;
+  margin: 1.3rem 0 0.9rem;
+}
+
+.fo-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.9rem 0.4rem;
+  text-align: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.fo-num { font-family: var(--mono); font-size: 1.45rem; font-weight: 700; color: var(--primary-dark); line-height: 1.1; }
+.fo-lbl { font-size: 0.7rem; color: var(--text-muted); line-height: 1.3; }
+
+.fo-hot { border-color: rgba(219, 39, 119, 0.4); background: rgba(219, 39, 119, 0.06); }
+.fo-hot .fo-num { color: #be185d; }
+
+.fo-note { margin: 0; font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+.fo-warn { color: #b91c1c; font-weight: 500; }
+
+[data-theme="dark"] .fanout-calc { background: #1e293b !important; border-color: #334155 !important; }
+[data-theme="dark"] .fo-stat { background: #0f172a !important; border-color: #334155 !important; }
+[data-theme="dark"] .fo-num { color: var(--primary-light) !important; }
+[data-theme="dark"] .fo-row label b { color: var(--primary-light) !important; }
+[data-theme="dark"] .fo-hot { border-color: rgba(244,114,182,0.45) !important; background: rgba(244,114,182,0.1) !important; }
+[data-theme="dark"] .fo-hot .fo-num { color: #f9a8d4 !important; }
+[data-theme="dark"] .fo-warn { color: #fca5a5 !important; }
+
+@media only screen and (max-width: 40em) {
+  .fanout-calc { padding: 1rem; }
+  .fo-grid { grid-template-columns: repeat(2, 1fr); }
+  .fo-num { font-size: 1.25rem; }
+}
