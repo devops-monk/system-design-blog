@@ -259,6 +259,33 @@ def art_erasure():
     return f'<svg width="640" height="420" viewBox="0 0 640 420">{"".join(s)}</svg>'
 
 
+
+def art_skiplist():
+    """A skip list: express lanes above a sorted base list."""
+    s = []
+    vals = [1, 4, 7, 8, 10, 15, 26, 36, 45, 60]
+    lanes = [vals, [1, 8, 15, 36, 60], [1, 15, 60]]
+    x0, step, ytop = 34, 62, 96
+    pos = {v: x0 + i * step for i, v in enumerate(vals)}
+    for li, lane in enumerate(reversed(lanes)):
+        y = ytop + li * 84
+        label = ["level 2", "level 1", "base"][li]
+        s.append(f'<text x="{x0-8}" y="{y-16}" fill="{DIM}" font-size="13">{label}</text>')
+        for j, v in enumerate(lane):
+            cx = pos[v]
+            hot = v in (1, 15, 36, 45)
+            col = PINK if (hot and li < 2) or (li == 2 and v == 45) else BLUE
+            s.append(f'<circle cx="{cx}" cy="{y}" r="15" fill="{col}" opacity="{.92 if col==PINK else .55}"/>')
+            s.append(f'<text x="{cx}" y="{y+5}" fill="#0b1220" font-size="13" font-weight="700" text-anchor="middle">{v}</text>')
+            if j < len(lane) - 1:
+                nx = pos[lane[j + 1]]
+                s.append(f'<line x1="{cx+16}" y1="{y}" x2="{nx-16}" y2="{y}" stroke="{FAINT}" stroke-width="1.6"/>')
+    s.append(f'<path d="M{pos[1]} 112 V172 M{pos[15]} 112 V172 M{pos[15]} 196 V256 M{pos[36]} 196 V256 M{pos[45]} 256 V264" '
+             f'stroke="{PINK}" stroke-width="2" stroke-dasharray="4 3" opacity=".75"/>')
+    s.append(f'<text x="{x0}" y="404" fill="{DIM}" font-size="15">searching 45: eleven hops, not sixty-two</text>')
+    return f'<svg width="640" height="420" viewBox="0 0 640 420">{"".join(s)}</svg>'
+
+
 COVERS = [
     ("proximity-service", "VOLUME 2 · CH 1", "Design a<br>Proximity Service", 58,
      "200 million businesses, 500 metres, under 100ms.", "two B-tree indexes are <i>not</i> a 2D index", art_quadtree),
@@ -278,6 +305,8 @@ COVERS = [
      "Protocols from the 1980s, carrying two exabytes a year.", "a <i>storage</i> system that sends messages", art_storage),
     ("object-storage", "VOLUME 2 · CH 9", "Design S3-like<br>Object Storage", 54,
      "Eleven nines of durability on drives that fail constantly.", "immutability is what makes it <i>tractable</i>", art_erasure),
+    ("gaming-leaderboard", "VOLUME 2 · CH 10", "Real-time Gaming<br>Leaderboard", 56,
+     "Ranking 25 million players, and telling each one where they stand.", "rank belongs to the <i>set</i>, not the row", art_skiplist),
 ]
 
 def build(only=None):
