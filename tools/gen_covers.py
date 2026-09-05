@@ -229,6 +229,36 @@ def art_storage():
     return f'<svg width="640" height="420" viewBox="0 0 640 420">{"".join(s)}</svg>'
 
 
+
+def art_erasure():
+    """8 data chunks + 4 parity, with 4 lost and reconstructible."""
+    s = []
+    cw, gap, x0, y0 = 62, 12, 34, 96
+    lost = {2, 5, 8, 11}
+    for i in range(12):
+        r, c = divmod(i, 4)
+        x = x0 + c * (cw + gap)
+        y = y0 + r * (cw + gap)
+        parity = i >= 8
+        if i in lost:
+            s.append(f'<rect x="{x}" y="{y}" width="{cw}" height="{cw}" fill="none" stroke="{RED}" '
+                     f'stroke-width="1.8" stroke-dasharray="5 4" rx="4" opacity=".85"/>')
+            s.append(f'<path d="M{x+20} {y+20} l{cw-40} {cw-40} M{x+cw-20} {y+20} l{-(cw-40)} {cw-40}" '
+                     f'stroke="{RED}" stroke-width="2" opacity=".7"/>')
+        else:
+            col = PURPLE if parity else BLUE
+            s.append(f'<rect x="{x}" y="{y}" width="{cw}" height="{cw}" fill="{col}" opacity=".8" rx="4"/>')
+            s.append(f'<text x="{x+cw/2}" y="{y+cw/2+6}" fill="#0b1220" font-size="17" font-weight="700" '
+                     f'text-anchor="middle">{"p" if parity else "d"}</text>')
+    bx = x0 + 4 * (cw + gap) + 22
+    s.append(f'<text x="{bx}" y="{y0+30}" fill="{BLUE}" font-size="15">d = data</text>')
+    s.append(f'<text x="{bx}" y="{y0+56}" fill="{PURPLE}" font-size="15">p = parity</text>')
+    s.append(f'<text x="{bx}" y="{y0+82}" fill="{RED}" font-size="15">lost</text>')
+    s.append(f'<text x="{x0}" y="{y0+3*(cw+gap)+18}" fill="{DIM}" font-size="15">any 8 of 12 rebuild the object</text>')
+    s.append(f'<text x="{x0}" y="404" fill="{DIM}" font-size="15">50% overhead, not 200%</text>')
+    return f'<svg width="640" height="420" viewBox="0 0 640 420">{"".join(s)}</svg>'
+
+
 COVERS = [
     ("proximity-service", "VOLUME 2 · CH 1", "Design a<br>Proximity Service", 58,
      "200 million businesses, 500 metres, under 100ms.", "two B-tree indexes are <i>not</i> a 2D index", art_quadtree),
@@ -246,6 +276,8 @@ COVERS = [
      "Three reservations per second — and the hardest design in the series.", "every read-then-write is a <i>race</i>", art_collision),
     ("email-service", "VOLUME 2 · CH 8", "Design a Distributed<br>Email Service", 50,
      "Protocols from the 1980s, carrying two exabytes a year.", "a <i>storage</i> system that sends messages", art_storage),
+    ("object-storage", "VOLUME 2 · CH 9", "Design S3-like<br>Object Storage", 54,
+     "Eleven nines of durability on drives that fail constantly.", "immutability is what makes it <i>tractable</i>", art_erasure),
 ]
 
 def build(only=None):

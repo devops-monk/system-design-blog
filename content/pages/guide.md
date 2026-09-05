@@ -76,6 +76,7 @@ Harder problems, and the ones that come up most often for senior roles.
 22. [Design an Ad Click Event Aggregation System](/2026/06/design-ad-click-aggregation/) — event time versus processing time, watermarks, and exactly-once as a genuine requirement rather than a luxury. Includes an interactive watermark simulator.
 23. [Design a Hotel Reservation System](/2026/06/design-hotel-reservation-system/) — three transactions a second, and the hardest problem in the series: double booking, locking strategies, and the one-statement fix. Includes an interactive race-condition simulator.
 24. [Design a Distributed Email Service](/2026/06/design-distributed-email-service/) — two exabytes a year, forty-year-old protocols, denormalising for a query NoSQL refuses, and the deliverability problem that isn't engineering. Includes an interactive deliverability checker.
+25. [Design S3-like Object Storage](/2026/06/design-s3-object-storage/) — eleven nines on hardware that fails constantly: immutability, replication versus erasure coding, and why small files waste disks. Includes an interactive durability calculator.
 
 ---
 
