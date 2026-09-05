@@ -122,6 +122,16 @@ a { transition: color 0.15s; }
 .container { max-width: 1440px !important; }
 
 .content-area { padding: 2em 2em 0 !important; width: 72% !important; }
+
+/* Article pages render no sidebar, but .content-area reserves 72% of the
+   1440px container for one — leaving a dead column down the right of every
+   post. Centre the article and let it use a little more of the width. */
+.post-content-area {
+  width: 100% !important;
+  max-width: 1120px;
+  margin: 0 auto !important;
+  float: none !important;
+}
 .sidebar      { padding: 2em 1.5em 0 !important; width: 28% !important; }
 
 /* ---- Page background ---- */
