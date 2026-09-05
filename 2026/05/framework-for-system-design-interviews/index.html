@@ -1,12 +1,12 @@
-<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - A Framework for System Design Interviews: The Complete Playbook"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't."><title>System Design - A Framework for System Design Interviews: The Complete Playbook</title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="A Framework for System Design Interviews: The Complete Playbook"><meta property="og:description" content="Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T06:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T06:00:00+00:00"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Interviews"><meta property="article:tag" content="Architecture"><meta property="article:tag" content="Scalability"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"A Framework for System Design Interviews: The Complete Playbook","headline":"A Framework for System Design Interviews: The Complete Playbook","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/","description":"Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't.","wordCount":"4012","keywords":["system-design","interviews","architecture","scalability"],"datePublished":"2026-05-30T06:00:00Z","dateModified":"2026-05-30T06:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js defer></script><script src=/assets/js/search.js defer></script><script src=/assets/js/enhancements.js defer></script><script type=module>
+<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - A Framework for System Design Interviews: The Complete Playbook"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't."><title>System Design - A Framework for System Design Interviews: The Complete Playbook</title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="A Framework for System Design Interviews: The Complete Playbook"><meta property="og:description" content="Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T06:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T06:00:00+00:00"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Interviews"><meta property="article:tag" content="Architecture"><meta property="article:tag" content="Scalability"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"A Framework for System Design Interviews: The Complete Playbook","headline":"A Framework for System Design Interviews: The Complete Playbook","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/","description":"Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't.","wordCount":"3938","keywords":["system-design","interviews","architecture","scalability"],"datePublished":"2026-05-30T06:00:00Z","dateModified":"2026-05-30T06:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js defer></script><script src=/assets/js/search.js defer></script><script src=/assets/js/enhancements.js defer></script><script type=module>
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 
       
       
       
       
-      const pick = () =>
-        document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default';
+      const isDark = () =>
+        document.documentElement.getAttribute('data-theme') === 'dark';
 
       function draw() {
         document.querySelectorAll('pre.mermaid').forEach((el) => {
@@ -16,13 +16,57 @@
           else el.innerHTML = el.dataset.src;
           el.removeAttribute('data-processed');
         });
+        
+        
+        
+        const vars = {
+          light: {
+            background: '#ffffff', mainBkg: '#eff6ff',
+            primaryColor: '#eff6ff', primaryTextColor: '#1e293b',
+            primaryBorderColor: '#3b82f6', secondaryColor: '#f0fdf4',
+            secondaryTextColor: '#166534', secondaryBorderColor: '#10b981',
+            tertiaryColor: '#f8fafc', tertiaryTextColor: '#1e293b',
+            tertiaryBorderColor: '#cbd5e1',
+            lineColor: '#64748b', textColor: '#1e293b', titleColor: '#0f172a',
+            clusterBkg: '#f8fafc', clusterBorder: '#cbd5e1',
+            edgeLabelBackground: '#ffffff', nodeBorder: '#3b82f6',
+            actorBkg: '#eff6ff', actorBorder: '#3b82f6', actorTextColor: '#1e293b',
+            signalColor: '#475569', signalTextColor: '#1e293b',
+            labelBoxBkgColor: '#eff6ff', labelBoxBorderColor: '#3b82f6',
+            labelTextColor: '#1e293b', loopTextColor: '#1e293b',
+            noteBkgColor: '#fffbeb', noteBorderColor: '#f59e0b', noteTextColor: '#92400e',
+          },
+          dark: {
+            background: '#16233c', mainBkg: '#1e3a5f',
+            primaryColor: '#1e3a5f', primaryTextColor: '#e2e8f0',
+            primaryBorderColor: '#3b82f6', secondaryColor: '#10291f',
+            secondaryTextColor: '#6ee7b7', secondaryBorderColor: '#10b981',
+            tertiaryColor: '#0f1a2e', tertiaryTextColor: '#e2e8f0',
+            tertiaryBorderColor: '#3b4d6b',
+            lineColor: '#94a3b8', textColor: '#e2e8f0', titleColor: '#f1f5f9',
+            clusterBkg: '#0f1a2e', clusterBorder: '#2b3a55',
+            edgeLabelBackground: '#16233c', nodeBorder: '#3b82f6',
+            actorBkg: '#1e3a5f', actorBorder: '#3b82f6', actorTextColor: '#e2e8f0',
+            signalColor: '#94a3b8', signalTextColor: '#e2e8f0',
+            labelBoxBkgColor: '#1e3a5f', labelBoxBorderColor: '#3b82f6',
+            labelTextColor: '#e2e8f0', loopTextColor: '#e2e8f0',
+            noteBkgColor: '#2a1d10', noteBorderColor: '#f59e0b', noteTextColor: '#fcd34d',
+          },
+        };
+
         mermaid.initialize({
           startOnLoad: false,
-          theme: pick(),
+          theme: 'base',
+          themeVariables: {
+            fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
+            fontSize: '15px',
+            ...(isDark() ? vars.dark : vars.light),
+          },
           securityLevel: 'loose',
           
           
-          flowchart: { htmlLabels: true, useMaxWidth: true },
+          flowchart: { htmlLabels: true, useMaxWidth: true, curve: 'basis' },
+          sequence: { useMaxWidth: true },
         });
         mermaid.run({ querySelector: 'pre.mermaid' });
       }
@@ -83,17 +127,17 @@
     section Step 4
     Wrap Up (3–5 min)                     :active, s4, 40, 5m
 </pre><pre class=mermaid>flowchart TD
-    START(["🎯 Question given\n'Design Twitter'"])
+    START(["Question given\n'Design Twitter'"])
 
-    S1["📋 STEP 1\nUnderstand the Problem\n& Establish Design Scope\n\n3–10 minutes\nAsk questions\nWrite assumptions\nDefine scope"]
+    S1["STEP 1\nUnderstand the Problem\n& Establish Design Scope\n\n3–10 minutes\nAsk questions\nWrite assumptions\nDefine scope"]
 
-    S2["🏗️ STEP 2\nPropose High-Level Design\n& Get Buy-In\n\n10–15 minutes\nDraw boxes & arrows\nSketch APIs\nBack-of-envelope math"]
+    S2["STEP 2\nPropose High-Level Design\n& Get Buy-In\n\n10–15 minutes\nDraw boxes & arrows\nSketch APIs\nBack-of-envelope math"]
 
-    S3["🔬 STEP 3\nDesign Deep Dive\n\n10–25 minutes\nZoom into critical components\nDiscuss trade-offs\nHandle bottlenecks"]
+    S3["STEP 3\nDesign Deep Dive\n\n10–25 minutes\nZoom into critical components\nDiscuss trade-offs\nHandle bottlenecks"]
 
-    S4["🎁 STEP 4\nWrap Up\n\n3–5 minutes\nSummarise design\nMention bottlenecks\nPropose improvements"]
+    S4["STEP 4\nWrap Up\n\n3–5 minutes\nSummarise design\nMention bottlenecks\nPropose improvements"]
 
-    HIRED(["✅ Strong signal\nshown to interviewer"])
+    HIRED(["✓ Strong signal\nshown to interviewer"])
 
     START --> S1 --> S2 --> S3 --> S4 --> HIRED
 
@@ -126,8 +170,8 @@
       Budget / cost sensitivity?
       Regulatory requirements?
 </pre><p><strong>Functional requirements</strong> — <em>What</em> the system must do.</p><ul><li>What specific features are we building?</li><li>What are the most important ones? (Don&rsquo;t design everything)</li><li>What is explicitly out of scope?</li></ul><p><strong>Non-functional requirements</strong> — <em>How well</em> the system must do it.</p><ul><li>Latency: Does this need to be real-time (&lt; 100ms) or is eventual consistency OK?</li><li>Availability: 99.9% or 99.999%? (That&rsquo;s the difference between 8 hours and 5 minutes downtime per year)</li><li>Consistency: Can users see slightly stale data? (Twitter feed vs. bank balance — very different)</li></ul><p><strong>Scale</strong> — drives every architecture decision.</p><ul><li>How many users? (1K vs 10M vs 1B is not the same system)</li><li>What&rsquo;s the read/write ratio? (Facebook News Feed: ~1000:1 reads to writes)</li></ul><h3 id=the-news-feed-example--how-a-good-step-1-sounds>The news feed example — how a good Step 1 sounds</h3><p>Here is what a strong candidate conversation looks like:</p><pre class=mermaid>sequenceDiagram
-    actor C as 🧑‍💻 Candidate
-    actor I as 👩‍💼 Interviewer
+    actor C as ‍ Candidate
+    actor I as ‍ Interviewer
 
     C->>I: Is this a mobile app, web app, or both?
     I->>C: Both
@@ -163,11 +207,11 @@
 - No strong consistency required — eventual is fine
 - 99.9% availability target
 </code></pre><hr><h2 id=step-2-propose-a-high-level-design-and-get-buy-in>Step 2: Propose a High-Level Design and Get Buy-In</h2><p><em>Time: 10–15 minutes</em></p><p>You&rsquo;ve established scope. Now it&rsquo;s time to sketch the architecture. The goal here is not perfection — it&rsquo;s <strong>direction</strong>. You&rsquo;re proposing a rough blueprint and getting the interviewer&rsquo;s buy-in before you invest time in details.</p><h3 id=three-things-to-do-in-step-2>Three things to do in Step 2</h3><pre class=mermaid>flowchart LR
-    A["📦 Draw the boxes\nIdentify major components:\nClients, APIs, Services,\nDatabases, Caches, CDN,\nMessage Queues"]
+    A["Draw the boxes\nIdentify major components:\nClients, APIs, Services,\nDatabases, Caches, CDN,\nMessage Queues"]
 
-    B["🔗 Connect the arrows\nShow data flow.\nWhere do reads go?\nWhere do writes go?\nWhat calls what?"]
+    B["Connect the arrows\nShow data flow.\nWhere do reads go?\nWhere do writes go?\nWhat calls what?"]
 
-    C["🧮 Sanity check with math\nBack-of-envelope estimates.\nDoes 1 DB handle\nour write QPS?\nDo we need sharding?"]
+    C["Sanity check with math\nBack-of-envelope estimates.\nDoes 1 DB handle\nour write QPS?\nDo we need sharding?"]
 
     A --> B --> C
 
@@ -175,25 +219,25 @@
     style B fill:#10B981,color:#fff
     style C fill:#F59E0B,color:#fff
 </pre><h3 id=the-standard-building-blocks>The standard building blocks</h3><p>Every system design is composed of some combination of these:</p><pre class=mermaid>flowchart TD
-    subgraph Client["📱 Client Layer"]
+    subgraph Client["Client Layer"]
         WEB["Web Browser"]
         MOB["Mobile App"]
     end
 
-    subgraph Edge["🌐 Edge Layer"]
+    subgraph Edge["Edge Layer"]
         DNS["DNS"]
         CDN["CDN\n(static assets)"]
         LB["Load Balancer\n(traffic distribution)"]
     end
 
-    subgraph API["⚙️ API Layer"]
+    subgraph API["API Layer"]
         GW["API Gateway\n(auth, rate limiting, routing)"]
         SVC1["Service A"]
         SVC2["Service B"]
         SVC3["Service C"]
     end
 
-    subgraph Data["💾 Data Layer"]
+    subgraph Data["Data Layer"]
         SQL["Relational DB\n(MySQL / PostgreSQL)"]
         NOSQL["NoSQL DB\n(Cassandra / DynamoDB)"]
         CACHE["Cache\n(Redis / Memcached)"]
@@ -209,18 +253,18 @@
     style API fill:#10B981,stroke:#047857,color:#fff
     style Data fill:#F59E0B,stroke:#B45309,color:#fff
 </pre><p>Not every system needs all of these. Part of good design is knowing which to include and why. A junior engineer adds everything. A senior engineer adds only what&rsquo;s justified.</p><h3 id=high-level-design-news-feed-system--feed-publishing>High-level design: News Feed System — Feed Publishing</h3><p>Let&rsquo;s continue our news feed example. Feed publishing = when a user creates a post:</p><pre class=mermaid>flowchart TD
-    U["👤 User posts\n'Hello World + photo'"]
-    LB["⚖️ Load Balancer"]
-    WS["🖥️ Web Servers\nAuthentication\nRate Limiting"]
-    PS["📝 Post Service\nValidates & stores post"]
-    FS["📡 Fanout Service\nPushes post to followers' feeds"]
-    NS["🔔 Notification Service\nSends push notifications"]
-    PC["⚡ Post Cache\n(Redis)"]
-    PDB["🗄️ Post DB\n(MySQL)"]
-    MQ["📬 Message Queue\n(Kafka)"]
-    FW["⚙️ Fanout Workers\n(async)"]
-    NFC["📦 News Feed Cache\n(Redis — per user)"]
-    GDB["🌐 Graph DB\n(Neo4j — friend graph)"]
+    U["User posts\n'Hello World + photo'"]
+    LB["Load Balancer"]
+    WS["Web Servers\nAuthentication\nRate Limiting"]
+    PS["Post Service\nValidates & stores post"]
+    FS["Fanout Service\nPushes post to followers' feeds"]
+    NS["Notification Service\nSends push notifications"]
+    PC["Post Cache\n(Redis)"]
+    PDB["Post DB\n(MySQL)"]
+    MQ["Message Queue\n(Kafka)"]
+    FW["Fanout Workers\n(async)"]
+    NFC["News Feed Cache\n(Redis — per user)"]
+    GDB["Graph DB\n(Neo4j — friend graph)"]
 
     U --> LB --> WS
     WS --> PS
@@ -242,14 +286,14 @@
     style NFC fill:#EC4899,color:#fff
     style GDB fill:#14B8A6,color:#fff
 </pre><h3 id=high-level-design-news-feed-system--feed-reading>High-level design: News Feed System — Feed Reading</h3><p>When a user opens their app and loads their feed:</p><pre class=mermaid>sequenceDiagram
-    actor U as 👤 User
-    participant LB as ⚖️ Load Balancer
-    participant WS as 🖥️ Web Server
-    participant NFS as 📰 News Feed Service
-    participant NFC as ⚡ Feed Cache (Redis)
-    participant UC as 👥 User Cache
-    participant PC as 📝 Post Cache
-    participant DB as 🗄️ Database
+    actor U as  User
+    participant LB as  Load Balancer
+    participant WS as  Web Server
+    participant NFS as  News Feed Service
+    participant NFC as  Feed Cache (Redis)
+    participant UC as  User Cache
+    participant PC as  Post Cache
+    participant DB as  Database
 
     U->>LB: GET /v1/me/feed
     LB->>WS: route request
@@ -272,7 +316,7 @@
 
     NFS-->>WS: assembled feed (20 posts)
     WS-->>LB: HTTP 200 + JSON
-    LB-->>U: render feed 🎉
+    LB-->>U: render feed 
 </pre><p>This sequence diagram shows something important: the <strong>feed is pre-computed and cached</strong> (the Fanout Service populates it when posts are created). Reading the feed is just a cache lookup — it doesn&rsquo;t need to touch the database at all on the hot path. This is why Facebook, Instagram, and Twitter all use this pattern.</p><h3 id=when-to-include-back-of-envelope-estimates>When to include back-of-envelope estimates</h3><p>After sketching the high-level design, do a quick sanity check:</p><pre tabindex=0><code>For our news feed:
 DAU = 10M
 Feed reads per user per day = 5 (open app 5 times)
@@ -298,7 +342,7 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
     style C fill:#10B981,color:#fff
     style D fill:#F59E0B,color:#fff
 </pre><p><strong>Common deep-dive areas by system type:</strong></p><table><thead><tr><th>System</th><th>Interesting Deep Dives</th></tr></thead><tbody><tr><td>Chat (WhatsApp)</td><td>WebSocket connection management, message delivery guarantees, online/offline status</td></tr><tr><td>URL Shortener</td><td>Hash function design, collision handling, redirect caching</td></tr><tr><td>News Feed</td><td>Fanout-on-write vs fanout-on-read, handling celebrity users</td></tr><tr><td>Search Autocomplete</td><td>Trie data structure, caching prefix results, ranking</td></tr><tr><td>Rate Limiter</td><td>Token bucket vs sliding window, distributed counters in Redis</td></tr><tr><td>Video Platform</td><td>Chunked upload, video transcoding pipeline, adaptive bitrate streaming</td></tr></tbody></table><h3 id=deep-dive-example-fanout-on-write-vs-fanout-on-read>Deep dive example: Fanout-on-write vs Fanout-on-read</h3><p>This is a classic deep-dive topic for any social feed system. Let&rsquo;s explore both approaches:</p><pre class=mermaid>flowchart LR
-    subgraph FOW["📤 Fanout-on-WRITE\n(Push model)"]
+    subgraph FOW["Fanout-on-WRITE\n(Push model)"]
         direction TB
         W1["User posts"]
         W2["Immediately push\nto all N followers'feed caches"]
@@ -306,7 +350,7 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
         W1 --> W2 --> W3
     end
 
-    subgraph FOR["📥 Fanout-on-READ\n(Pull model)"]
+    subgraph FOR["Fanout-on-READ\n(Pull model)"]
         direction TB
         R1["User posts"]
         R2["Store in your\nown timeline only"]
@@ -314,7 +358,7 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
         R1 --> R2 --> R3
     end
 
-    subgraph HYBRID["🔀 Hybrid\n(Best of both)"]
+    subgraph HYBRID["Hybrid\n(Best of both)"]
         direction TB
         H1["Normal users:\nfanout-on-write"]
         H2["Celebrity users\n(10M+ followers):\nfanout-on-read"]
@@ -354,18 +398,15 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
         timestamp created_at
     }
 
-    USER ||--o{ POST : "creates"
-    USER ||--o{ FRIENDSHIP : "has"
-    USER ||--o{ NEWSFEED : "sees"
-    POST ||--o{ NEWSFEED : "appears in"
+    USER ||--o{ POST : "creates"USER ||--o{ FRIENDSHIP : "has"USER ||--o{ NEWSFEED : "sees"POST ||--o{ NEWSFEED : "appears in"
 </pre><p>Key design decisions to discuss:</p><ul><li><code>post_id</code> uses <strong>Snowflake ID</strong> (Twitter&rsquo;s algorithm) — a time-sortable 64-bit integer that works across distributed systems without coordination</li><li><code>NEWSFEED</code> table is actually a Redis sorted set in production (score = timestamp), not a SQL table</li><li><code>FRIENDSHIP</code> table needs indexes on both <code>user_id</code> and <code>friend_id</code> for bidirectional lookup</li></ul><hr><h2 id=step-4-wrap-up>Step 4: Wrap Up</h2><p><em>Time: 3–5 minutes</em></p><p>Don&rsquo;t just stop and say &ldquo;I&rsquo;m done.&rdquo; The wrap-up is an opportunity to leave a strong final impression.</p><pre class=mermaid>flowchart LR
-    W1["📊 Recap the design\n\nQuickly walk through\nwhat you built.\nHelps interviewer remember\nyour key decisions."]
+    W1["Recap the design\n\nQuickly walk through\nwhat you built.\nHelps interviewer remember\nyour key decisions."]
 
-    W2["🔍 Identify bottlenecks\n\nNever say the design\nis perfect.\nAlways mention what\nyou'd improve next."]
+    W2["Identify bottlenecks\n\nNever say the design\nis perfect.\nAlways mention what\nyou'd improve next."]
 
-    W3["🚨 Mention failure modes\n\nWhat happens if the\nDB goes down?\nIf the cache is cold?\nIf a datacenter fails?"]
+    W3["Mention failure modes\n\nWhat happens if the\nDB goes down?\nIf the cache is cold?\nIf a datacenter fails?"]
 
-    W4["📈 Discuss scale curve\n\nIf we go from\n1M → 10M → 100M users,\nwhat changes?"]
+    W4["Discuss scale curve\n\nIf we go from\n1M → 10M → 100M users,\nwhat changes?"]
 
     W1 --> W2 --> W3 --> W4
 
@@ -374,43 +415,24 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
     style W3 fill:#EF4444,color:#fff
     style W4 fill:#10B981,color:#fff
 </pre><h3 id=strong-wrap-up-phrases>Strong wrap-up phrases</h3><p>Instead of &ldquo;I&rsquo;m done,&rdquo; try:</p><ul><li><em>&ldquo;Let me do a quick recap of what we&rsquo;ve designed&mldr;&rdquo;</em></li><li><em>&ldquo;The main bottlenecks I see are&mldr; I&rsquo;d address them by&mldr;&rdquo;</em></li><li><em>&ldquo;If we needed to scale from 10M to 100M DAU, the first thing I&rsquo;d change is&mldr;&rdquo;</em></li><li><em>&ldquo;One thing I didn&rsquo;t cover that could be interesting is&mldr;&rdquo;</em></li></ul><h3 id=example-wrap-up-for-the-news-feed>Example wrap-up for the news feed</h3><blockquote><p>&ldquo;To summarise — we&rsquo;ve built a news feed system for 10M DAU. Users can post text and media, and see a chronological feed of their friends&rsquo; posts. We use a load balancer to distribute traffic across stateless web servers, a Fanout Service that asynchronously pre-computes feeds using Kafka workers, Redis for both feed caches and post caches, and MySQL for persistent storage.</p><p>The biggest bottleneck I see is the Fanout Service at scale — if a user has 5,000 friends and posts frequently, we generate 5,000 cache writes per post. For users with very large friend counts, I&rsquo;d switch to a hybrid fanout-on-read approach.</p><p>For failure modes: if Redis goes down, we fall back to the database (slower, but correct). If the Fanout workers fall behind, users see stale feeds temporarily, which is acceptable given our eventual consistency requirement.</p><p>If traffic grew to 100M DAU, I&rsquo;d add database sharding by user_id, introduce a CDN for media delivery, and add more Redis nodes with consistent hashing.&rdquo;</p></blockquote><p>That&rsquo;s a 90-second wrap-up that demonstrates critical thinking, awareness of failure modes, and understanding of scale — all things that leave a lasting positive impression.</p><hr><h2 id=the-complete-45-minute-picture>The Complete 45-Minute Picture</h2><p>Here&rsquo;s the full flow from start to finish, including how the two sides of the conversation should feel:</p><pre class=mermaid>sequenceDiagram
-    actor C as 🧑‍💻 Candidate
-    actor I as 👩‍💼 Interviewer
+    actor C as ‍ Candidate
+    actor I as ‍ Interviewer
 
-    Note over C,I: ⏱️ 0:00 — Question given
+    Note over C,I: ⏱ 0:00 — Question given
 
-    I->>C: "Design a news feed system like Facebook"
-
-    Note over C,I: ⏱️ 0:00–0:10 — Step 1: Clarify
+    I->>C: "Design a news feed system like Facebook"Note over C,I: ⏱ 0:00–0:10 — Step 1: Clarify
     C->>I: Ask 5–7 targeted questions
     I->>C: Answer each one
-    C->>I: "Let me write down my assumptions..."
-    C->>I: "Recap: 10M DAU, chronological feed, media posts. Correct?"
-    I->>C: "Yes, let's proceed"
+    C->>I: "Let me write down my assumptions..."C->>I: "Recap: 10M DAU, chronological feed, media posts. Correct?"I->>C: "Yes, let's proceed"Note over C,I: ⏱ 0:10–0:25 — Step 2: High-Level Design
+    C->>I: "I'll start with the high-level components..."C->>I: Draws boxes on whiteboard
+    C->>I: "For feed publishing, I'm thinking a Fanout Service..."I->>C: "Interesting, tell me more about the fanout"C->>I: Quick back-of-envelope: "230 write QPS — single DB is fine"I->>C: "Good. What about the read path?"Note over C,I: ⏱ 0:25–0:40 — Step 3: Deep Dive
+    C->>I: "Let me deep dive into the fanout trade-offs..."C->>I: Explains push vs pull vs hybrid
+    I->>C: "How do you handle the celebrity problem?"C->>I: "Great question — for users with 1M+ followers we..."I->>C: "What does your data model look like?"C->>I: Draws schema, discusses indexes and ID generation
 
-    Note over C,I: ⏱️ 0:10–0:25 — Step 2: High-Level Design
-    C->>I: "I'll start with the high-level components..."
-    C->>I: Draws boxes on whiteboard
-    C->>I: "For feed publishing, I'm thinking a Fanout Service..."
-    I->>C: "Interesting, tell me more about the fanout"
-    C->>I: Quick back-of-envelope: "230 write QPS — single DB is fine"
-    I->>C: "Good. What about the read path?"
-
-    Note over C,I: ⏱️ 0:25–0:40 — Step 3: Deep Dive
-    C->>I: "Let me deep dive into the fanout trade-offs..."
-    C->>I: Explains push vs pull vs hybrid
-    I->>C: "How do you handle the celebrity problem?"
-    C->>I: "Great question — for users with 1M+ followers we..."
-    I->>C: "What does your data model look like?"
-    C->>I: Draws schema, discusses indexes and ID generation
-
-    Note over C,I: ⏱️ 0:40–0:45 — Step 4: Wrap Up
-    C->>I: "Let me quickly recap what we've built..."
-    C->>I: "Main bottleneck is fanout at scale, here's how I'd handle it..."
-    C->>I: "If we scaled to 100M DAU, first change would be..."
-    I->>C: "Great, thank you — any questions for me?"
+    Note over C,I: ⏱ 0:40–0:45 — Step 4: Wrap Up
+    C->>I: "Let me quickly recap what we've built..."C->>I: "Main bottleneck is fanout at scale, here's how I'd handle it..."C->>I: "If we scaled to 100M DAU, first change would be..."I->>C: "Great, thank you — any questions for me?"
 </pre><hr><h2 id=dos-and-donts-the-complete-list>Dos and Don&rsquo;ts: The Complete List</h2><p>These are the exact behaviours that separate candidates who get offers from those who don&rsquo;t.</p><h3 id=-always-do-these>✅ Always Do These</h3><pre class=mermaid>flowchart TD
-    subgraph DOS["✅ DOs"]
+    subgraph DOS["✓ DOs"]
         D1["Always ask for clarification\nDon't assume your assumption is correct"]
         D2["Understand requirements\nbefore touching the design"]
         D3["Think out loud\nLet the interviewer follow your reasoning"]
@@ -423,7 +445,7 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
 
     style DOS fill:#10B981,stroke:#047857,color:#fff
 </pre><h3 id=-never-do-these>❌ Never Do These</h3><pre class=mermaid>flowchart TD
-    subgraph DONTS["❌ DON'Ts"]
+    subgraph DONTS["✗ DON'Ts"]
         X1["Jump into solution immediately\nwithout clarifying requirements"]
         X2["Think in silence\nInterviewers can't evaluate what they can't hear"]
         X3["Go too deep on one component early\nCover the system breadth first"]
@@ -436,7 +458,7 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
 
     style DONTS fill:#EF4444,stroke:#B91C1C,color:#fff
 </pre><hr><h2 id=red-flags-that-kill-good-candidates>Red Flags That Kill Good Candidates</h2><p>Even technically strong candidates fail interviews for non-technical reasons. Watch for these:</p><p><strong>🚩 Narrow-mindedness</strong> — &ldquo;We should use Kafka. Period.&rdquo; vs &ldquo;We could use Kafka or RabbitMQ or SQS — here&rsquo;s when I&rsquo;d choose each&mldr;&rdquo;</p><p><strong>🚩 Stubbornness</strong> — The interviewer hints you&rsquo;re going down the wrong path. You defend your choice instead of exploring theirs. This signals you&rsquo;d be difficult to work with.</p><p><strong>🚩 Silence</strong> — You&rsquo;re thinking hard but not talking. The interviewer is sitting there with no signal. They can&rsquo;t give partial credit for thoughts you never expressed.</p><p><strong>🚩 Premature optimization</strong> — You spend 15 minutes designing a globally distributed caching layer for a system that hasn&rsquo;t been asked to scale yet.</p><p><strong>🚩 No questions asked</strong> — If you started designing immediately without a single clarifying question, it signals you don&rsquo;t think about requirements in real work either.</p><hr><h2 id=interview-preparation-checklist>Interview Preparation Checklist</h2><p>Before your interview, make sure you can do all of these from memory:</p><pre class=mermaid>flowchart TD
-    subgraph KNOW["📚 Know These Building Blocks"]
+    subgraph KNOW["Know These Building Blocks"]
         K1["Load balancer — algorithms, health checks"]
         K2["SQL vs NoSQL — when to use each"]
         K3["Database replication — master/slave, failover"]
@@ -447,7 +469,7 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
         K8["CAP theorem — consistency vs availability"]
     end
 
-    subgraph PRACTICE["🏋️ Practice These Skills"]
+    subgraph PRACTICE["Practice These Skills"]
         P1["Back-of-envelope estimation — QPS, storage, bandwidth"]
         P2["Drawing clear architecture diagrams"]
         P3["Thinking out loud while designing"]
@@ -455,7 +477,7 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
         P5["Data modelling — schemas, indexes, ID generation"]
     end
 
-    subgraph COMMON["🎯 Common Interview Questions"]
+    subgraph COMMON["Common Interview Questions"]
         C1["Design Twitter / News Feed"]
         C2["Design a URL Shortener"]
         C3["Design WhatsApp / Chat System"]
@@ -471,30 +493,30 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
     style COMMON fill:#F59E0B,stroke:#B45309,color:#fff
 </pre><hr><h2 id=the-one-page-cheat-sheet>The One-Page Cheat Sheet</h2><p>Print this. Internalize it. Use it in every mock interview until it&rsquo;s automatic:</p><pre class=mermaid>flowchart LR
     subgraph STEP1["Step 1 · 3–10 min"]
-        A1["❓ Ask: features, scale,\nnon-functional requirements"]
-        A2["📝 Write assumptions\non whiteboard"]
-        A3["🔁 Recap + confirm\nwith interviewer"]
+        A1["Ask: features, scale,\nnon-functional requirements"]
+        A2["Write assumptions\non whiteboard"]
+        A3["Recap + confirm\nwith interviewer"]
         A1 --> A2 --> A3
     end
 
     subgraph STEP2["Step 2 · 10–15 min"]
-        B1["📦 Draw major\ncomponents"]
-        B2["🔗 Show data flow\n(reads and writes)"]
-        B3["🧮 Sanity check\nwith math"]
+        B1["Draw major\ncomponents"]
+        B2["Show data flow\n(reads and writes)"]
+        B3["Sanity check\nwith math"]
         B1 --> B2 --> B3
     end
 
     subgraph STEP3["Step 3 · 10–25 min"]
-        C1["🔬 Zoom into\ncritical components"]
-        C2["⚖️ Discuss trade-offs\nfor every choice"]
-        C3["🚨 Handle edge cases\nand failures"]
+        C1["Zoom into\ncritical components"]
+        C2["Discuss trade-offs\nfor every choice"]
+        C3["Handle edge cases\nand failures"]
         C1 --> C2 --> C3
     end
 
     subgraph STEP4["Step 4 · 3–5 min"]
-        D1["📊 Recap design"]
-        D2["🔍 Name bottlenecks"]
-        D3["📈 Scale next steps"]
+        D1["Recap design"]
+        D2["Name bottlenecks"]
+        D3["Scale next steps"]
         D1 --> D2 --> D3
     end
 

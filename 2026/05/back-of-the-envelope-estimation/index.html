@@ -1,12 +1,12 @@
-<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - Back-of-the-Envelope Estimation: The Art of Making Smart Guesses"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - Learn how to estimate QPS, storage, bandwidth, and memory requirements quickly and confidently — a must-have skill for system design interviews and real-world engineering decisions."><title>System Design - Back-of-the-Envelope Estimation: The Art of Making Smart Guesses</title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="Back-of-the-Envelope Estimation: The Art of Making Smart Guesses"><meta property="og:description" content="Learn how to estimate QPS, storage, bandwidth, and memory requirements quickly and confidently — a must-have skill for system design interviews and real-world engineering decisions."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T00:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T00:00:00+00:00"><meta property="article:tag" content="Scalability"><meta property="article:tag" content="Estimation"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Performance"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"Back-of-the-Envelope Estimation: The Art of Making Smart Guesses","headline":"Back-of-the-Envelope Estimation: The Art of Making Smart Guesses","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/","description":"Learn how to estimate QPS, storage, bandwidth, and memory requirements quickly and confidently — a must-have skill for system design interviews and real-world engineering decisions.","wordCount":"3681","keywords":["scalability","estimation","system-design","performance"],"datePublished":"2026-05-30T00:00:00Z","dateModified":"2026-05-30T00:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js defer></script><script src=/assets/js/search.js defer></script><script src=/assets/js/enhancements.js defer></script><script type=module>
+<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - Back-of-the-Envelope Estimation: The Art of Making Smart Guesses"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - Learn how to estimate QPS, storage, bandwidth, and memory requirements quickly and confidently — a must-have skill for system design interviews and real-world engineering decisions."><title>System Design - Back-of-the-Envelope Estimation: The Art of Making Smart Guesses</title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="Back-of-the-Envelope Estimation: The Art of Making Smart Guesses"><meta property="og:description" content="Learn how to estimate QPS, storage, bandwidth, and memory requirements quickly and confidently — a must-have skill for system design interviews and real-world engineering decisions."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T00:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T00:00:00+00:00"><meta property="article:tag" content="Scalability"><meta property="article:tag" content="Estimation"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Performance"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"Back-of-the-Envelope Estimation: The Art of Making Smart Guesses","headline":"Back-of-the-Envelope Estimation: The Art of Making Smart Guesses","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/","description":"Learn how to estimate QPS, storage, bandwidth, and memory requirements quickly and confidently — a must-have skill for system design interviews and real-world engineering decisions.","wordCount":"3665","keywords":["scalability","estimation","system-design","performance"],"datePublished":"2026-05-30T00:00:00Z","dateModified":"2026-05-30T00:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/back-of-the-envelope-estimation/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js defer></script><script src=/assets/js/search.js defer></script><script src=/assets/js/enhancements.js defer></script><script type=module>
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 
       
       
       
       
-      const pick = () =>
-        document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default';
+      const isDark = () =>
+        document.documentElement.getAttribute('data-theme') === 'dark';
 
       function draw() {
         document.querySelectorAll('pre.mermaid').forEach((el) => {
@@ -16,13 +16,57 @@
           else el.innerHTML = el.dataset.src;
           el.removeAttribute('data-processed');
         });
+        
+        
+        
+        const vars = {
+          light: {
+            background: '#ffffff', mainBkg: '#eff6ff',
+            primaryColor: '#eff6ff', primaryTextColor: '#1e293b',
+            primaryBorderColor: '#3b82f6', secondaryColor: '#f0fdf4',
+            secondaryTextColor: '#166534', secondaryBorderColor: '#10b981',
+            tertiaryColor: '#f8fafc', tertiaryTextColor: '#1e293b',
+            tertiaryBorderColor: '#cbd5e1',
+            lineColor: '#64748b', textColor: '#1e293b', titleColor: '#0f172a',
+            clusterBkg: '#f8fafc', clusterBorder: '#cbd5e1',
+            edgeLabelBackground: '#ffffff', nodeBorder: '#3b82f6',
+            actorBkg: '#eff6ff', actorBorder: '#3b82f6', actorTextColor: '#1e293b',
+            signalColor: '#475569', signalTextColor: '#1e293b',
+            labelBoxBkgColor: '#eff6ff', labelBoxBorderColor: '#3b82f6',
+            labelTextColor: '#1e293b', loopTextColor: '#1e293b',
+            noteBkgColor: '#fffbeb', noteBorderColor: '#f59e0b', noteTextColor: '#92400e',
+          },
+          dark: {
+            background: '#16233c', mainBkg: '#1e3a5f',
+            primaryColor: '#1e3a5f', primaryTextColor: '#e2e8f0',
+            primaryBorderColor: '#3b82f6', secondaryColor: '#10291f',
+            secondaryTextColor: '#6ee7b7', secondaryBorderColor: '#10b981',
+            tertiaryColor: '#0f1a2e', tertiaryTextColor: '#e2e8f0',
+            tertiaryBorderColor: '#3b4d6b',
+            lineColor: '#94a3b8', textColor: '#e2e8f0', titleColor: '#f1f5f9',
+            clusterBkg: '#0f1a2e', clusterBorder: '#2b3a55',
+            edgeLabelBackground: '#16233c', nodeBorder: '#3b82f6',
+            actorBkg: '#1e3a5f', actorBorder: '#3b82f6', actorTextColor: '#e2e8f0',
+            signalColor: '#94a3b8', signalTextColor: '#e2e8f0',
+            labelBoxBkgColor: '#1e3a5f', labelBoxBorderColor: '#3b82f6',
+            labelTextColor: '#e2e8f0', loopTextColor: '#e2e8f0',
+            noteBkgColor: '#2a1d10', noteBorderColor: '#f59e0b', noteTextColor: '#fcd34d',
+          },
+        };
+
         mermaid.initialize({
           startOnLoad: false,
-          theme: pick(),
+          theme: 'base',
+          themeVariables: {
+            fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
+            fontSize: '15px',
+            ...(isDark() ? vars.dark : vars.light),
+          },
           securityLevel: 'loose',
           
           
-          flowchart: { htmlLabels: true, useMaxWidth: true },
+          flowchart: { htmlLabels: true, useMaxWidth: true, curve: 'basis' },
+          sequence: { useMaxWidth: true },
         });
         mermaid.run({ querySelector: 'pre.mermaid' });
       }
@@ -96,13 +140,12 @@ SSD read          │███████████████████�
 HDD disk seek     │                        │ 10,000,000 seconds (116 DAYS!)
 CA→Netherlands    │                        │ 150,000,000 seconds (4.75 YEARS!)
 </code></pre><pre class=mermaid>graph TD
-    subgraph "Speed Tiers — What's Fast vs Slow"
-        A["🚀 L1/L2 Cache\n0.5 – 7 ns\nInstant"]
-        B["⚡ RAM\n100 ns\nVery Fast"]
-        C["🌐 Same Datacenter Network\n500 μs\nFast"]
-        D["💾 SSD Read\n~150 μs\nModerate"]
-        E["🐌 HDD Disk Seek\n10 ms\nSlow — avoid if possible"]
-        F["🌍 Cross-continent Network\n150 ms\nVery Slow"]
+    subgraph "Speed Tiers — What's Fast vs Slow"A["L1/L2 Cache\n0.5 – 7 ns\nInstant"]
+        B["RAM\n100 ns\nVery Fast"]
+        C["Same Datacenter Network\n500 μs\nFast"]
+        D["SSD Read\n~150 μs\nModerate"]
+        E["HDD Disk Seek\n10 ms\nSlow — avoid if possible"]
+        F["Cross-continent Network\n150 ms\nVery Slow"]
     end
     A --> B --> C --> D --> E --> F
 
@@ -113,11 +156,10 @@ CA→Netherlands    │                        │ 150,000,000 seconds (4.75 YEA
     style E fill:#EF4444,stroke:#B91C1C,color:#fff
     style F fill:#8B5CF6,stroke:#6D28D9,color:#fff
 </pre><h3 id=what-these-numbers-teach-us>What these numbers teach us</h3><ol><li><p><strong>Memory is fast, disk is slow</strong> — A disk seek (10ms) is 20,000× slower than a RAM read (0.5 μs). If your hot path touches disk for every request, your system will be slow regardless of how fast the rest is.</p></li><li><p><strong>Avoid disk seeks</strong> — Sequential reads from disk are far better than random seeks. HDD random I/O is the enemy. SSD is much better but still 1,000× slower than RAM.</p></li><li><p><strong>Simple compression algorithms are fast</strong> — Compressing 1 KB takes only 10 μs, but sending uncompressed over the network takes 20 μs. <strong>Compress before sending over the network.</strong></p></li><li><p><strong>Data centers within the same region are fast</strong> — 500 μs round trip within a DC. Cross-continent adds 150 ms, which is 300× slower. This is why geographic data center placement matters.</p></li><li><p><strong>L1/L2 cache is your friend</strong> — Algorithms and data structures that fit in CPU cache can run 200× faster than those requiring main memory.</p></li></ol><hr><h2 id=foundation-3-availability-numbers--how-reliable-is-your-system>Foundation 3: Availability Numbers — How Reliable Is Your System?</h2><p><strong>High availability</strong> is the ability of a system to be continuously operational for a desirably long period of time. It is measured as a percentage. 100% means zero downtime (impossible in practice). Most services target 99%–99.999%.</p><p>A <strong>Service Level Agreement (SLA)</strong> is a formal agreement between a service provider and a customer defining the level of uptime. Amazon, Google, and Microsoft all set SLAs at 99.9% or above.</p><p>Uptime is measured in <strong>nines</strong>. More nines = more availability = less downtime:</p><table><thead><tr><th style=text-align:center>Availability</th><th style=text-align:center>Downtime per Day</th><th style=text-align:center>Downtime per Year</th><th style=text-align:center>Nines</th></tr></thead><tbody><tr><td style=text-align:center>99%</td><td style=text-align:center>14.4 minutes</td><td style=text-align:center>3.65 days</td><td style=text-align:center>Two nines</td></tr><tr><td style=text-align:center>99.9%</td><td style=text-align:center>1.44 minutes</td><td style=text-align:center>8.77 hours</td><td style=text-align:center>Three nines</td></tr><tr><td style=text-align:center>99.99%</td><td style=text-align:center>8.64 seconds</td><td style=text-align:center>52.6 minutes</td><td style=text-align:center>Four nines</td></tr><tr><td style=text-align:center>99.999%</td><td style=text-align:center>864 ms</td><td style=text-align:center>5.26 minutes</td><td style=text-align:center>Five nines</td></tr><tr><td style=text-align:center>99.9999%</td><td style=text-align:center>86 ms</td><td style=text-align:center>31.5 seconds</td><td style=text-align:center>Six nines</td></tr></tbody></table><pre class=mermaid>graph LR
-    subgraph "What does 99% mean in practice?"
-        A["99%\n3.65 days/year down\n❌ Not acceptable\nfor production"]
-        B["99.9%\n8.77 hours/year down\n⚠️ Minimum bar\nfor most services"]
-        C["99.99%\n52 min/year down\n✅ Good target\nfor user-facing APIs"]
-        D["99.999%\n5 min/year down\n🏆 Five nines\nPayments / Banking"]
+    subgraph "What does 99% mean in practice?"A["99%\n3.65 days/year down\n✗ Not acceptable\nfor production"]
+        B["99.9%\n8.77 hours/year down\n Minimum bar\nfor most services"]
+        C["99.99%\n52 min/year down\n✓ Good target\nfor user-facing APIs"]
+        D["99.999%\n5 min/year down\n Five nines\nPayments / Banking"]
     end
     A --> B --> C --> D
 
@@ -130,10 +172,10 @@ CA→Netherlands    │                        │ 150,000,000 seconds (4.75 YEA
                       = 1 - 0.000001
                       = 99.9999%  ← Six nines!
 </code></pre><hr><h2 id=the-estimation-framework-4-steps>The Estimation Framework: 4 Steps</h2><p>Every good estimation follows the same structure. Don&rsquo;t skip steps.</p><pre class=mermaid>flowchart LR
-    S1["📋 Step 1\nState Your\nAssumptions"]
-    S2["📐 Step 2\nCalculate\nQPS"]
-    S3["💾 Step 3\nCalculate\nStorage"]
-    S4["🌐 Step 4\nCalculate\nBandwidth\n& Memory"]
+    S1["Step 1\nState Your\nAssumptions"]
+    S2["Step 2\nCalculate\nQPS"]
+    S3["Step 3\nCalculate\nStorage"]
+    S4["Step 4\nCalculate\nBandwidth\n& Memory"]
 
     S1 --> S2 --> S3 --> S4
 
@@ -188,17 +230,15 @@ With replication ×3 = ~327 TB
 </code></pre><p><strong>Media storage (10% of tweets have 1 MB media):</strong></p><pre tabindex=0><code>Media bytes per day  = 300M × 10% × 1 MB = 30 TB/day
 5-year media storage = 30 TB × 365 × 5   = ~54,750 TB = ~55 PB
 With replication ×3  = ~165 PB
-</code></pre><pre class=mermaid>pie title "5-Year Storage Breakdown (before replication)"
-    "Media storage (images/video)" : 54750
+</code></pre><pre class=mermaid>pie title "5-Year Storage Breakdown (before replication)" "Media storage (images/video)" : 54750
     "Text & metadata" : 109
 </pre><blockquote><p><strong>Key insight:</strong> Media utterly dominates storage. Text is negligible. This is why Instagram, Twitter, and TikTok use dedicated object storage (like Amazon S3) for media — not databases.</p></blockquote><h3 id=step-4-calculate-bandwidth-1>Step 4: Calculate bandwidth</h3><pre tabindex=0><code>Write bandwidth = 7,000 QPS × (200 bytes text + 10% chance × 1 MB)
                ≈ 7,000 × (200 + 100,000) bytes
                ≈ 7,000 × ~100 KB
                ≈ 700 MB/s write bandwidth at peak
 </code></pre><pre class=mermaid>flowchart LR
-    subgraph "Storage Insight"
-        T["📝 Text\n200 bytes/tweet\n~109 TB over 5 years\n(tiny)"]
-        M["📸 Media\n1 MB / 10% of tweets\n~55 PB over 5 years\n(massive)"]
+    subgraph "Storage Insight"T["Text\n200 bytes/tweet\n~109 TB over 5 years\n(tiny)"]
+        M["Media\n1 MB / 10% of tweets\n~55 PB over 5 years\n(massive)"]
     end
     T --- M
 
@@ -227,8 +267,7 @@ A typical DB server handles:  ~1,000 QPS (reads), ~500 QPS (writes)
 </code></pre><p><strong>Example:</strong> 50,000 peak QPS:</p><pre tabindex=0><code>Web servers = 50,000 / 5,000 = 10 servers minimum
 (Add 2–3× headroom for spikes → 20–30 servers)
 </code></pre><hr><h2 id=the-memory-hierarchy--where-your-data-lives>The Memory Hierarchy — Where Your Data Lives</h2><p>Understanding where data lives is critical for latency decisions. Here&rsquo;s the full picture:</p><pre class=mermaid>graph TD
-    subgraph "Fastest → Slowest"
-        L1["L1 Cache\n~32 KB per core\n0.5 ns\nInside the CPU chip"]
+    subgraph "Fastest → Slowest"L1["L1 Cache\n~32 KB per core\n0.5 ns\nInside the CPU chip"]
         L2["L2 Cache\n~256 KB per core\n7 ns\nStill on the chip"]
         L3["L3 Cache\n~8–32 MB shared\n~30 ns\nShared across cores"]
         RAM["RAM / Main Memory\n16 GB – 1 TB\n100 ns\nDIMM sticks"]
@@ -246,11 +285,11 @@ A typical DB server handles:  ~1,000 QPS (reads), ~500 QPS (writes)
     style HDD fill:#EF4444,stroke:#B91C1C,color:#fff
     style NET fill:#8B5CF6,stroke:#6D28D9,color:#fff
 </pre><h3 id=the-key-design-implication>The key design implication</h3><p><strong>Every cache layer in a real system maps to this hierarchy:</strong></p><table><thead><tr><th>System Layer</th><th>Maps to</th></tr></thead><tbody><tr><td>In-process memory (application cache)</td><td>L3 / RAM</td></tr><tr><td>Redis / Memcached (in-memory cache)</td><td>RAM on a remote server</td></tr><tr><td>CDN edge cache</td><td>RAM on a geographically close server</td></tr><tr><td>Database with SSD storage</td><td>SSD reads</td></tr><tr><td>Cold storage (S3 Glacier, archival)</td><td>Slow HDD / tape</td></tr></tbody></table><p>When you design a cache, you&rsquo;re choosing which layer of this hierarchy to promote your &ldquo;hot&rdquo; data into. Promoting from HDD → RAM makes operations 100,000× faster.</p><hr><h2 id=tips-for-interviews-how-to-not-freeze-up>Tips for Interviews: How to Not Freeze Up</h2><p>Back-of-the-envelope estimation is <strong>all about the process</strong>. Solving the problem is more important than getting the exact right number. Here are the rules:</p><pre class=mermaid>flowchart TD
-    T1["✅ Round generously\n99,987 → 100,000\n86,400 seconds/day → just say 10^5"]
-    T2["✅ State assumptions first\nWrite them down.\n'I'll assume 150M DAU...'"]
-    T3["✅ Label your units\nDon't write '5' — write '5 MB'\nUnit confusion kills estimates"]
-    T4["✅ Use scientific notation\n300,000,000 = 3 × 10^8\nMuch easier to multiply"]
-    T5["✅ Check your answer\nDoes this make intuitive sense?\nIs Twitter really 55 PB? Yes — plausible."]
+    T1["✓ Round generously\n99,987 → 100,000\n86,400 seconds/day → just say 10^5"]
+    T2["✓ State assumptions first\nWrite them down.\n'I'll assume 150M DAU...'"]
+    T3["✓ Label your units\nDon't write '5' — write '5 MB'\nUnit confusion kills estimates"]
+    T4["✓ Use scientific notation\n300,000,000 = 3 × 10^8\nMuch easier to multiply"]
+    T5["✓ Check your answer\nDoes this make intuitive sense?\nIs Twitter really 55 PB? Yes — plausible."]
 
     style T1 fill:#10B981,stroke:#047857,color:#fff
     style T2 fill:#3B82F6,stroke:#1D4ED8,color:#fff
