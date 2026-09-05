@@ -123,16 +123,23 @@ a { transition: color 0.15s; }
 
 .content-area { padding: 2em 2em 0 !important; width: 72% !important; }
 
-/* Article pages render no sidebar, but .content-area reserves 72% of the
-   1440px container for one — leaving a dead column down the right of every
-   post. Centre the article and let it use a little more of the width. */
-.post-content-area {
-  width: 100% !important;
-  max-width: 1120px;
-  margin: 0 auto !important;
-  float: none !important;
-}
 .sidebar      { padding: 2em 1.5em 0 !important; width: 28% !important; }
+
+/* The 72/28 split above uses !important, which beat the theme's own stacking
+   rule at 60em — so on a phone the sidebar stayed a 28%-wide sliver (about
+   109px at 390px) instead of going full width under the content. Match the
+   theme's breakpoint and stack properly. */
+@media only screen and (max-width: 60em) {
+  .content-area,
+  .sidebar {
+    width: 100% !important;
+    float: none !important;
+  }
+  .sidebar {
+    border-left: none !important;
+    border-top: 1px solid var(--border) !important;
+  }
+}
 
 /* ---- Page background ---- */
 .site-content { padding: 1.5em 0 !important; }
