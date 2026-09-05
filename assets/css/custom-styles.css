@@ -337,7 +337,20 @@ pre.mermaid {
   text-align: center !important;
   border-radius: var(--radius) !important;
   box-shadow: var(--shadow-sm) !important;
+  overflow-x: auto !important;
 }
+
+/* --surface is not redefined for dark mode (the theme overrides components
+   one by one), so mermaid blocks rendered as a white slab on the dark page. */
+[data-theme="dark"] pre.mermaid {
+  background: #16233c !important;
+  border-color: #2b3a55 !important;
+  box-shadow: none !important;
+}
+
+/* A wide flowchart squeezed into the column shrinks its labels to nothing.
+   Give it a legibility floor and let the block scroll instead. */
+pre.mermaid svg { height: auto !important; min-width: 540px; }
 
 /* ---- Sidebar ---- */
 .sidebar { background: transparent !important; }

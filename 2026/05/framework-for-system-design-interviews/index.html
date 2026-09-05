@@ -1,7 +1,36 @@
 <!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - A Framework for System Design Interviews: The Complete Playbook"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't."><title>System Design - A Framework for System Design Interviews: The Complete Playbook</title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="A Framework for System Design Interviews: The Complete Playbook"><meta property="og:description" content="Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T06:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T06:00:00+00:00"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Interviews"><meta property="article:tag" content="Architecture"><meta property="article:tag" content="Scalability"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"A Framework for System Design Interviews: The Complete Playbook","headline":"A Framework for System Design Interviews: The Complete Playbook","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/","description":"Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't.","wordCount":"3841","keywords":["system-design","interviews","architecture","scalability"],"datePublished":"2026-05-30T06:00:00Z","dateModified":"2026-05-30T06:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js defer></script><script src=/assets/js/search.js defer></script><script src=/assets/js/enhancements.js defer></script><script type=module>
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-      mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
-      document.addEventListener('DOMContentLoaded', () => mermaid.run());
+
+      
+      
+      
+      
+      const pick = () =>
+        document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default';
+
+      function draw() {
+        document.querySelectorAll('pre.mermaid').forEach((el) => {
+          
+          
+          if (el.dataset.src === undefined) el.dataset.src = el.innerHTML;
+          else el.innerHTML = el.dataset.src;
+          el.removeAttribute('data-processed');
+        });
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: pick(),
+          securityLevel: 'loose',
+          
+          
+          flowchart: { htmlLabels: true, useMaxWidth: true },
+        });
+        mermaid.run({ querySelector: 'pre.mermaid' });
+      }
+
+      document.addEventListener('DOMContentLoaded', draw);
+      new MutationObserver((m) => {
+        if (m.some((r) => r.attributeName === 'data-theme')) draw();
+      }).observe(document.documentElement, { attributes: true });
     </script></head><body class="home blog post-layout-one-column"><button onclick=topFunction() id=scrollTopBtn title="Go to top">
 <i class="fa-solid fa-arrow-up"></i></button><div id=header-top class=header-bar-wrap></div><div id=page class=site><a class="skip-link screen-reader-text" href=#content>Skip to content</a><header id=masthead class="site-header clearfix" role=banner><div class="header-main container clearfix"><div id=logo class="site-branding clearfix"><h1 class=site-title><a href=/ title="System Design" rel=home>System Design</a></h1><p class=site-description>Build Systems That Scale</p></div><button id=dark-mode-toggle title="Toggle dark mode" aria-label="Toggle dark mode">
 <i class="fa-solid fa-moon" id=dm-icon></i></button></div><div id=main-navigation-wrap class=primary-navigation-wrap><nav id=main-navigation class="primary-navigation navigation container clearfix" role=navigation><ul id=menu-home class=main-navigation-menu><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/>Home</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/categories/fundamentals/>Fundamentals</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/categories/case-studies/>Case Studies</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children"><a href=#>Concepts</a><ul class=sub-menu><li class=menu-item><a href=/tags/scalability/>Scalability</a></li><li class=menu-item><a href=/tags/databases/>Databases</a></li><li class=menu-item><a href=/tags/caching/>Caching</a></li><li class=menu-item><a href=/tags/load-balancing/>Load Balancing</a></li><li class=menu-item><a href=/tags/message-queues/>Message Queues</a></li></ul></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href=/about/>About</a></li><li class="menu-item nav-rss"><a href=/index.xml title="Subscribe via RSS" target=_blank rel=noopener><i class="fa-solid fa-rss"></i> RSS</a></li></ul></nav></div></header><div id=content class="site-content container clearfix"><section id=primary class="content-archive content-area post-content-area"><main id=main class=site-main role=main><article class="post type-post"><div class=post-inner-content><div class=post-hero-img-link><img class=post-hero-img src=/images/articles/system-design-framework.webp alt="A Framework for System Design Interviews: The Complete Playbook" width=1200 height=480></div><header class=entry-header><div class=entry-meta><span class=meta-date><a href=https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/ rel=bookmark><time class="entry-date published" datetime=2026-05-30T06:00:00>May 30, 2026
@@ -175,10 +204,10 @@
 
     Client --> Edge --> API --> Data
 
-    style Client fill:#EEF2FF,stroke:#6366F1
-    style Edge fill:#EFF6FF,stroke:#3B82F6
-    style API fill:#F0FDF4,stroke:#10B981
-    style Data fill:#FFFBEB,stroke:#F59E0B
+    style Client fill:#6366F1,stroke:#4338CA,color:#fff
+    style Edge fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style API fill:#10B981,stroke:#047857,color:#fff
+    style Data fill:#F59E0B,stroke:#B45309,color:#fff
 </pre><p>Not every system needs all of these. Part of good design is knowing which to include and why. A junior engineer adds everything. A senior engineer adds only what&rsquo;s justified.</p><h3 id=high-level-design-news-feed-system--feed-publishing>High-level design: News Feed System — Feed Publishing</h3><p>Let&rsquo;s continue our news feed example. Feed publishing = when a user creates a post:</p><pre class=mermaid>flowchart TD
     U["👤 User posts\n'Hello World + photo'"]
     LB["⚖️ Load Balancer"]
@@ -203,7 +232,7 @@
     MQ -->|"4. consume"| FW
     FW -->|"5. update each\nfriend's feed cache"| NFC
 
-    style U fill:#EEF2FF,stroke:#6366F1
+    style U fill:#6366F1,stroke:#4338CA,color:#fff
     style LB fill:#0E7490,color:#fff
     style WS fill:#3B82F6,color:#fff
     style PS fill:#10B981,color:#fff
@@ -294,9 +323,9 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
         H2 --> H3
     end
 
-    style FOW fill:#EFF6FF,stroke:#3B82F6
-    style FOR fill:#FEF2F2,stroke:#EF4444
-    style HYBRID fill:#F0FDF4,stroke:#10B981
+    style FOW fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style FOR fill:#EF4444,stroke:#B91C1C,color:#fff
+    style HYBRID fill:#10B981,stroke:#047857,color:#fff
 </pre><table><thead><tr><th></th><th>Fanout-on-Write</th><th>Fanout-on-Read</th><th>Hybrid</th></tr></thead><tbody><tr><td><strong>Read speed</strong></td><td>⚡ Instant (cache hit)</td><td>🐌 Slow (merge N timelines)</td><td>⚡ Fast</td></tr><tr><td><strong>Write speed</strong></td><td>🐌 Slow (N writes)</td><td>⚡ Fast (1 write)</td><td>Moderate</td></tr><tr><td><strong>Celebrity problem</strong></td><td>❌ 10M cache writes per post</td><td>✅ No issue</td><td>✅ Solved</td></tr><tr><td><strong>Stale data</strong></td><td>Fresh</td><td>Fresh</td><td>Fresh</td></tr><tr><td><strong>Used by</strong></td><td>Facebook, Instagram (most users)</td><td>Old Twitter pull</td><td>Twitter, Instagram (celebrities)</td></tr></tbody></table><blockquote><p><strong>The right answer in an interview:</strong> &ldquo;For most users we use fanout-on-write because reads are 100× more frequent than writes. For users with over 1 million followers, we switch to fanout-on-read to avoid the write amplification problem. We merge the two at read time.&rdquo;</p></blockquote><p>This answer shows you understand trade-offs, know real production patterns, and can reason about edge cases (the celebrity problem).</p><h3 id=deep-dive-data-model>Deep dive: Data model</h3><p>A good data model discussion shows database design maturity:</p><pre class=mermaid>erDiagram
     USER {
         bigint user_id PK
@@ -392,7 +421,7 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
         D8["Confirm your understanding\nRecap scope before designing"]
     end
 
-    style DOS fill:#F0FDF4,stroke:#10B981
+    style DOS fill:#10B981,stroke:#047857,color:#fff
 </pre><h3 id=-never-do-these>❌ Never Do These</h3><pre class=mermaid>flowchart TD
     subgraph DONTS["❌ DON'Ts"]
         X1["Jump into solution immediately\nwithout clarifying requirements"]
@@ -405,7 +434,7 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
         X8["Over-engineer\nDon't add microservices for a 1,000-user app"]
     end
 
-    style DONTS fill:#FEF2F2,stroke:#EF4444
+    style DONTS fill:#EF4444,stroke:#B91C1C,color:#fff
 </pre><hr><h2 id=red-flags-that-kill-good-candidates>Red Flags That Kill Good Candidates</h2><p>Even technically strong candidates fail interviews for non-technical reasons. Watch for these:</p><p><strong>🚩 Narrow-mindedness</strong> — &ldquo;We should use Kafka. Period.&rdquo; vs &ldquo;We could use Kafka or RabbitMQ or SQS — here&rsquo;s when I&rsquo;d choose each&mldr;&rdquo;</p><p><strong>🚩 Stubbornness</strong> — The interviewer hints you&rsquo;re going down the wrong path. You defend your choice instead of exploring theirs. This signals you&rsquo;d be difficult to work with.</p><p><strong>🚩 Silence</strong> — You&rsquo;re thinking hard but not talking. The interviewer is sitting there with no signal. They can&rsquo;t give partial credit for thoughts you never expressed.</p><p><strong>🚩 Premature optimization</strong> — You spend 15 minutes designing a globally distributed caching layer for a system that hasn&rsquo;t been asked to scale yet.</p><p><strong>🚩 No questions asked</strong> — If you started designing immediately without a single clarifying question, it signals you don&rsquo;t think about requirements in real work either.</p><hr><h2 id=interview-preparation-checklist>Interview Preparation Checklist</h2><p>Before your interview, make sure you can do all of these from memory:</p><pre class=mermaid>flowchart TD
     subgraph KNOW["📚 Know These Building Blocks"]
         K1["Load balancer — algorithms, health checks"]
@@ -437,9 +466,9 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
         C8["Design a Notification System"]
     end
 
-    style KNOW fill:#EFF6FF,stroke:#3B82F6
-    style PRACTICE fill:#F0FDF4,stroke:#10B981
-    style COMMON fill:#FFFBEB,stroke:#F59E0B
+    style KNOW fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style PRACTICE fill:#10B981,stroke:#047857,color:#fff
+    style COMMON fill:#F59E0B,stroke:#B45309,color:#fff
 </pre><hr><h2 id=the-one-page-cheat-sheet>The One-Page Cheat Sheet</h2><p>Print this. Internalize it. Use it in every mock interview until it&rsquo;s automatic:</p><pre class=mermaid>flowchart LR
     subgraph STEP1["Step 1 · 3–10 min"]
         A1["❓ Ask: features, scale,\nnon-functional requirements"]
@@ -471,16 +500,16 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
 
     STEP1 --> STEP2 --> STEP3 --> STEP4
 
-    style STEP1 fill:#EEF2FF,stroke:#6366F1
-    style STEP2 fill:#EFF6FF,stroke:#3B82F6
-    style STEP3 fill:#FFFBEB,stroke:#F59E0B
-    style STEP4 fill:#F0FDF4,stroke:#10B981
+    style STEP1 fill:#6366F1,stroke:#4338CA,color:#fff
+    style STEP2 fill:#3B82F6,stroke:#1D4ED8,color:#fff
+    style STEP3 fill:#F59E0B,stroke:#B45309,color:#fff
+    style STEP4 fill:#10B981,stroke:#047857,color:#fff
 </pre><hr><h2 id=whats-next>What&rsquo;s Next</h2><p>Now that you have the framework, the next posts apply it to real systems — starting with the most commonly asked interview question of all time:</p><ul><li><strong>Next:</strong> Design a Rate Limiter — token bucket, sliding window, distributed Redis counters</li><li><strong>Coming soon:</strong> Design a URL Shortener — hash functions, redirect caching, analytics</li><li><strong>Coming soon:</strong> Design a Chat System — WebSockets, message delivery, presence</li></ul><p>Master the framework first. Then the specific systems become much easier — they&rsquo;re all just different combinations of the same building blocks.</p></div><div class=social-share-bar><span class=share-label>Share:</span>
 <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fframework-for-system-design-interviews%2f&title=A+Framework+for+System+Design+Interviews%3A+The+Complete+Playbook" target=_blank rel=noopener class="share-btn share-linkedin" title="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i> LinkedIn
 </a><a href="https://twitter.com/intent/tweet?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fframework-for-system-design-interviews%2f&text=A+Framework+for+System+Design+Interviews%3A+The+Complete+Playbook" target=_blank rel=noopener class="share-btn share-twitter" title="Share on Twitter / X"><i class="fa-brands fa-x-twitter"></i> X
 </a><a href="https://www.reddit.com/submit?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fframework-for-system-design-interviews%2f&title=A+Framework+for+System+Design+Interviews%3A+The+Complete+Playbook" target=_blank rel=noopener class="share-btn share-reddit" title="Share on Reddit"><i class="fa-brands fa-reddit-alien"></i> Reddit</a></div></div></article><nav class="navigation post-navigation" role=navigation><h2 class=screen-reader-text>Post navigation</h2><div class=nav-links><div class=nav-previous><a href=/2026/05/design-a-rate-limiter/ rel=next><i class="fa fa-chevron-left"></i>
 <span class=post-title>Design a Rate Limiter</span></a></div><div class=nav-next><a href=/2026/05/back-of-the-envelope-estimation/ rel=prev><span class=post-title>Back-of-the-Envelope Estimation: The Art of Making Smart Guesses
-<i class="fa fa-chevron-right"></i></span></a></div></div></nav><div class=related-posts><h3 class=related-title><i class="fa-solid fa-layer-group"></i> You might also like</h3><div class=related-grid><a class=related-card href=/2026/05/back-of-the-envelope-estimation/><span class=related-card-meta>May 2026 · 14 min read</span>
+<i class="fa fa-chevron-right"></i></span></a></div></div></nav><div class=related-posts><h3 class=related-title><i class="fa-solid fa-layer-group"></i> You might also like</h3><div class=related-grid><a class=related-card href=/2026/05/back-of-the-envelope-estimation/><span class=related-card-meta>May 2026 · 18 min read</span>
 <span class=related-card-title>Back-of-the-Envelope Estimation: The Art of Making Smart Guesses</span>
 <span class=related-card-cat>Fundamentals</span>
 </a><a class=related-card href=/2026/05/scale-from-zero-to-millions/><span class=related-card-meta>May 2026 · 27 min read</span>
