@@ -466,6 +466,7 @@ Since the book, running your own monitoring stack has become the unusual choice.
 <li><a href="https://prometheus.io/docs/introduction/overview/">Prometheus</a> · <a href="https://prometheus.io/docs/concepts/data_model/">its data model</a></li>
 <li><a href="https://www.influxdata.com/">InfluxDB</a> · <a href="https://docs.influxdata.com/influxdb/v2.0/reference/internals/storage-engine/">storage engine internals</a></li>
 <li><a href="http://opentsdb.net/">OpenTSDB</a> · <a href="https://aws.amazon.com/timestream/">Amazon Timestream</a> · <a href="https://victoriametrics.com/">VictoriaMetrics</a></li>
+<li><a href="https://db-engines.com/en/ranking/time+series+dbms">DB-Engines time-series ranking</a></li>
 </ul>
 
 **Collection and the push/pull debate**
