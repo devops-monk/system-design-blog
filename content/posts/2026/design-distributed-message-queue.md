@@ -269,7 +269,7 @@ sequenceDiagram
     A->>CO: heartbeat
     CO-->>A: rebalance needed — please rejoin
     A->>CO: JoinGroup
-    CO-->>A: joined; you are the leader
+    CO-->>A: joined — you are the leader
     CO-->>B: joined
     A->>CO: SyncGroup (partition assignment plan)
     CO-->>A: consume partitions 1, 3
