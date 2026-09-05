@@ -75,6 +75,7 @@ Harder problems, and the ones that come up most often for senior roles.
 21. [Design a Metrics Monitoring and Alerting System](/2026/06/design-metrics-monitoring-alerting/) — time-series storage, pull versus push collection, Gorilla compression, and the cardinality bomb that kills monitoring systems. Includes an interactive cardinality calculator.
 22. [Design an Ad Click Event Aggregation System](/2026/06/design-ad-click-aggregation/) — event time versus processing time, watermarks, and exactly-once as a genuine requirement rather than a luxury. Includes an interactive watermark simulator.
 23. [Design a Hotel Reservation System](/2026/06/design-hotel-reservation-system/) — three transactions a second, and the hardest problem in the series: double booking, locking strategies, and the one-statement fix. Includes an interactive race-condition simulator.
+24. [Design a Distributed Email Service](/2026/06/design-distributed-email-service/) — two exabytes a year, forty-year-old protocols, denormalising for a query NoSQL refuses, and the deliverability problem that isn't engineering. Includes an interactive deliverability checker.
 
 ---
 

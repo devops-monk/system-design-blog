@@ -467,7 +467,7 @@ Why it matters beyond Kafka: operating two distributed consensus systems to run 
 
 (Kafka had already moved consumer offsets out of ZooKeeper years earlier, into an internal Kafka topic — the same instinct, applied first to the highest-traffic state.)
 
-### Zero-copy is the mechanism the chapter gestures at
+### Zero-copy is the mechanism behind all of this
 
 The design says the message format avoids copying, but doesn't name how.
 
@@ -481,7 +481,7 @@ That's the payoff for choosing an append-only log. The format is so simple that 
 
 ### How exactly-once actually works
 
-The chapter calls exactly-once hard and moves on. The mechanism is two parts:
+Exactly-once is usually called hard and left there. The mechanism is two parts:
 
 **Idempotent producer.** Each producer gets a **producer ID (PID)**, and each message carries a **sequence number** per partition. The broker remembers the last sequence number it saw from each PID. A retry arrives with a sequence number it has already written, so the broker **discards it silently**. Duplicates from retries disappear at the source.
 
@@ -493,7 +493,7 @@ Note what this does *not* solve: if your consumer writes to an external database
 
 ### Tiered storage makes retention cheap
 
-The chapter's closing suggestion — archive old data to HDFS or object storage — is now a built-in feature.
+Archiving old data to HDFS or object storage used to be something you bolted on. It is now a built-in feature.
 
 **Tiered storage** (KIP-405, production-ready in Kafka 3.9) splits retention in two. Recent segments stay on broker disks; older ones are copied to **S3 or equivalent** and deleted locally. `local.retention.ms` governs the disk copy, `retention.ms` the remote one.
 

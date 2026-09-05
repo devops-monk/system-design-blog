@@ -383,7 +383,7 @@ The memory advantage is the whole point: **only the tiles the search actually to
 
 ### Adaptive ETA and rerouting
 
-Now the hard part, and the best piece of algorithmic thinking in the chapter.
+Now the hard part, and the best piece of algorithmic thinking in the whole design.
 
 Traffic changes. Millions of people are mid-journey. When an incident occurs in one routing tile, **which of those millions are affected?**
 
@@ -436,7 +436,7 @@ SSE is the closer call than the table suggests. It's simpler, it reconnects auto
 
 ### Vector tiles
 
-The chapter's final rendering improvement is significant enough that it has since become the default.
+The last rendering improvement is significant enough that it has since become the default.
 
 Instead of shipping **rasterised PNGs**, ship **vector data** — paths and polygons — and let the client draw them with WebGL.
 
@@ -446,7 +446,7 @@ Two wins:
 
 **Zooming.** With raster tiles, zooming between levels is a blurry stretch until the new tile set arrives. With vectors, the client re-renders at any scale, continuously and sharply. Text stays crisp and correctly sized at every zoom, because it's drawn rather than baked in.
 
-There's a third benefit the chapter doesn't mention: **the client can restyle without new downloads.** Dark mode, a different colour scheme, hiding a layer — all local rendering changes on data you already have. With raster tiles, every style is a complete second copy of the planet.
+There's a third benefit that usually goes unmentioned: **the client can restyle without new downloads.** Dark mode, a different colour scheme, hiding a layer — all local rendering changes on data you already have. With raster tiles, every style is a complete second copy of the planet.
 
 ---
 
@@ -454,7 +454,7 @@ There's a third benefit the chapter doesn't mention: **the client can restyle wi
 
 ### The tile URL is not a geohash
 
-The chapter suggests addressing tiles by geohash: `cdn.map-provider.com/tiles/9q9hvu.png`.
+The obvious way to address a tile — and the one you will see suggested — is by geohash: `cdn.map-provider.com/tiles/9q9hvu.png`.
 
 **No major map provider does this.** The universal convention — Google, OpenStreetMap, Mapbox, Apple — is the **slippy map** scheme:
 
@@ -466,21 +466,21 @@ The chapter suggests addressing tiles by geohash: `cdn.map-provider.com/tiles/9q
 
 Geohash and quadkeys are close cousins — both interleave coordinate bits — but geohash divides an *equirectangular* projection, while map tiles divide *Web Mercator*. They are different grids over different projections, so a geohash cell and a map tile do not correspond.
 
-The chapter is right that a tile ID is computed from position and zoom. It just names the wrong scheme, and if you say "geohash tile URL" to someone who has worked on maps, it will land oddly.
+The principle is right: a tile ID is computed from position and zoom. The scheme is simply not geohash, and if you say "geohash tile URL" to someone who has worked on maps, it will land oddly.
 
 ### Production routers don't use plain A\*
 
-The chapter says routing is "a variation of Dijkstra's or A\*", which was true in the 2000s. Modern engines mostly use **preprocessing-based** methods that are dramatically faster.
+Routing is usually described as "a variation of Dijkstra's or A\*", which was true in the 2000s. Modern engines mostly use **preprocessing-based** methods that are dramatically faster.
 
 **Contraction Hierarchies** is the best known. It preprocesses the road network by repeatedly removing less important nodes and inserting **shortcut edges** that preserve the shortest distances between the nodes that remain. Queries then search a much smaller graph. The result: **OSRM answers continent-scale queries in under a millisecond** — a scale of speed plain A\* does not reach.
 
 The trade-off is that preprocessing takes hours and must be redone when the network or its cost model changes — which is exactly why traffic isn't in the shortest-path stage. Valhalla, by contrast, keeps a **tiled bidirectional A\***, much closer to the design here, precisely because tiles are easier to update incrementally.
 
-So the chapter's architecture is a real one, just not the fastest one — and the reason to prefer it is update flexibility, which is worth saying out loud.
+So the tiled architecture above is a real one, just not the fastest one — and the reason to prefer it is update flexibility, which is worth saying out loud.
 
 ### ETA is a graph neural network now
 
-The chapter defers ETA prediction to "machine learning" without detail. The detail is interesting.
+ETA prediction is usually waved through as "machine learning". The detail is interesting.
 
 Google DeepMind's production system divides road networks into **Supersegments** — chains of adjacent road segments that share traffic volume — and models each as a graph, with segments as nodes and edges where segments connect. A **graph neural network** then predicts travel time.
 
@@ -490,7 +490,7 @@ Note what that says about the problem. The last 3% is where all the difficulty l
 
 ### Vector tiles won
 
-The chapter frames vector tiles as a "potential improvement." They are now standard. The **Mapbox Vector Tile specification** encodes tiles as protocol buffers, and it's the de facto interchange format across the industry, rendered by WebGL clients.
+Vector tiles are often framed as a "potential improvement." They are now standard. The **Mapbox Vector Tile specification** encodes tiles as protocol buffers, and it's the de facto interchange format across the industry, rendered by WebGL clients.
 
 If you were building this today you would start with vector tiles and treat raster as the fallback for old clients.
 

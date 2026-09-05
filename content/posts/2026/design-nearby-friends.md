@@ -15,7 +15,7 @@ Restaurants do not move. A restaurant's location is written once and read a bill
 
 People move. Every user is emitting a new location every thirty seconds, and every one of those updates has to reach a few hundred other people *right now*. The index is obsolete before you finish building it.
 
-Here is the number that defines the chapter. With 10 million concurrent users updating every 30 seconds, the system takes **333,000 location updates per second**. But each update has to be forwarded to every online, nearby friend — and that turns it into roughly **13.3 million outbound messages per second**.
+Here is the number that defines the problem. With 10 million concurrent users updating every 30 seconds, the system takes **333,000 location updates per second**. But each update has to be forwarded to every online, nearby friend — and that turns it into roughly **13.3 million outbound messages per second**.
 
 **The input is not the problem. The amplification is.** Everything below follows from that one ratio.
 
@@ -333,7 +333,7 @@ But **333,000 writes per second** is too much for a single node. Fortunately thi
 
 ### Redis Pub/Sub: which resource runs out first?
 
-Here is the most instructive calculation in the chapter, because the obvious answer is wrong.
+Here is the most instructive calculation in the design, because the obvious answer is wrong.
 
 **Memory.** 100 million channels, an average of 100 friends using the feature, ~20 bytes of pointers per subscriber:
 

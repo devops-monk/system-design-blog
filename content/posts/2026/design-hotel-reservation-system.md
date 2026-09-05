@@ -300,7 +300,7 @@ Simple and robust. Two caveats: constraints don't version-control alongside appl
 
 ---
 
-## The option the chapter leaves out
+## The option that usually gets left out
 
 All three options above are about managing the gap between the read and the write.
 
@@ -330,7 +330,7 @@ Compare what each approach needs:
 
 **When a read-then-write race appears, the first question should be whether the whole operation can be expressed as one statement.** Very often it can, and then there is no race to manage. Locking strategies are for when it genuinely can't — when real business logic has to happen between reading and writing.
 
-The chapter's three options are all correct. This one is simpler than all of them, and it's what most production inventory systems actually do.
+The three textbook options are all correct. This one is simpler than all of them, and it's what most production inventory systems actually do.
 
 ---
 
@@ -401,7 +401,7 @@ That is the right call, and worth stating plainly: **"each service owns its own 
 
 ### Isolation levels are the missing context
 
-The chapter says "assume the isolation level is not serializable" and moves on. That assumption is doing a lot of work.
+The race above quietly assumes the isolation level is not serializable. That assumption is doing a lot of work.
 
 The race above is a **lost update** — two transactions read the same value and both write based on it. Whether it's possible depends on isolation level:
 
@@ -423,9 +423,9 @@ It's the same instinct as the atomic UPDATE above: **when two things must agree,
 
 ### Idempotency keys are now standard practice
 
-The chapter's `reservation_id` idea is now an industry convention. Stripe's `Idempotency-Key` header is the reference implementation, and the pattern is the same: the client generates a key, the server stores the result against it, and a repeat with the same key returns the original result rather than performing the action twice.
+The `reservation_id` trick above is now an industry convention. Stripe's `Idempotency-Key` header is the reference implementation, and the pattern is the same: the client generates a key, the server stores the result against it, and a repeat with the same key returns the original result rather than performing the action twice.
 
-Worth noting a subtlety the chapter skips: **a primary-key collision tells you the request is a duplicate but not what happened the first time.** A production implementation stores the *response* against the key, so a retry gets the original confirmation number instead of an error.
+Worth noting a subtlety that is easy to skip: **a primary-key collision tells you the request is a duplicate but not what happened the first time.** A production implementation stores the *response* against the key, so a retry gets the original confirmation number instead of an error.
 
 ---
 

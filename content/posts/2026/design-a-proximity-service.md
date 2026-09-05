@@ -625,7 +625,7 @@ Trying to filter 200 million rows on `is_open AND category = 'restaurant' AND` a
 
 ## What you'd actually use in production
 
-The chapter teaches you to build this from parts. In practice you'd reach for something existing — but you should know what it's doing.
+Everything above builds this from parts. In practice you'd reach for something existing — but you should know what it's doing.
 
 ### Redis
 

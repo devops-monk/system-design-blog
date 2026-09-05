@@ -253,7 +253,7 @@ delta-of-delta:  1610087371, 10, 0, -1, +2   ← mostly zeros
 
 Ten seconds fits in **4 bits** instead of a 32-bit timestamp. In the common case the delta-of-delta is exactly **zero**, which costs a single bit.
 
-Gorilla's other half — which the chapter omits — is **XOR compression for the values**. Consecutive readings of a metric are usually similar, and similar IEEE-754 doubles share most of their leading bits. XOR two of them and you get a value with long runs of zeros, which is cheap to encode.
+Gorilla's other half, which is usually left out, is **XOR compression for the values**. Consecutive readings of a metric are usually similar, and similar IEEE-754 doubles share most of their leading bits. XOR two of them and you get a value with long runs of zeros, which is cheap to encode.
 
 Together, the published result is remarkable: **16 bytes per point down to an average of 1.37 bytes — a 12× reduction.** That's what let Facebook keep 26 hours of production monitoring data in RAM.
 
@@ -319,7 +319,7 @@ Use Grafana. A high-quality visualisation system is genuinely hard, and this one
 
 ## The cardinality bomb
 
-Here is the thing that kills real monitoring systems, and it gets one sentence in the chapter: *keep each label low cardinality*.
+Here is the thing that kills real monitoring systems, and it usually gets one sentence: *keep each label low cardinality*.
 
 That's correct and it dramatically undersells the danger.
 
@@ -411,15 +411,15 @@ Every vendor used to ship a proprietary agent, so moving from one backend to ano
 
 It **graduated from the CNCF in May 2026** — the highest maturity level — with more than 26,000 contributors and around 5,100 contributing companies, making it the **second-highest-velocity CNCF project after Kubernetes itself**. Datadog, New Relic, Grafana, Honeycomb, Dynatrace and Splunk all support it natively.
 
-For this design, the "metrics collector" is now an **OTel Collector**, and it does more than the chapter's version: it handles metrics, traces and logs through one pipeline, with processors that can filter, batch, and — importantly — **drop high-cardinality labels before they ever reach storage.**
+For this design, the "metrics collector" is now an **OTel Collector**, and it does more than the collector described above: it handles metrics, traces and logs through one pipeline, with processors that can filter, batch, and — importantly — **drop high-cardinality labels before they ever reach storage.**
 
 That last capability is the cardinality bomb's most practical defence: a central place to enforce label hygiene that doesn't require fixing every service.
 
 ### Prometheus scales differently now
 
-The chapter treats the TSDB as a single component. In practice a single Prometheus doesn't scale to 10 million series, and the ecosystem answered with **remote write** plus long-term storage: **Thanos**, **Cortex**, **Grafana Mimir**, and **VictoriaMetrics**.
+The design above treats the TSDB as a single component. In practice a single Prometheus doesn't scale to 10 million series, and the ecosystem answered with **remote write** plus long-term storage: **Thanos**, **Cortex**, **Grafana Mimir**, and **VictoriaMetrics**.
 
-These are essentially the chapter's "query service and cache layer" as real products — a query layer that fans out across many Prometheus instances, deduplicates overlapping data, and keeps history in object storage rather than local disk.
+These are essentially the "query service and cache layer" above, as real products — a query layer that fans out across many Prometheus instances, deduplicates overlapping data, and keeps history in object storage rather than local disk.
 
 **The instinct in the design was right; the industry just built it for you.** Which reinforces the build-versus-buy thread: components you'd have to invent in an interview usually exist by the time you'd ship them.
 
@@ -437,7 +437,7 @@ The usual implementation is **multi-window, multi-burn-rate**: a fast window cat
 
 Since the book, running your own monitoring stack has become the unusual choice. Amazon Managed Prometheus, Grafana Cloud, Datadog, Honeycomb — all remove the operational burden of the component that must stay up when everything else is down.
 
-**Which sharpens the build-versus-buy argument the chapter keeps making.** The question is no longer "should we build the visualisation layer" but "should we operate any of this at all". For most organisations the answer is no, and the design skill being tested is knowing *why* the pieces are shaped the way they are — which is exactly what lets you evaluate a vendor properly.
+**Which sharpens the build-versus-buy argument running through this whole design.** The question is no longer "should we build the visualisation layer" but "should we operate any of this at all". For most organisations the answer is no, and the design skill being tested is knowing *why* the pieces are shaped the way they are — which is exactly what lets you evaluate a vendor properly.
 
 ---
 
@@ -453,7 +453,7 @@ Since the book, running your own monitoring stack has become the unusual choice.
 
 **Alerting quality is deduplication and hysteresis, not detection.** Detecting a threshold breach is trivial. Merging duplicates, requiring a condition to persist, and alerting on symptoms rather than causes is what makes people trust the pager instead of muting it.
 
-**"Buy this part" is a real answer.** Grafana for dashboards, an existing TSDB for storage, a managed alert manager. The chapter argues against several of its own components and is right each time.
+**"Buy this part" is a real answer.** Grafana for dashboards, an existing TSDB for storage, a managed alert manager. This design argues against several of its own components, and is right each time.
 
 ---
 

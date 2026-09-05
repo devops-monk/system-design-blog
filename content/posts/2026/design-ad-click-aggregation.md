@@ -15,7 +15,7 @@ This one is different, and the difference changes everything: **these numbers be
 
 Ad click aggregation decides how much advertisers pay and how much publishers earn. A 1% error on a billion clicks a day is millions of dollars, in someone's favour, every month. That single fact is why this design reaches for **exactly-once** processing — which we spent [the last chapter](/2026/06/design-distributed-message-queue/) establishing is expensive and usually unnecessary.
 
-Here it is necessary. That makes this the chapter where the expensive option is correct.
+Here it is necessary. That makes this the design where the expensive option is the correct one.
 
 ---
 
@@ -149,7 +149,7 @@ flowchart LR
 
 ### Event time or processing time?
 
-The most important decision in the chapter, and it is not close.
+The most important decision in this design, and it is not close.
 
 **Event time** is when the click happened. **Processing time** is when your server got round to it.
 
@@ -344,21 +344,21 @@ This design is Kappa: recalculation reads raw data and pushes it through a **ded
 
 ## What has changed since the book
 
-### Flink's checkpointing is the mechanism the chapter needs
+### Flink's checkpointing is the mechanism this needs
 
-The chapter concludes that exactly-once requires wrapping operations in a distributed transaction, then calls it an advanced topic. It's worth knowing how stream processors actually do it.
+"Wrap it in a distributed transaction" is where most treatments stop, filing the rest under advanced topics. It's worth knowing how stream processors actually do it.
 
 Flink implements a variant of the **Chandy-Lamport** distributed snapshot algorithm called **asynchronous barrier snapshotting**. The job manager injects **barriers** into the source streams. Barriers flow along with the data; when an operator has received the barrier on all its inputs, it snapshots its state and forwards the barrier downstream. When every operator acknowledges, the checkpoint is complete.
 
 That gives a **consistent cut** across a distributed pipeline without stopping it.
 
-End-to-end exactly-once then needs **transactional sinks**: the sink writes inside a transaction and **commits nothing until the checkpoint completes**. A crash rolls the transaction back and the pipeline restarts from the last checkpoint — the two-phase commit the chapter gestures at, built into the framework.
+End-to-end exactly-once then needs **transactional sinks**: the sink writes inside a transaction and **commits nothing until the checkpoint completes**. A crash rolls the transaction back and the pipeline restarts from the last checkpoint — the two-phase commit described above, built into the framework.
 
 This is the practical answer to that unwinnable ordering problem: **don't hand-roll it.** Use an engine where the transaction boundary is part of the execution model.
 
 ### Real-time OLAP databases took over the serving layer
 
-The chapter mentions ClickHouse and Druid as an alternative. They've become the mainstream answer.
+ClickHouse and Druid are often listed as an alternative. They've become the mainstream answer.
 
 Columnar, real-time OLAP stores — **Druid, ClickHouse, Apache Pinot** — ingest streaming data and serve aggregate queries over billions of rows in milliseconds. They absorb both jobs the design splits between an aggregation service and an aggregation database: **ingest the stream, pre-aggregate on the way in, serve slice-and-dice queries**.
 
@@ -370,7 +370,7 @@ The most interesting development, and it goes well beyond architecture.
 
 This entire design assumes you can identify and count clicks across sites. That assumption came under sustained attack: Apple's App Tracking Transparency, browsers blocking third-party cookies, and Google's **Privacy Sandbox** — launched 2019 to replace cookie-based measurement with privacy-preserving APIs.
 
-The **Attribution Reporting API** was the replacement for exactly what this chapter builds. Rather than a log of individual clicks, it offered **aggregated, deliberately noisy reports**: summary reports processed through an aggregation service that returns only noisy aggregates, and event-level reports carrying just **3 bits of conversion data for a click, 1 bit for a view**, delivered with deliberate delay. Differential privacy applied to ad measurement.
+The **Attribution Reporting API** was the replacement for exactly what this design builds. Rather than a log of individual clicks, it offered **aggregated, deliberately noisy reports**: summary reports processed through an aggregation service that returns only noisy aggregates, and event-level reports carrying just **3 bits of conversion data for a click, 1 bit for a view**, delivered with deliberate delay. Differential privacy applied to ad measurement.
 
 It did not survive.
 
@@ -382,9 +382,9 @@ A smaller set survives — CHIPS, FedCM, Private State Tokens — chosen for hav
 
 **Two things worth taking from that.**
 
-The chapter's design is **not** obsolete. A platform counting clicks on its own inventory — the first-party case — is unaffected by any of this, and that is precisely what's designed here. What the privacy work targeted was *cross-site* attribution.
+The design above is **not** obsolete. A platform counting clicks on its own inventory — the first-party case — is unaffected by any of this, and that is precisely what's designed here. What the privacy work targeted was *cross-site* attribution.
 
-And the industry attempted to replace exact counting with **statistically noisy aggregates**, deliberately trading accuracy for privacy — the exact opposite of this chapter's premise that a 1% error is millions of dollars. It's a striking example of a **non-technical requirement reshaping an architecture**, and of an ambitious redesign failing not on engineering merit but on adoption.
+And the industry attempted to replace exact counting with **statistically noisy aggregates**, deliberately trading accuracy for privacy — the exact opposite of the premise here, that a 1% error is millions of dollars. It's a striking example of a **non-technical requirement reshaping an architecture**, and of an ambitious redesign failing not on engineering merit but on adoption.
 
 ---
 
