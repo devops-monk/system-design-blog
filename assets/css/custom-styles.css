@@ -1761,3 +1761,141 @@ a.cert-card:hover .cert-verify { opacity: 1; }
   .about-stats { grid-template-columns: repeat(2, 1fr); }
   .about-cta a { width: 100%; justify-content: center; }
 }
+
+/* ==========================================================================
+   Interactive geohash encoder (posts/2026/design-a-proximity-service)
+   ========================================================================== */
+
+.geohash-demo {
+  margin: 1.75rem 0;
+  padding: 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.gh-controls { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.9rem; }
+
+.gh-field { flex: 1 1 190px; display: flex; flex-direction: column; gap: 0.3rem; }
+
+.gh-field label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.gh-field input[type="number"] {
+  padding: 0.5rem 0.65rem;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.gh-field input[type="number"]:focus { outline: 2px solid var(--primary); outline-offset: -1px; }
+
+.gh-presets { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+
+.gh-presets button {
+  padding: 0.32rem 0.7rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--primary-dark);
+  background: rgba(14, 165, 233, 0.09);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.gh-presets button:hover { background: rgba(14, 165, 233, 0.2); }
+
+.gh-slider { margin-bottom: 1.1rem; }
+.gh-slider input[type="range"] { width: 100%; accent-color: var(--primary); }
+.gh-slider label span { font-family: var(--mono); color: var(--primary-dark); font-weight: 700; }
+
+.gh-out { text-align: center; margin-bottom: 1rem; }
+
+.gh-hash-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.gh-hash {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  color: var(--primary-dark);
+  word-break: break-all;
+}
+
+.gh-bits {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.7rem;
+}
+
+/* Each base32 character is one group of 5 bits; keep groups from splitting
+   across lines so a character is never broken in half. */
+.gh-group { display: flex; gap: 3px; }
+
+.gh-bit {
+  display: inline-block;
+  width: 1.28rem;
+  padding: 0.16rem 0;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.gh-lng { color: #0c4a6e; background: #bae6fd; }
+.gh-lat { color: #831843; background: #fbcfe8; }
+
+.gh-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.1rem;
+  margin-bottom: 1rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.gh-legend i { display: inline-block; width: 0.72rem; height: 0.72rem; border-radius: 3px; margin-right: 0.3rem; vertical-align: -1px; }
+.gh-sw-lng { background: #bae6fd; }
+.gh-sw-lat { background: #fbcfe8; }
+
+.gh-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; }
+.gh-table td { padding: 0.42rem 0.6rem; border-top: 1px solid var(--border); }
+.gh-table td:first-child { color: var(--text-muted); width: 42%; }
+.gh-table td:last-child { font-family: var(--mono); color: var(--text); }
+
+[data-theme="dark"] .geohash-demo { background: #1e293b !important; border-color: #334155 !important; }
+[data-theme="dark"] .gh-field input[type="number"] { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+[data-theme="dark"] .gh-hash { color: var(--primary-light) !important; }
+[data-theme="dark"] .gh-presets button { color: var(--primary-light) !important; background: rgba(56,189,248,0.12) !important; border-color: rgba(56,189,248,0.3) !important; }
+[data-theme="dark"] .gh-lng { color: #e0f2fe !important; background: #075985 !important; }
+[data-theme="dark"] .gh-lat { color: #fce7f3 !important; background: #9d174d !important; }
+[data-theme="dark"] .gh-sw-lng { background: #075985 !important; }
+[data-theme="dark"] .gh-sw-lat { background: #9d174d !important; }
+[data-theme="dark"] .gh-table td { border-color: #334155 !important; }
+[data-theme="dark"] .gh-table td:last-child { color: #e2e8f0 !important; }
+
+@media only screen and (max-width: 40em) {
+  .geohash-demo { padding: 1rem; }
+  .gh-hash { font-size: 1.5rem; }
+  .gh-bit { width: 1.05rem; font-size: 0.7rem; }
+}
