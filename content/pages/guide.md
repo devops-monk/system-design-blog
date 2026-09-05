@@ -60,6 +60,12 @@ Full consumer products. Each one takes the building blocks above and pushes them
 
 ---
 
+## Part 5: Keep Going
+
+16. [What to Read Next](/2026/06/what-to-read-next/) — the book's reading list rebuilt and link-checked for 2026, the engineering blogs still worth a subscription, and a method for reading them that turns links into knowledge.
+
+---
+
 ## How to read this series
 
 **Preparing for an interview?** Read Part 1 in order, then pick any four designs from Parts 3 and 4. The framework in Chapter 3 is what you'll actually perform under time pressure — the case studies are practice reps for it.
