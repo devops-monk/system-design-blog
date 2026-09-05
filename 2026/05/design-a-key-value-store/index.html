@@ -2,57 +2,62 @@
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 
       
-      
-      
-      
       const isDark = () =>
         document.documentElement.getAttribute('data-theme') === 'dark';
 
-      function draw() {
-        document.querySelectorAll('pre.mermaid').forEach((el) => {
-          
-          
+      
+      
+      const vars = {
+        light: {
+          background: '#ffffff', mainBkg: '#eff6ff',
+          primaryColor: '#eff6ff', primaryTextColor: '#1e293b',
+          primaryBorderColor: '#3b82f6', secondaryColor: '#f0fdf4',
+          secondaryTextColor: '#166534', secondaryBorderColor: '#10b981',
+          tertiaryColor: '#f8fafc', tertiaryTextColor: '#1e293b',
+          tertiaryBorderColor: '#cbd5e1',
+          lineColor: '#64748b', textColor: '#1e293b', titleColor: '#0f172a',
+          clusterBkg: '#f8fafc', clusterBorder: '#cbd5e1',
+          edgeLabelBackground: '#ffffff', nodeBorder: '#3b82f6',
+          actorBkg: '#eff6ff', actorBorder: '#3b82f6', actorTextColor: '#1e293b',
+          signalColor: '#475569', signalTextColor: '#1e293b',
+          labelBoxBkgColor: '#eff6ff', labelBoxBorderColor: '#3b82f6',
+          labelTextColor: '#1e293b', loopTextColor: '#1e293b',
+          noteBkgColor: '#fffbeb', noteBorderColor: '#f59e0b', noteTextColor: '#92400e',
+        },
+        dark: {
+          background: '#16233c', mainBkg: '#1e3a5f',
+          primaryColor: '#1e3a5f', primaryTextColor: '#e2e8f0',
+          primaryBorderColor: '#3b82f6', secondaryColor: '#10291f',
+          secondaryTextColor: '#6ee7b7', secondaryBorderColor: '#10b981',
+          tertiaryColor: '#0f1a2e', tertiaryTextColor: '#e2e8f0',
+          tertiaryBorderColor: '#3b4d6b',
+          lineColor: '#94a3b8', textColor: '#e2e8f0', titleColor: '#f1f5f9',
+          clusterBkg: '#0f1a2e', clusterBorder: '#2b3a55',
+          edgeLabelBackground: '#16233c', nodeBorder: '#3b82f6',
+          actorBkg: '#1e3a5f', actorBorder: '#3b82f6', actorTextColor: '#e2e8f0',
+          signalColor: '#94a3b8', signalTextColor: '#e2e8f0',
+          labelBoxBkgColor: '#1e3a5f', labelBoxBorderColor: '#3b82f6',
+          labelTextColor: '#e2e8f0', loopTextColor: '#e2e8f0',
+          noteBkgColor: '#2a1d10', noteBorderColor: '#f59e0b', noteTextColor: '#fcd34d',
+        },
+      };
+
+      
+      
+      
+      function sourceOf(el) {
+        const t = document.createElement('textarea');
+        t.innerHTML = el.dataset.src;
+        return t.value;
+      }
+
+      let seq = 0;
+
+      async function draw() {
+        const blocks = [...document.querySelectorAll('pre.mermaid')];
+        blocks.forEach((el) => {
           if (el.dataset.src === undefined) el.dataset.src = el.innerHTML;
-          else el.innerHTML = el.dataset.src;
-          el.removeAttribute('data-processed');
         });
-        
-        
-        
-        const vars = {
-          light: {
-            background: '#ffffff', mainBkg: '#eff6ff',
-            primaryColor: '#eff6ff', primaryTextColor: '#1e293b',
-            primaryBorderColor: '#3b82f6', secondaryColor: '#f0fdf4',
-            secondaryTextColor: '#166534', secondaryBorderColor: '#10b981',
-            tertiaryColor: '#f8fafc', tertiaryTextColor: '#1e293b',
-            tertiaryBorderColor: '#cbd5e1',
-            lineColor: '#64748b', textColor: '#1e293b', titleColor: '#0f172a',
-            clusterBkg: '#f8fafc', clusterBorder: '#cbd5e1',
-            edgeLabelBackground: '#ffffff', nodeBorder: '#3b82f6',
-            actorBkg: '#eff6ff', actorBorder: '#3b82f6', actorTextColor: '#1e293b',
-            signalColor: '#475569', signalTextColor: '#1e293b',
-            labelBoxBkgColor: '#eff6ff', labelBoxBorderColor: '#3b82f6',
-            labelTextColor: '#1e293b', loopTextColor: '#1e293b',
-            noteBkgColor: '#fffbeb', noteBorderColor: '#f59e0b', noteTextColor: '#92400e',
-          },
-          dark: {
-            background: '#16233c', mainBkg: '#1e3a5f',
-            primaryColor: '#1e3a5f', primaryTextColor: '#e2e8f0',
-            primaryBorderColor: '#3b82f6', secondaryColor: '#10291f',
-            secondaryTextColor: '#6ee7b7', secondaryBorderColor: '#10b981',
-            tertiaryColor: '#0f1a2e', tertiaryTextColor: '#e2e8f0',
-            tertiaryBorderColor: '#3b4d6b',
-            lineColor: '#94a3b8', textColor: '#e2e8f0', titleColor: '#f1f5f9',
-            clusterBkg: '#0f1a2e', clusterBorder: '#2b3a55',
-            edgeLabelBackground: '#16233c', nodeBorder: '#3b82f6',
-            actorBkg: '#1e3a5f', actorBorder: '#3b82f6', actorTextColor: '#e2e8f0',
-            signalColor: '#94a3b8', signalTextColor: '#e2e8f0',
-            labelBoxBkgColor: '#1e3a5f', labelBoxBorderColor: '#3b82f6',
-            labelTextColor: '#e2e8f0', loopTextColor: '#e2e8f0',
-            noteBkgColor: '#2a1d10', noteBorderColor: '#f59e0b', noteTextColor: '#fcd34d',
-          },
-        };
 
         mermaid.initialize({
           startOnLoad: false,
@@ -65,10 +70,25 @@
           securityLevel: 'loose',
           
           
-          flowchart: { htmlLabels: true, useMaxWidth: true, curve: 'basis' },
+          flowchart: { htmlLabels: true, useMaxWidth: true },
           sequence: { useMaxWidth: true },
         });
-        mermaid.run({ querySelector: 'pre.mermaid' });
+
+        
+        
+        
+        
+        
+        for (const el of blocks) {
+          const id = 'mermaid-svg-' + (seq++);
+          try {
+            const { svg, bindFunctions } = await mermaid.render(id, sourceOf(el));
+            el.innerHTML = svg;
+            if (bindFunctions) bindFunctions(el);
+          } catch (err) {
+            console.error('mermaid: failed to render diagram', err);
+          }
+        }
       }
 
       document.addEventListener('DOMContentLoaded', draw);
@@ -586,9 +606,10 @@ get(&#34;session:abc123&#34;)   → &#34;{token: xyz, expires: 1748649600}&#34;
 </pre><hr><h2 id=key-takeaways>Key Takeaways</h2><ol><li><p><strong>A key-value store is the simplest possible database</strong> — just <code>put</code> and <code>get</code>. But making it distributed and fault-tolerant requires solving some of the hardest problems in computer science.</p></li><li><p><strong>CAP theorem is not optional knowledge.</strong> Every distributed system design decision traces back to it. In practice, P is always required — so you&rsquo;re always choosing between consistency and availability.</p></li><li><p><strong>Quorum consensus (N, W, R) gives you tunable consistency.</strong> <code>W + R > N</code> guarantees strong consistency. <code>W + R ≤ N</code> gives you speed at the cost of potential staleness. Cassandra lets you choose per query.</p></li><li><p><strong>Vector clocks detect conflicts that timestamps can&rsquo;t.</strong> Simultaneous writes from different clients create genuine conflicts. Vector clocks give you enough information to reconcile them — but push the reconciliation logic to the client.</p></li><li><p><strong>Gossip protocol scales to thousands of nodes.</strong> Every node talks to a few random neighbors. Information propagates exponentially. No central coordinator needed.</p></li><li><p><strong>Merkle trees make replica sync blazingly efficient.</strong> Instead of comparing all keys, you compare tree hashes and descend only into differing subtrees. Sync is proportional to differences, not total data size.</p></li><li><p><strong>The write path optimizes for durability and speed.</strong> Commit log → MemTable → SSTable is a pattern used by Cassandra, HBase, LevelDB, and RocksDB. It&rsquo;s the foundation of modern write-optimized storage engines.</p></li><li><p><strong>Bloom filters make reads fast even with many SSTables.</strong> A probabilistic filter that eliminates most unnecessary disk reads — critical when you have hundreds of SSTable files on disk.</p></li></ol><hr><h2 id=references-and-further-reading>References and Further Reading</h2><p><strong>The foundational papers</strong></p><ul><li><a href=https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf>Dynamo: Amazon&rsquo;s Highly Available Key-value Store</a> — SOSP 2007. Consistent hashing, vector clocks, quorums, hinted handoff and Merkle trees all in one paper. If you read one thing, read this</li><li><a href=https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf>Bigtable: A Distributed Storage System for Structured Data</a> — OSDI 2006. Where SSTables and the LSM-tree write path come from</li><li><a href=https://www.cs.cornell.edu/projects/ladis2009/papers/lakshman-ladis2009.pdf>Cassandra: A Decentralized Structured Storage System</a> — Dynamo&rsquo;s ideas plus a Bigtable data model</li></ul><p><strong>Mechanisms in detail</strong></p><ul><li><a href=https://en.wikipedia.org/wiki/Merkle_tree>Merkle tree</a> — how anti-entropy compares replicas without shipping the data</li><li><a href=https://en.wikipedia.org/wiki/Bloom_filter>Bloom filter</a> — how a read skips SSTables that cannot contain the key</li><li><a href=https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/>SSTable and log-structured storage: LevelDB</a> — Ilya Grigorik, the clearest walkthrough of the write path</li><li><a href=https://cassandra.apache.org/doc/latest/cassandra/architecture/>Cassandra architecture</a> — the same ideas as shipped code</li></ul><p><strong>Implementations</strong></p><ul><li><a href=https://aws.amazon.com/dynamodb/>Amazon DynamoDB</a>, <a href=https://cassandra.apache.org/>Apache Cassandra</a>, <a href=https://redis.io/>Redis</a>, <a href=https://memcached.org/>memcached</a></li><li><a href=https://www.usenix.org/system/files/atc22-elhemali.pdf>Amazon DynamoDB: A Scalable, Predictably Performant, and Fully Managed NoSQL Database Service</a> — USENIX ATC 2022. What Amazon actually changed in the fifteen years after the Dynamo paper, and notably it abandoned vector clocks for a managed, single-leader-per-partition design. Newer than the book and a strong point to raise</li><li><a href=https://rocksdb.org/>RocksDB</a> — the LSM engine underneath a large share of modern stores</li></ul><p><strong>Going deeper</strong></p><ul><li><em>Designing Data-Intensive Applications</em> — Martin Kleppmann. Chapters 5, 6 and 9 cover replication, partitioning and consistency far more rigorously than any interview guide</li><li><a href=https://jepsen.io/analyses>Jepsen</a> — Kyle Kingsbury&rsquo;s consistency analyses. Sobering reading on what these systems actually guarantee under partition</li></ul><hr><h2 id=whats-next>What&rsquo;s Next?</h2><p>In <strong>Chapter 7</strong>, we&rsquo;ll design a <strong>Unique ID Generator in Distributed Systems</strong> — tackling the surprisingly complex problem of generating globally unique, sortable, numeric IDs at 10,000+ IDs per second without any central coordination. We&rsquo;ll look at multi-master replication, UUIDs, ticket servers, and the famous Twitter Snowflake approach.</p><p><em>Every concept in this chapter builds on the previous ones — if you understand consistent hashing, quorum, and gossip, the rest of distributed systems becomes much more approachable. You&rsquo;re building a mental model that compounds.</em></p></div><div class=social-share-bar><span class=share-label>Share:</span>
 <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fdesign-a-key-value-store%2f&title=Design+a+Key-Value+Store" target=_blank rel=noopener class="share-btn share-linkedin" title="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i> LinkedIn
 </a><a href="https://twitter.com/intent/tweet?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fdesign-a-key-value-store%2f&text=Design+a+Key-Value+Store" target=_blank rel=noopener class="share-btn share-twitter" title="Share on Twitter / X"><i class="fa-brands fa-x-twitter"></i> X
-</a><a href="https://www.reddit.com/submit?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fdesign-a-key-value-store%2f&title=Design+a+Key-Value+Store" target=_blank rel=noopener class="share-btn share-reddit" title="Share on Reddit"><i class="fa-brands fa-reddit-alien"></i> Reddit</a></div></div></article><nav class="navigation post-navigation" role=navigation><h2 class=screen-reader-text>Post navigation</h2><div class=nav-links><div class=nav-next><a href=/2026/05/design-consistent-hashing/ rel=prev><span class=post-title>Design Consistent Hashing
+</a><a href="https://www.reddit.com/submit?url=https%3a%2f%2fsystem-design.devops-monk.com%2f2026%2f05%2fdesign-a-key-value-store%2f&title=Design+a+Key-Value+Store" target=_blank rel=noopener class="share-btn share-reddit" title="Share on Reddit"><i class="fa-brands fa-reddit-alien"></i> Reddit</a></div></div></article><nav class="navigation post-navigation" role=navigation><h2 class=screen-reader-text>Post navigation</h2><div class=nav-links><div class=nav-previous><a href=/2026/05/design-unique-id-generator/ rel=next><i class="fa fa-chevron-left"></i>
+<span class=post-title>Design a Unique ID Generator in Distributed Systems</span></a></div><div class=nav-next><a href=/2026/05/design-consistent-hashing/ rel=prev><span class=post-title>Design Consistent Hashing
 <i class="fa fa-chevron-right"></i></span></a></div></div></nav></main></section><section id=secondary class="sidebar widget-area clearfix" role=complementary><aside id=search class="widget clearfix"><div class=widget-header><h3 class=widget-title>Search</h3></div><form onsubmit=return!1><input id=search-query type=text placeholder="Search posts..." autocomplete=off>
-<button id=search-btn type=button><i class="fa-solid fa-magnifying-glass"></i></button></form><div id=search-results></div></aside><aside id=rss-subscribe class="widget clearfix"><div class=widget-header><h3 class=widget-title>Subscribe</h3></div><a href=/index.xml class=rss-subscribe-btn target=_blank rel=noopener><i class="fa-solid fa-rss"></i> Subscribe via RSS</a></aside><aside id=recent-posts class="widget clearfix"><div class=widget-header><h3 class=widget-title>Recent Posts</h3></div><ul><li class=widget__item><a class=widget__link href=/2026/05/design-a-key-value-store/>Design a Key-Value Store</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-consistent-hashing/>Design Consistent Hashing</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-a-rate-limiter/>Design a Rate Limiter</a></li><li class=widget__item><a class=widget__link href=/2026/05/framework-for-system-design-interviews/>A Framework for System Design Interviews: The Complete Playbook</a></li><li class=widget__item><a class=widget__link href=/2026/05/back-of-the-envelope-estimation/>Back-of-the-Envelope Estimation: The Art of Making Smart Guesses</a></li></ul></aside><aside id=categories class="widget clearfix"><div class=widget-header><h3 class=widget-title>Categories</h3></div><ul><li><a href=/categories/fundamentals/ title=fundamentals>fundamentals</a></li></ul></aside><aside id=tag_cloud class="widget widget_tag_cloud clearfix"><div class=widget-header><h3 class=widget-title>Tags</h3></div><div class=tagcloud><div class=widget__content><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/algorithms/ title=algorithms>algorithms
+<button id=search-btn type=button><i class="fa-solid fa-magnifying-glass"></i></button></form><div id=search-results></div></aside><aside id=rss-subscribe class="widget clearfix"><div class=widget-header><h3 class=widget-title>Subscribe</h3></div><a href=/index.xml class=rss-subscribe-btn target=_blank rel=noopener><i class="fa-solid fa-rss"></i> Subscribe via RSS</a></aside><aside id=recent-posts class="widget clearfix"><div class=widget-header><h3 class=widget-title>Recent Posts</h3></div><ul><li class=widget__item><a class=widget__link href=/2026/05/design-unique-id-generator/>Design a Unique ID Generator in Distributed Systems</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-a-key-value-store/>Design a Key-Value Store</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-consistent-hashing/>Design Consistent Hashing</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-a-rate-limiter/>Design a Rate Limiter</a></li><li class=widget__item><a class=widget__link href=/2026/05/framework-for-system-design-interviews/>A Framework for System Design Interviews: The Complete Playbook</a></li></ul></aside><aside id=categories class="widget clearfix"><div class=widget-header><h3 class=widget-title>Categories</h3></div><ul><li><a href=/categories/fundamentals/ title=fundamentals>fundamentals</a></li></ul></aside><aside id=tag_cloud class="widget widget_tag_cloud clearfix"><div class=widget-header><h3 class=widget-title>Tags</h3></div><div class=tagcloud><div class=widget__content><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/algorithms/ title=algorithms>algorithms
 </a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/api/ title=api>api
 </a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/architecture/ title=architecture>architecture
 </a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/caching/ title=caching>caching
@@ -608,6 +629,9 @@ get(&#34;session:abc123&#34;)   → &#34;{token: xyz, expires: 1748649600}&#34;
 </a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/rate-limiter/ title=rate-limiter>rate-limiter
 </a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/redis/ title=redis>redis
 </a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/scalability/ title=scalability>scalability
-</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/system-design/ title=system-design>system-design</a></div></div></aside></section></div><div id=footer class=footer-wrap><footer id=colophon class="site-footer container clearfix" role=contentinfo><div id=footer-text class=site-info><span class=credit-link><a href=/>System Design by Abhay</a>
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/snowflake/ title=snowflake>snowflake
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/system-design/ title=system-design>system-design
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/unique-id/ title=unique-id>unique-id
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/uuid/ title=uuid>uuid</a></div></div></aside></section></div><div id=footer class=footer-wrap><footer id=colophon class="site-footer container clearfix" role=contentinfo><div id=footer-text class=site-info><span class=credit-link><a href=/>System Design by Abhay</a>
 Copyright © 2026
 </span><span class=footer-rss><a href=/index.xml title="RSS Feed" target=_blank rel=noopener><i class="fa-solid fa-rss"></i> RSS Feed</a></span></div></footer></div></div><script type=text/javascript src=/assets/js/custom.js></script></body></html>

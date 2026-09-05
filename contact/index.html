@@ -4,57 +4,62 @@ GitHub: https://github.com/devops-monk"><meta property="og:locale" content="en_
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 
       
-      
-      
-      
       const isDark = () =>
         document.documentElement.getAttribute('data-theme') === 'dark';
 
-      function draw() {
-        document.querySelectorAll('pre.mermaid').forEach((el) => {
-          
-          
+      
+      
+      const vars = {
+        light: {
+          background: '#ffffff', mainBkg: '#eff6ff',
+          primaryColor: '#eff6ff', primaryTextColor: '#1e293b',
+          primaryBorderColor: '#3b82f6', secondaryColor: '#f0fdf4',
+          secondaryTextColor: '#166534', secondaryBorderColor: '#10b981',
+          tertiaryColor: '#f8fafc', tertiaryTextColor: '#1e293b',
+          tertiaryBorderColor: '#cbd5e1',
+          lineColor: '#64748b', textColor: '#1e293b', titleColor: '#0f172a',
+          clusterBkg: '#f8fafc', clusterBorder: '#cbd5e1',
+          edgeLabelBackground: '#ffffff', nodeBorder: '#3b82f6',
+          actorBkg: '#eff6ff', actorBorder: '#3b82f6', actorTextColor: '#1e293b',
+          signalColor: '#475569', signalTextColor: '#1e293b',
+          labelBoxBkgColor: '#eff6ff', labelBoxBorderColor: '#3b82f6',
+          labelTextColor: '#1e293b', loopTextColor: '#1e293b',
+          noteBkgColor: '#fffbeb', noteBorderColor: '#f59e0b', noteTextColor: '#92400e',
+        },
+        dark: {
+          background: '#16233c', mainBkg: '#1e3a5f',
+          primaryColor: '#1e3a5f', primaryTextColor: '#e2e8f0',
+          primaryBorderColor: '#3b82f6', secondaryColor: '#10291f',
+          secondaryTextColor: '#6ee7b7', secondaryBorderColor: '#10b981',
+          tertiaryColor: '#0f1a2e', tertiaryTextColor: '#e2e8f0',
+          tertiaryBorderColor: '#3b4d6b',
+          lineColor: '#94a3b8', textColor: '#e2e8f0', titleColor: '#f1f5f9',
+          clusterBkg: '#0f1a2e', clusterBorder: '#2b3a55',
+          edgeLabelBackground: '#16233c', nodeBorder: '#3b82f6',
+          actorBkg: '#1e3a5f', actorBorder: '#3b82f6', actorTextColor: '#e2e8f0',
+          signalColor: '#94a3b8', signalTextColor: '#e2e8f0',
+          labelBoxBkgColor: '#1e3a5f', labelBoxBorderColor: '#3b82f6',
+          labelTextColor: '#e2e8f0', loopTextColor: '#e2e8f0',
+          noteBkgColor: '#2a1d10', noteBorderColor: '#f59e0b', noteTextColor: '#fcd34d',
+        },
+      };
+
+      
+      
+      
+      function sourceOf(el) {
+        const t = document.createElement('textarea');
+        t.innerHTML = el.dataset.src;
+        return t.value;
+      }
+
+      let seq = 0;
+
+      async function draw() {
+        const blocks = [...document.querySelectorAll('pre.mermaid')];
+        blocks.forEach((el) => {
           if (el.dataset.src === undefined) el.dataset.src = el.innerHTML;
-          else el.innerHTML = el.dataset.src;
-          el.removeAttribute('data-processed');
         });
-        
-        
-        
-        const vars = {
-          light: {
-            background: '#ffffff', mainBkg: '#eff6ff',
-            primaryColor: '#eff6ff', primaryTextColor: '#1e293b',
-            primaryBorderColor: '#3b82f6', secondaryColor: '#f0fdf4',
-            secondaryTextColor: '#166534', secondaryBorderColor: '#10b981',
-            tertiaryColor: '#f8fafc', tertiaryTextColor: '#1e293b',
-            tertiaryBorderColor: '#cbd5e1',
-            lineColor: '#64748b', textColor: '#1e293b', titleColor: '#0f172a',
-            clusterBkg: '#f8fafc', clusterBorder: '#cbd5e1',
-            edgeLabelBackground: '#ffffff', nodeBorder: '#3b82f6',
-            actorBkg: '#eff6ff', actorBorder: '#3b82f6', actorTextColor: '#1e293b',
-            signalColor: '#475569', signalTextColor: '#1e293b',
-            labelBoxBkgColor: '#eff6ff', labelBoxBorderColor: '#3b82f6',
-            labelTextColor: '#1e293b', loopTextColor: '#1e293b',
-            noteBkgColor: '#fffbeb', noteBorderColor: '#f59e0b', noteTextColor: '#92400e',
-          },
-          dark: {
-            background: '#16233c', mainBkg: '#1e3a5f',
-            primaryColor: '#1e3a5f', primaryTextColor: '#e2e8f0',
-            primaryBorderColor: '#3b82f6', secondaryColor: '#10291f',
-            secondaryTextColor: '#6ee7b7', secondaryBorderColor: '#10b981',
-            tertiaryColor: '#0f1a2e', tertiaryTextColor: '#e2e8f0',
-            tertiaryBorderColor: '#3b4d6b',
-            lineColor: '#94a3b8', textColor: '#e2e8f0', titleColor: '#f1f5f9',
-            clusterBkg: '#0f1a2e', clusterBorder: '#2b3a55',
-            edgeLabelBackground: '#16233c', nodeBorder: '#3b82f6',
-            actorBkg: '#1e3a5f', actorBorder: '#3b82f6', actorTextColor: '#e2e8f0',
-            signalColor: '#94a3b8', signalTextColor: '#e2e8f0',
-            labelBoxBkgColor: '#1e3a5f', labelBoxBorderColor: '#3b82f6',
-            labelTextColor: '#e2e8f0', loopTextColor: '#e2e8f0',
-            noteBkgColor: '#2a1d10', noteBorderColor: '#f59e0b', noteTextColor: '#fcd34d',
-          },
-        };
 
         mermaid.initialize({
           startOnLoad: false,
@@ -67,10 +72,25 @@ GitHub: https://github.com/devops-monk"><meta property="og:locale" content="en_
           securityLevel: 'loose',
           
           
-          flowchart: { htmlLabels: true, useMaxWidth: true, curve: 'basis' },
+          flowchart: { htmlLabels: true, useMaxWidth: true },
           sequence: { useMaxWidth: true },
         });
-        mermaid.run({ querySelector: 'pre.mermaid' });
+
+        
+        
+        
+        
+        
+        for (const el of blocks) {
+          const id = 'mermaid-svg-' + (seq++);
+          try {
+            const { svg, bindFunctions } = await mermaid.render(id, sourceOf(el));
+            el.innerHTML = svg;
+            if (bindFunctions) bindFunctions(el);
+          } catch (err) {
+            console.error('mermaid: failed to render diagram', err);
+          }
+        }
       }
 
       document.addEventListener('DOMContentLoaded', draw);
@@ -95,7 +115,7 @@ GitHub: https://github.com/devops-monk"><meta property="og:locale" content="en_
 <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fsystem-design.devops-monk.com%2fcontact%2f&title=Contact" target=_blank rel=noopener class="share-btn share-linkedin" title="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i> LinkedIn
 </a><a href="https://twitter.com/intent/tweet?url=https%3a%2f%2fsystem-design.devops-monk.com%2fcontact%2f&text=Contact" target=_blank rel=noopener class="share-btn share-twitter" title="Share on Twitter / X"><i class="fa-brands fa-x-twitter"></i> X
 </a><a href="https://www.reddit.com/submit?url=https%3a%2f%2fsystem-design.devops-monk.com%2fcontact%2f&title=Contact" target=_blank rel=noopener class="share-btn share-reddit" title="Share on Reddit"><i class="fa-brands fa-reddit-alien"></i> Reddit</a></div></div></article></main></section><section id=secondary class="sidebar widget-area clearfix" role=complementary><aside id=search class="widget clearfix"><div class=widget-header><h3 class=widget-title>Search</h3></div><form onsubmit=return!1><input id=search-query type=text placeholder="Search posts..." autocomplete=off>
-<button id=search-btn type=button><i class="fa-solid fa-magnifying-glass"></i></button></form><div id=search-results></div></aside><aside id=rss-subscribe class="widget clearfix"><div class=widget-header><h3 class=widget-title>Subscribe</h3></div><a href=/index.xml class=rss-subscribe-btn target=_blank rel=noopener><i class="fa-solid fa-rss"></i> Subscribe via RSS</a></aside><aside id=recent-posts class="widget clearfix"><div class=widget-header><h3 class=widget-title>Recent Posts</h3></div><ul><li class=widget__item><a class=widget__link href=/2026/05/design-a-key-value-store/>Design a Key-Value Store</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-consistent-hashing/>Design Consistent Hashing</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-a-rate-limiter/>Design a Rate Limiter</a></li><li class=widget__item><a class=widget__link href=/2026/05/framework-for-system-design-interviews/>A Framework for System Design Interviews: The Complete Playbook</a></li><li class=widget__item><a class=widget__link href=/2026/05/back-of-the-envelope-estimation/>Back-of-the-Envelope Estimation: The Art of Making Smart Guesses</a></li></ul></aside><aside id=categories class="widget clearfix"><div class=widget-header><h3 class=widget-title>Categories</h3></div><ul><li><a href=/categories/fundamentals/ title=fundamentals>fundamentals</a></li></ul></aside><aside id=tag_cloud class="widget widget_tag_cloud clearfix"><div class=widget-header><h3 class=widget-title>Tags</h3></div><div class=tagcloud><div class=widget__content><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/algorithms/ title=algorithms>algorithms
+<button id=search-btn type=button><i class="fa-solid fa-magnifying-glass"></i></button></form><div id=search-results></div></aside><aside id=rss-subscribe class="widget clearfix"><div class=widget-header><h3 class=widget-title>Subscribe</h3></div><a href=/index.xml class=rss-subscribe-btn target=_blank rel=noopener><i class="fa-solid fa-rss"></i> Subscribe via RSS</a></aside><aside id=recent-posts class="widget clearfix"><div class=widget-header><h3 class=widget-title>Recent Posts</h3></div><ul><li class=widget__item><a class=widget__link href=/2026/05/design-unique-id-generator/>Design a Unique ID Generator in Distributed Systems</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-a-key-value-store/>Design a Key-Value Store</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-consistent-hashing/>Design Consistent Hashing</a></li><li class=widget__item><a class=widget__link href=/2026/05/design-a-rate-limiter/>Design a Rate Limiter</a></li><li class=widget__item><a class=widget__link href=/2026/05/framework-for-system-design-interviews/>A Framework for System Design Interviews: The Complete Playbook</a></li></ul></aside><aside id=categories class="widget clearfix"><div class=widget-header><h3 class=widget-title>Categories</h3></div><ul><li><a href=/categories/fundamentals/ title=fundamentals>fundamentals</a></li></ul></aside><aside id=tag_cloud class="widget widget_tag_cloud clearfix"><div class=widget-header><h3 class=widget-title>Tags</h3></div><div class=tagcloud><div class=widget__content><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/algorithms/ title=algorithms>algorithms
 </a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/api/ title=api>api
 </a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/architecture/ title=architecture>architecture
 </a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/caching/ title=caching>caching
@@ -115,6 +135,9 @@ GitHub: https://github.com/devops-monk"><meta property="og:locale" content="en_
 </a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/rate-limiter/ title=rate-limiter>rate-limiter
 </a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/redis/ title=redis>redis
 </a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/scalability/ title=scalability>scalability
-</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/system-design/ title=system-design>system-design</a></div></div></aside></section></div><div id=footer class=footer-wrap><footer id=colophon class="site-footer container clearfix" role=contentinfo><div id=footer-text class=site-info><span class=credit-link><a href=/>System Design by Abhay</a>
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/snowflake/ title=snowflake>snowflake
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/system-design/ title=system-design>system-design
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/unique-id/ title=unique-id>unique-id
+</a><a class="tag-cloud-link widget__link widget__link--taglist" href=/tags/uuid/ title=uuid>uuid</a></div></div></aside></section></div><div id=footer class=footer-wrap><footer id=colophon class="site-footer container clearfix" role=contentinfo><div id=footer-text class=site-info><span class=credit-link><a href=/>System Design by Abhay</a>
 Copyright © 2026
 </span><span class=footer-rss><a href=/index.xml title="RSS Feed" target=_blank rel=noopener><i class="fa-solid fa-rss"></i> RSS Feed</a></span></div></footer></div></div><script type=text/javascript src=/assets/js/custom.js></script></body></html>
