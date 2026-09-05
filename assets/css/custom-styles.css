@@ -2917,3 +2917,103 @@ a.cert-card:hover .cert-verify { opacity: 1; }
   .es-demo { padding: 1rem; }
   .es-cols { grid-template-columns: 1fr; gap: 1rem; }
 }
+
+/* ==========================================================================
+   Order book matcher (posts/2026/design-stock-exchange)
+   ========================================================================== */
+
+.ob-demo {
+  margin: 1.75rem 0;
+  padding: 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.ob-row { margin-bottom: 1.1rem; }
+.ob-row label { display: block; margin-bottom: 0.3rem; font-size: 0.84rem; color: var(--text-muted); }
+.ob-row label b { font-family: var(--mono); color: var(--primary-dark); font-weight: 700; }
+.ob-row input[type="range"] { width: 100%; accent-color: var(--primary); }
+
+.ob-label {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  margin-bottom: 0.35rem;
+}
+.ob-ask-l { color: #be185d; }
+.ob-bid-l { color: #16a34a; }
+
+.ob-t { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.ob-t td { padding: 0.3rem 0.4rem; font-family: var(--mono); border-bottom: 1px solid var(--border); }
+.ob-t tr:last-child td { border-bottom: none; }
+.ob-p { width: 4.4rem; color: var(--text); font-weight: 600; }
+.ob-o i { display: inline-block; padding: 0.1rem 0.36rem; margin-right: 0.22rem; font-style: normal;
+          font-size: 0.72rem; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; }
+.ob-tot { width: 3.4rem; text-align: right; color: var(--text-muted); }
+
+.ob-best td { background: rgba(14, 165, 233, 0.09); }
+.ob-best .ob-p { color: var(--primary-dark); }
+.ob-gone { opacity: 0.3; }
+.ob-gone .ob-p { text-decoration: line-through; }
+
+.ob-spread {
+  padding: 0.5rem 0.7rem;
+  margin: 0.55rem 0;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+}
+.ob-spread b { color: var(--primary-dark); }
+
+.ob-fills { margin-top: 1rem; }
+
+.ob-flabel {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.ob-fill {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  margin: 0 0.3rem 0.3rem 0;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: #166534;
+  background: rgba(22, 163, 74, 0.1);
+  border: 1px solid rgba(22, 163, 74, 0.3);
+  border-radius: 5px;
+}
+
+.ob-fill i { font-style: normal; opacity: 0.7; }
+.ob-unfilled { color: #991b1b !important; background: rgba(220,38,38,0.09) !important; border-color: rgba(220,38,38,0.3) !important; }
+.ob-none { font-size: 0.8rem; color: var(--text-muted); font-style: italic; }
+
+[data-theme="dark"] .ob-demo { background: #1e293b !important; border-color: #334155 !important; }
+[data-theme="dark"] .ob-t td,
+[data-theme="dark"] .ob-spread { border-color: #334155 !important; }
+[data-theme="dark"] .ob-p { color: #e2e8f0 !important; }
+[data-theme="dark"] .ob-o i,
+[data-theme="dark"] .ob-spread { background: #0f172a !important; border-color: #334155 !important; }
+[data-theme="dark"] .ob-best td { background: rgba(56,189,248,0.13) !important; }
+[data-theme="dark"] .ob-best .ob-p,
+[data-theme="dark"] .ob-spread b,
+[data-theme="dark"] .ob-row label b { color: var(--primary-light) !important; }
+[data-theme="dark"] .ob-ask-l { color: #f9a8d4 !important; }
+[data-theme="dark"] .ob-bid-l { color: #4ade80 !important; }
+[data-theme="dark"] .ob-fill { color: #4ade80 !important; border-color: rgba(74,222,128,0.32) !important; }
+[data-theme="dark"] .ob-unfilled { color: #fca5a5 !important; border-color: rgba(248,113,113,0.35) !important; }
+
+@media only screen and (max-width: 40em) {
+  .ob-demo { padding: 1rem; }
+  .ob-t { font-size: 0.74rem; }
+  .ob-spread { font-size: 0.7rem; }
+}
