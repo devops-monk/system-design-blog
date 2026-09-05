@@ -66,6 +66,14 @@ Full consumer products. Each one takes the building blocks above and pushes them
 
 ---
 
+## Part 6: Volume 2 — Advanced Designs
+
+Harder problems, and the ones that come up most often for senior roles.
+
+17. [Design a Proximity Service](/2026/06/design-a-proximity-service/) — why two B-tree indexes are not a 2D index, and how geohash, quadtrees, S2 and H3 each fold two dimensions into one. Includes an interactive geohash encoder.
+
+---
+
 ## How to read this series
 
 **Preparing for an interview?** Read Part 1 in order, then pick any four designs from Parts 3 and 4. The framework in Chapter 3 is what you'll actually perform under time pressure — the case studies are practice reps for it.
