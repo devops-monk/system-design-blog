@@ -63,11 +63,6 @@ preserveTaxonomyNames = true
     weight = 2
 
   [[menu.main]]
-    name = "Case Studies"
-    url = "/categories/case-studies/"
-    weight = 3
-
-  [[menu.main]]
     name = "Concepts"
     identifier = "concepts"
     weight = 4
