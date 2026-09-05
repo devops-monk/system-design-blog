@@ -34,58 +34,63 @@
     <script type="module">
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 
-      // Mermaid was pinned to the light theme, so diagrams stayed light when the
-      // page went dark. Pick the theme from data-theme, and re-render when the
-      // dark-mode toggle flips it. Each block's source is stashed on first run,
-      // because mermaid replaces the element's contents with rendered SVG.
+      // Theme follows data-theme, and diagrams re-render when the toggle flips it.
       const isDark = () =>
         document.documentElement.getAttribute('data-theme') === 'dark';
 
-      function draw() {
-        document.querySelectorAll('pre.mermaid').forEach((el) => {
-          // innerHTML, not textContent: the browser parses the <br/> in node
-          // labels into real elements inside <pre>, and textContent drops them.
+      // Style every diagram from a shared palette rather than relying on per-node
+      // `style` directives, which most diagrams do not carry.
+      const vars = {
+        light: {
+          background: '#ffffff', mainBkg: '#eff6ff',
+          primaryColor: '#eff6ff', primaryTextColor: '#1e293b',
+          primaryBorderColor: '#3b82f6', secondaryColor: '#f0fdf4',
+          secondaryTextColor: '#166534', secondaryBorderColor: '#10b981',
+          tertiaryColor: '#f8fafc', tertiaryTextColor: '#1e293b',
+          tertiaryBorderColor: '#cbd5e1',
+          lineColor: '#64748b', textColor: '#1e293b', titleColor: '#0f172a',
+          clusterBkg: '#f8fafc', clusterBorder: '#cbd5e1',
+          edgeLabelBackground: '#ffffff', nodeBorder: '#3b82f6',
+          actorBkg: '#eff6ff', actorBorder: '#3b82f6', actorTextColor: '#1e293b',
+          signalColor: '#475569', signalTextColor: '#1e293b',
+          labelBoxBkgColor: '#eff6ff', labelBoxBorderColor: '#3b82f6',
+          labelTextColor: '#1e293b', loopTextColor: '#1e293b',
+          noteBkgColor: '#fffbeb', noteBorderColor: '#f59e0b', noteTextColor: '#92400e',
+        },
+        dark: {
+          background: '#16233c', mainBkg: '#1e3a5f',
+          primaryColor: '#1e3a5f', primaryTextColor: '#e2e8f0',
+          primaryBorderColor: '#3b82f6', secondaryColor: '#10291f',
+          secondaryTextColor: '#6ee7b7', secondaryBorderColor: '#10b981',
+          tertiaryColor: '#0f1a2e', tertiaryTextColor: '#e2e8f0',
+          tertiaryBorderColor: '#3b4d6b',
+          lineColor: '#94a3b8', textColor: '#e2e8f0', titleColor: '#f1f5f9',
+          clusterBkg: '#0f1a2e', clusterBorder: '#2b3a55',
+          edgeLabelBackground: '#16233c', nodeBorder: '#3b82f6',
+          actorBkg: '#1e3a5f', actorBorder: '#3b82f6', actorTextColor: '#e2e8f0',
+          signalColor: '#94a3b8', signalTextColor: '#e2e8f0',
+          labelBoxBkgColor: '#1e3a5f', labelBoxBorderColor: '#3b82f6',
+          labelTextColor: '#e2e8f0', loopTextColor: '#e2e8f0',
+          noteBkgColor: '#2a1d10', noteBorderColor: '#f59e0b', noteTextColor: '#fcd34d',
+        },
+      };
+
+      // The <pre> holds diagram source as markup: the browser has already parsed
+      // <br/> into elements and encoded &, < and >. Decode via a textarea, whose
+      // content model is RCDATA — entities are decoded, tags left as text.
+      function sourceOf(el) {
+        const t = document.createElement('textarea');
+        t.innerHTML = el.dataset.src;
+        return t.value;
+      }
+
+      let seq = 0;
+
+      async function draw() {
+        const blocks = [...document.querySelectorAll('pre.mermaid')];
+        blocks.forEach((el) => {
           if (el.dataset.src === undefined) el.dataset.src = el.innerHTML;
-          else el.innerHTML = el.dataset.src;
-          el.removeAttribute('data-processed');
         });
-        // Style every diagram from a shared palette rather than relying on
-        // per-node `style` directives, which only a few diagrams carry — the
-        // key-value-store post has 22 diagrams and no styling at all.
-        const vars = {
-          light: {
-            background: '#ffffff', mainBkg: '#eff6ff',
-            primaryColor: '#eff6ff', primaryTextColor: '#1e293b',
-            primaryBorderColor: '#3b82f6', secondaryColor: '#f0fdf4',
-            secondaryTextColor: '#166534', secondaryBorderColor: '#10b981',
-            tertiaryColor: '#f8fafc', tertiaryTextColor: '#1e293b',
-            tertiaryBorderColor: '#cbd5e1',
-            lineColor: '#64748b', textColor: '#1e293b', titleColor: '#0f172a',
-            clusterBkg: '#f8fafc', clusterBorder: '#cbd5e1',
-            edgeLabelBackground: '#ffffff', nodeBorder: '#3b82f6',
-            actorBkg: '#eff6ff', actorBorder: '#3b82f6', actorTextColor: '#1e293b',
-            signalColor: '#475569', signalTextColor: '#1e293b',
-            labelBoxBkgColor: '#eff6ff', labelBoxBorderColor: '#3b82f6',
-            labelTextColor: '#1e293b', loopTextColor: '#1e293b',
-            noteBkgColor: '#fffbeb', noteBorderColor: '#f59e0b', noteTextColor: '#92400e',
-          },
-          dark: {
-            background: '#16233c', mainBkg: '#1e3a5f',
-            primaryColor: '#1e3a5f', primaryTextColor: '#e2e8f0',
-            primaryBorderColor: '#3b82f6', secondaryColor: '#10291f',
-            secondaryTextColor: '#6ee7b7', secondaryBorderColor: '#10b981',
-            tertiaryColor: '#0f1a2e', tertiaryTextColor: '#e2e8f0',
-            tertiaryBorderColor: '#3b4d6b',
-            lineColor: '#94a3b8', textColor: '#e2e8f0', titleColor: '#f1f5f9',
-            clusterBkg: '#0f1a2e', clusterBorder: '#2b3a55',
-            edgeLabelBackground: '#16233c', nodeBorder: '#3b82f6',
-            actorBkg: '#1e3a5f', actorBorder: '#3b82f6', actorTextColor: '#e2e8f0',
-            signalColor: '#94a3b8', signalTextColor: '#e2e8f0',
-            labelBoxBkgColor: '#1e3a5f', labelBoxBorderColor: '#3b82f6',
-            labelTextColor: '#e2e8f0', loopTextColor: '#e2e8f0',
-            noteBkgColor: '#2a1d10', noteBorderColor: '#f59e0b', noteTextColor: '#fcd34d',
-          },
-        };
 
         mermaid.initialize({
           startOnLoad: false,
@@ -98,10 +103,25 @@
           securityLevel: 'loose',
           // Without htmlLabels the <br/> in node labels is dropped and the two
           // lines run together ("1 Bytea single char").
-          flowchart: { htmlLabels: true, useMaxWidth: true, curve: 'basis' },
+          flowchart: { htmlLabels: true, useMaxWidth: true },
           sequence: { useMaxWidth: true },
         });
-        mermaid.run({ querySelector: 'pre.mermaid' });
+
+        // Render one at a time with an explicit unique id. mermaid.run() derives
+        // ids from a timestamp, so diagrams produced within the same millisecond
+        // collided — on a 26-diagram page 21 of them ended up sharing an id,
+        // which broke their scoped <style> and viewBox and collapsed them to a
+        // 150px-tall empty box.
+        for (const el of blocks) {
+          const id = 'mermaid-svg-' + (seq++);
+          try {
+            const { svg, bindFunctions } = await mermaid.render(id, sourceOf(el));
+            el.innerHTML = svg;
+            if (bindFunctions) bindFunctions(el);
+          } catch (err) {
+            console.error('mermaid: failed to render diagram', err);
+          }
+        }
       }
 
       document.addEventListener('DOMContentLoaded', draw);
