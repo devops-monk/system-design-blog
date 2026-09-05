@@ -1,331 +1,163 @@
 {{ if .IsPage }}
-<!-- ── Text-to-Speech Player ── -->
-<div id="tts-player" class="tts-player" role="region" aria-label="Article audio player">
-  <div class="tts-inner">
+{{/* Text-to-speech player. Styles live in static/assets/css/custom-styles.css
+     with the rest of the widget CSS, so the player picks up the site's design
+     tokens and adapts to light and dark like everything else. */}}
+<div id="tts-player" class="tts" role="region" aria-label="Article audio player">
+  <div class="tts-main">
 
-    <!-- Left: icon + title + status -->
-    <div class="tts-meta">
-      <span class="tts-headphone" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-             width="22" height="22" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
-          <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/>
-          <path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
-        </svg>
-      </span>
-      <div>
-        <div class="tts-title">Listen to this article</div>
-        <div class="tts-status" id="tts-status">Click ▶ to start</div>
-      </div>
+    <span class="tts-badge" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           width="18" height="18" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/>
+        <path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+      </svg>
+    </span>
+
+    <div class="tts-text">
+      <div class="tts-title">Listen to this article</div>
+      <div class="tts-status" id="tts-status">Read aloud in your browser</div>
     </div>
 
-    <!-- Centre: controls -->
-    <div class="tts-controls">
-      <!-- Stop -->
-      <button class="tts-icon-btn" id="tts-stop" title="Stop &amp; reset" aria-label="Stop">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-          <rect x="5" y="5" width="14" height="14" rx="2"/>
+    <div class="tts-actions">
+      <div class="tts-speed" role="group" aria-label="Playback speed">
+        <button type="button" data-rate="0.75">0.75&times;</button>
+        <button type="button" data-rate="1" class="on">1&times;</button>
+        <button type="button" data-rate="1.25">1.25&times;</button>
+        <button type="button" data-rate="1.5">1.5&times;</button>
+      </div>
+
+      <button class="tts-stop" id="tts-stop" title="Stop and reset" aria-label="Stop" hidden>
+        <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+          <rect x="6" y="6" width="12" height="12" rx="2"/>
         </svg>
       </button>
 
-      <!-- Play / Pause (main CTA) -->
-      <button class="tts-play-btn" id="tts-play" title="Play / Pause" aria-label="Play article">
-        <span id="tts-play-label">
-          <svg id="tts-play-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-            <path d="M6 4l14 8-14 8z"/>
-          </svg>
-          <svg id="tts-pause-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" style="display:none">
-            <rect x="6" y="4" width="4" height="16" rx="1"/>
-            <rect x="14" y="4" width="4" height="16" rx="1"/>
-          </svg>
-        </span>
-        <span class="tts-play-text" id="tts-play-text">Play</span>
-      </button>
-
-      <!-- Speed -->
-      <div class="tts-speed">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-             width="14" height="14" aria-hidden="true">
-          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83
-                   M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+      <button class="tts-play" id="tts-play" aria-label="Play article">
+        <svg id="tts-play-icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+          <path d="M7 4l13 8-13 8z"/>
         </svg>
-        <select id="tts-speed-select" class="tts-speed-select" aria-label="Playback speed">
-          <option value="0.75">0.75×</option>
-          <option value="1" selected>1×</option>
-          <option value="1.25">1.25×</option>
-          <option value="1.5">1.5×</option>
-          <option value="2">2×</option>
-        </select>
-      </div>
+        <svg id="tts-pause-icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" hidden>
+          <rect x="6" y="4" width="4" height="16" rx="1.2"/>
+          <rect x="14" y="4" width="4" height="16" rx="1.2"/>
+        </svg>
+        <span id="tts-play-text">Play</span>
+      </button>
     </div>
-
-    <!-- Right: progress counter -->
-    <div class="tts-counter" id="tts-counter" aria-live="polite">0%</div>
-
   </div>
 
-  <!-- Progress bar -->
-  <div class="tts-track">
-    <div class="tts-fill" id="tts-progress-bar"></div>
-  </div>
+  <div class="tts-track"><div class="tts-fill" id="tts-progress-bar"></div></div>
 </div>
-
-<style>
-/* ── Player shell ── */
-.tts-player {
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  background: #0f172a;
-  border-bottom: 2px solid #6366f1;
-  box-shadow: 0 2px 16px rgba(0,0,0,.4);
-  margin-bottom: 2rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-.tts-inner {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 10px 20px;
-  flex-wrap: wrap;
-}
-
-/* Meta */
-.tts-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  min-width: 160px;
-}
-.tts-headphone { color: #818cf8; flex-shrink: 0; }
-.tts-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #f1f5f9;
-  letter-spacing: .02em;
-  line-height: 1.2;
-}
-.tts-status {
-  font-size: 11px;
-  color: #64748b;
-  margin-top: 2px;
-  line-height: 1;
-}
-
-/* Controls row */
-.tts-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Stop button */
-.tts-icon-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: #ef4444;
-  color: #fff;
-  cursor: pointer;
-  transition: background .15s, color .15s;
-  flex-shrink: 0;
-}
-.tts-icon-btn:hover { background: #dc2626; color: #fff; }
-
-/* Play button — pill shaped */
-.tts-play-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 18px;
-  border-radius: 999px;
-  border: none;
-  background: #6366f1;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background .15s, transform .1s;
-  flex-shrink: 0;
-}
-.tts-play-btn:hover  { background: #4f46e5; transform: scale(1.03); }
-.tts-play-btn.active { background: #10b981; }
-.tts-play-text { white-space: nowrap; }
-
-/* Speed */
-.tts-speed {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #475569;
-}
-.tts-speed-select {
-  background: #1e293b;
-  color: #cbd5e1;
-  border: 1px solid #334155;
-  border-radius: 6px;
-  padding: 4px 6px;
-  font-size: 12px;
-  cursor: pointer;
-  outline: none;
-}
-.tts-speed-select:focus { border-color: #6366f1; }
-
-/* Counter */
-.tts-counter {
-  font-size: 12px;
-  font-weight: 600;
-  color: #475569;
-  min-width: 36px;
-  text-align: right;
-  white-space: nowrap;
-}
-
-/* Progress track */
-.tts-track {
-  height: 3px;
-  background: #1e293b;
-  width: 100%;
-}
-.tts-fill {
-  height: 3px;
-  width: 0%;
-  background: linear-gradient(90deg, #6366f1 0%, #10b981 100%);
-  transition: width .35s linear;
-}
-
-/* Reading highlight */
-.tts-reading {
-  background: rgba(99,102,241,.07) !important;
-  border-left: 3px solid #6366f1 !important;
-  padding-left: 10px !important;
-  border-radius: 0 4px 4px 0 !important;
-  transition: background .3s !important;
-}
-
-@media (max-width: 520px) {
-  .tts-inner   { gap: 8px; padding: 8px 12px; }
-  .tts-speed   { display: none; }
-  .tts-counter { display: none; }
-}
-</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var synth    = window.speechSynthesis;
+  var synth = window.speechSynthesis;
   var playerEl = document.getElementById('tts-player');
   if (!synth || !playerEl) return;
 
-  var playBtn    = document.getElementById('tts-play');
-  var playText   = document.getElementById('tts-play-text');
-  var stopBtn    = document.getElementById('tts-stop');
-  var playIcon   = document.getElementById('tts-play-icon');
-  var pauseIcon  = document.getElementById('tts-pause-icon');
-  var statusEl   = document.getElementById('tts-status');
-  var progressEl = document.getElementById('tts-progress-bar');
-  var counterEl  = document.getElementById('tts-counter');
-  var speedSel   = document.getElementById('tts-speed-select');
+  var playBtn = document.getElementById('tts-play'),
+      playText = document.getElementById('tts-play-text'),
+      stopBtn = document.getElementById('tts-stop'),
+      playIcon = document.getElementById('tts-play-icon'),
+      pauseIcon = document.getElementById('tts-pause-icon'),
+      statusEl = document.getElementById('tts-status'),
+      progressEl = document.getElementById('tts-progress-bar'),
+      speedBtns = playerEl.querySelectorAll('.tts-speed button');
 
-  // Find article content — try several selectors
-  var contentEl = document.querySelector('.entry-content')
-               || document.querySelector('.post-content')
-               || document.querySelector('article .content')
-               || document.querySelector('article')
-               || document.querySelector('main');
-
-  var paragraphs = [];
-  var currentIdx = 0;
-  var isPlaying  = false;
+  var contentEl = document.querySelector('.entry-content') || document.querySelector('article');
+  var paragraphs = [], currentIdx = 0, isPlaying = false, rate = 1;
 
   function init() {
-    if (!contentEl) { playerEl.style.display = 'none'; return; }
-    var nodes = contentEl.querySelectorAll('p, h1, h2, h3, h4, li, blockquote');
-    paragraphs = Array.from(nodes).filter(function (n) {
-      return n.textContent.trim().length > 15 && !n.closest('#tts-player');
+    if (!contentEl) { playerEl.hidden = true; return; }
+    // Skip interactive widgets and diagrams — reading their labels aloud is noise.
+    var nodes = contentEl.querySelectorAll('p, h2, h3, li, blockquote');
+    paragraphs = Array.prototype.filter.call(nodes, function (n) {
+      return n.textContent.trim().length > 15 &&
+             !n.closest('#tts-player') &&
+             !n.closest('pre') &&
+             !n.closest('[class*="-demo"], [class*="-calc"], [class*="-sim"], [class*="-explorer"], [class*="-check"]');
     });
-    if (!paragraphs.length) playerEl.style.display = 'none';
+    if (!paragraphs.length) playerEl.hidden = true;
   }
 
-  function setStatus(txt) { statusEl.textContent = txt; }
+  function setStatus(t) { statusEl.textContent = t; }
 
-  function updateProgress(idx) {
+  function progress(idx) {
     if (!paragraphs.length) return;
-    var pct = Math.round((idx / paragraphs.length) * 100);
-    progressEl.style.width = pct + '%';
-    counterEl.textContent  = pct + '%';
+    progressEl.style.width = Math.round((idx / paragraphs.length) * 100) + '%';
   }
 
   function clearHighlight() {
-    document.querySelectorAll('.tts-reading').forEach(function (el) {
-      el.classList.remove('tts-reading');
-    });
+    var els = document.querySelectorAll('.tts-reading');
+    Array.prototype.forEach.call(els, function (el) { el.classList.remove('tts-reading'); });
+  }
+
+  // `hidden` is an HTMLElement property, so assigning it on an <svg> sets a
+  // stray JS property and the icon never hides. Toggle the attribute instead.
+  function setHidden(el, h) {
+    if (h) el.setAttribute('hidden', ''); else el.removeAttribute('hidden');
+  }
+
+  function setPlayingUI(playing) {
+    isPlaying = playing;
+    playerEl.classList.toggle('is-playing', playing);
+    setHidden(playIcon, playing);
+    setHidden(pauseIcon, !playing);
+    playText.textContent = playing ? 'Pause' : 'Play';
+    playBtn.setAttribute('aria-label', playing ? 'Pause article' : 'Play article');
+    stopBtn.hidden = !playing && currentIdx === 0;
   }
 
   function speakFrom(idx) {
     synth.cancel();
     clearHighlight();
-    if (idx >= paragraphs.length) { stopReading(); setStatus('Finished ✓'); updateProgress(paragraphs.length); return; }
+    if (idx >= paragraphs.length) {
+      setPlayingUI(false); currentIdx = 0; progress(paragraphs.length);
+      setStatus('Finished'); return;
+    }
     currentIdx = idx;
-    var el   = paragraphs[idx];
-    var text = el.textContent.trim().replace(/\s+/g, ' ');
+    var el = paragraphs[idx];
     el.classList.add('tts-reading');
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    var utt  = new SpeechSynthesisUtterance(text);
-    utt.rate  = parseFloat(speedSel.value);
-    utt.pitch = 1;
-    utt.lang  = 'en-US';
-    updateProgress(idx + 1);
-    setStatus((idx + 1) + ' of ' + paragraphs.length + ' sections');
+    var utt = new SpeechSynthesisUtterance(el.textContent.trim().replace(/\s+/g, ' '));
+    utt.rate = rate; utt.pitch = 1; utt.lang = 'en-US';
+    progress(idx + 1);
+    setStatus('Section ' + (idx + 1) + ' of ' + paragraphs.length +
+              ' · ' + Math.round(((idx + 1) / paragraphs.length) * 100) + '%');
     utt.onend = function () { el.classList.remove('tts-reading'); if (isPlaying) speakFrom(idx + 1); };
     utt.onerror = function () { el.classList.remove('tts-reading'); if (isPlaying) speakFrom(idx + 1); };
     synth.speak(utt);
   }
 
-  function startReading() {
-    isPlaying = true;
-    playBtn.classList.add('active');
-    playIcon.style.display  = 'none';
-    pauseIcon.style.display = 'block';
-    playText.textContent    = 'Pause';
-    setStatus('Playing…');
-    speakFrom(currentIdx);
+  function play() { setPlayingUI(true); speakFrom(currentIdx); }
+
+  function pause() {
+    setPlayingUI(false); synth.cancel(); clearHighlight();
+    setStatus('Paused · section ' + (currentIdx + 1) + ' of ' + paragraphs.length);
+    stopBtn.hidden = false;
   }
 
-  function pauseReading() {
-    isPlaying = false;
-    playBtn.classList.remove('active');
-    playIcon.style.display  = 'block';
-    pauseIcon.style.display = 'none';
-    playText.textContent    = 'Play';
-    synth.cancel();
-    clearHighlight();
-    setStatus('Paused — click Play to resume');
-  }
-
-  function stopReading() {
-    isPlaying  = false;
-    currentIdx = 0;
-    playBtn.classList.remove('active');
-    playIcon.style.display  = 'block';
-    pauseIcon.style.display = 'none';
-    playText.textContent    = 'Play';
-    synth.cancel();
-    clearHighlight();
+  function stop() {
+    currentIdx = 0; setPlayingUI(false); synth.cancel(); clearHighlight();
     progressEl.style.width = '0%';
-    counterEl.textContent  = '0%';
-    setStatus('Click ▶ to start');
+    setStatus('Read aloud in your browser');
+    stopBtn.hidden = true;
   }
 
-  playBtn.addEventListener('click', function () { isPlaying ? pauseReading() : startReading(); });
-  stopBtn.addEventListener('click', stopReading);
-  speedSel.addEventListener('change', function () { if (isPlaying) speakFrom(currentIdx); });
+  playBtn.addEventListener('click', function () { isPlaying ? pause() : play(); });
+  stopBtn.addEventListener('click', stop);
+
+  Array.prototype.forEach.call(speedBtns, function (b) {
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(speedBtns, function (x) { x.classList.remove('on'); });
+      this.classList.add('on');
+      rate = parseFloat(this.getAttribute('data-rate'));
+      if (isPlaying) speakFrom(currentIdx);   // restart the section at the new rate
+    });
+  });
+
   window.addEventListener('beforeunload', function () { synth.cancel(); });
-  document.addEventListener('visibilitychange', function () { if (document.hidden && isPlaying) pauseReading(); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden && isPlaying) pause(); });
 
   init();
 });
