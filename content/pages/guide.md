@@ -74,6 +74,7 @@ Harder problems, and the ones that come up most often for senior roles.
 18. [Design Nearby Friends](/2026/06/design-nearby-friends/) — the same problem with moving data: 333K location updates a second becoming 13.3 million, WebSocket fan-out, and Redis Pub/Sub as a routing layer. Includes an interactive fan-out calculator.
 19. [Design Google Maps](/2026/06/design-google-maps/) — 100 petabytes of map tiles, a road graph too large for memory, and the CDN economics that decide the whole design. Includes an interactive tile explorer.
 20. [Design a Distributed Message Queue](/2026/06/design-distributed-message-queue/) — why an append-only file beats a database, how partitions make ordering a tunable choice, and what exactly-once actually costs. Includes an interactive delivery-semantics explorer.
+21. [Design a Metrics Monitoring and Alerting System](/2026/06/design-metrics-monitoring-alerting/) — time-series storage, pull versus push collection, Gorilla compression, and the cardinality bomb that kills monitoring systems. Includes an interactive cardinality calculator.
 
 ---
 
