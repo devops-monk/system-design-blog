@@ -342,6 +342,48 @@ def art_replay():
     return f'<svg width="640" height="420" viewBox="0 0 640 420">{"".join(s)}</svg>'
 
 
+
+def art_orderbook():
+    """A limit order book with the best ask being consumed."""
+    s = []
+    x0, w, rowh = 40, 380, 34
+    asks = [("100.13", [190, 200], False), ("100.12", [300], False),
+            ("100.11", [900], False), ("100.10", [260, 400, 1100, 100], True)]
+    bids = [("100.08", [500, 600, 900]), ("100.07", [100, 700]), ("100.06", [800, 300, 200])]
+    y = 76
+    s.append(f'<text x="{x0}" y="{y-10}" fill="{PINK}" font-size="12" letter-spacing="1.4">ASKS</text>')
+    for p, sizes, hot in asks:
+        col = RED if hot else PINK
+        s.append(f'<rect x="{x0}" y="{y}" width="{w}" height="{rowh-6}" fill="{col}" opacity="{.3 if hot else .13}" rx="3"/>')
+        s.append(f'<text x="{x0+10}" y="{y+19}" fill="#cbd5e1" font-size="14">{p}</text>')
+        bx = x0 + 84
+        for sz in sizes:
+            bw = 26 + len(str(sz)) * 8
+            s.append(f'<rect x="{bx}" y="{y+5}" width="{bw}" height="{rowh-16}" fill="{col}" opacity=".45" rx="2"/>')
+            s.append(f'<text x="{bx+bw/2}" y="{y+19}" fill="#0b1220" font-size="11" font-weight="700" text-anchor="middle">{sz}</text>')
+            bx += bw + 5
+        if hot:
+            s.append(f'<text x="{x0+w+12}" y="{y+19}" fill="{RED}" font-size="12">consumed</text>')
+        y += rowh
+    y += 6
+    s.append(f'<rect x="{x0}" y="{y}" width="{w}" height="26" fill="none" stroke="{FAINT}" stroke-width="1.2" stroke-dasharray="4 3" rx="3"/>')
+    s.append(f'<text x="{x0+w/2}" y="{y+18}" fill="{DIM}" font-size="12" text-anchor="middle">spread widens 0.02 &#8594; 0.03</text>')
+    y += 40
+    s.append(f'<text x="{x0}" y="{y-8}" fill="{GREEN}" font-size="12" letter-spacing="1.4">BIDS</text>')
+    for p, sizes in bids:
+        s.append(f'<rect x="{x0}" y="{y}" width="{w}" height="{rowh-6}" fill="{GREEN}" opacity=".13" rx="3"/>')
+        s.append(f'<text x="{x0+10}" y="{y+19}" fill="#cbd5e1" font-size="14">{p}</text>')
+        bx = x0 + 84
+        for sz in sizes:
+            bw = 26 + len(str(sz)) * 8
+            s.append(f'<rect x="{bx}" y="{y+5}" width="{bw}" height="{rowh-16}" fill="{GREEN}" opacity=".4" rx="2"/>')
+            s.append(f'<text x="{bx+bw/2}" y="{y+19}" fill="#0b1220" font-size="11" font-weight="700" text-anchor="middle">{sz}</text>')
+            bx += bw + 5
+        y += rowh
+    s.append(f'<text x="{x0}" y="404" fill="{DIM}" font-size="15">a big order walks the book</text>')
+    return f'<svg width="640" height="420" viewBox="0 0 640 420">{"".join(s)}</svg>'
+
+
 COVERS = [
     ("proximity-service", "VOLUME 2 · CH 1", "Design a<br>Proximity Service", 58,
      "200 million businesses, 500 metres, under 100ms.", "two B-tree indexes are <i>not</i> a 2D index", art_quadtree),
@@ -367,6 +409,8 @@ COVERS = [
      "Ten transactions per second, and the hardest correctness problem yet.", "a lost cent is <i>structurally</i> impossible", art_ledger),
     ("digital-wallet", "VOLUME 2 · CH 12", "Design a<br>Digital Wallet", 58,
      "Four designs, each one fixing what the last one broke.", "store the <i>facts</i>, derive the state", art_replay),
+    ("stock-exchange", "VOLUME 2 · CH 13", "Design a<br>Stock Exchange", 58,
+     "The one design in this series that scales in, not out.", "a network hop costs more than the <i>machine</i>", art_orderbook),
 ]
 
 def build(only=None):
