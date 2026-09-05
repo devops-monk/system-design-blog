@@ -1,17 +1,15 @@
 ---
 title: "System Design — The Complete Guide"
-description: "A complete, chapter-by-chapter system design course — from a single server to millions of users, then fifteen real architectures built from first principles. Every article includes diagrams, capacity numbers, and the trade-offs interviewers actually probe."
+description: "A complete, chapter-by-chapter system design course — from a single server to millions of users, then twenty real architectures built from first principles. Every article includes diagrams, capacity numbers, and the trade-offs interviewers actually probe."
 author: Abhay
 type: page
 date: 2026-06-03T00:00:00+00:00
 url: /guide/
 ---
 
-## System Design — The Complete Guide
-
 This series teaches system design the way it actually gets used — not as a list of buzzwords, but as a small set of mechanisms you combine differently for every problem. Every article works through a real design end to end: requirements, capacity estimates, a high-level architecture, then the deep dive where the interesting trade-offs live.
 
-**What you'll learn:** How to scale a single server to millions of users, how to size a system on the back of an envelope, and how to design fifteen real architectures — rate limiters, key-value stores, news feeds, chat, video, and file sync — knowing not just what the design is, but why every alternative was rejected.
+**What you'll learn:** How to scale a single server to millions of users, how to size a system on the back of an envelope, and how to design twenty real architectures — rate limiters, key-value stores, news feeds, chat, video, file sync, maps, message queues and monitoring — knowing not just what the design is, but why every alternative was rejected.
 
 **Who it's for:** Engineers preparing for system design interviews, and anyone who wants to understand how large-scale systems genuinely work. No prior distributed systems background assumed.
 
