@@ -73,6 +73,7 @@ Harder problems, and the ones that come up most often for senior roles.
 19. [Design Google Maps](/2026/06/design-google-maps/) — 100 petabytes of map tiles, a road graph too large for memory, and the CDN economics that decide the whole design. Includes an interactive tile explorer.
 20. [Design a Distributed Message Queue](/2026/06/design-distributed-message-queue/) — why an append-only file beats a database, how partitions make ordering a tunable choice, and what exactly-once actually costs. Includes an interactive delivery-semantics explorer.
 21. [Design a Metrics Monitoring and Alerting System](/2026/06/design-metrics-monitoring-alerting/) — time-series storage, pull versus push collection, Gorilla compression, and the cardinality bomb that kills monitoring systems. Includes an interactive cardinality calculator.
+22. [Design an Ad Click Event Aggregation System](/2026/06/design-ad-click-aggregation/) — event time versus processing time, watermarks, and exactly-once as a genuine requirement rather than a luxury. Includes an interactive watermark simulator.
 
 ---
 
