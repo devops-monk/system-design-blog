@@ -1,4 +1,4 @@
-<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - Design a Key-Value Store"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - A complete beginner-friendly guide to designing a distributed key-value store — covering CAP theorem, quorum consensus, vector clocks, gossip protocol, Merkle trees, and the write/read paths inspired by DynamoDB and Cassandra."><title>System Design - Design a Key-Value Store</title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/design-a-key-value-store/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="Design a Key-Value Store"><meta property="og:description" content="A complete beginner-friendly guide to designing a distributed key-value store — covering CAP theorem, quorum consensus, vector clocks, gossip protocol, Merkle trees, and the write/read paths inspired by DynamoDB and Cassandra."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T20:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T20:00:00+00:00"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Key-Value-Store"><meta property="article:tag" content="Dynamodb"><meta property="article:tag" content="Cassandra"><meta property="article:tag" content="Cap-Theorem"><meta property="article:tag" content="Distributed-Systems"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"Design a Key-Value Store","headline":"Design a Key-Value Store","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/design-a-key-value-store/","description":"A complete beginner-friendly guide to designing a distributed key-value store — covering CAP theorem, quorum consensus, vector clocks, gossip protocol, Merkle trees, and the write/read paths inspired by DynamoDB and Cassandra.","wordCount":"5017","keywords":["system-design","key-value-store","dynamodb","cassandra","cap-theorem","distributed-systems"],"datePublished":"2026-05-30T20:00:00Z","dateModified":"2026-05-30T20:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/design-a-key-value-store/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/design-a-key-value-store/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js defer></script><script src=/assets/js/search.js defer></script><script src=/assets/js/enhancements.js defer></script><script type=module>
+<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - Design a Key-Value Store"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - A complete beginner-friendly guide to designing a distributed key-value store — covering CAP theorem, quorum consensus, vector clocks, gossip protocol, Merkle trees, and the write/read paths inspired by DynamoDB and Cassandra."><title>System Design - Design a Key-Value Store</title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/design-a-key-value-store/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="Design a Key-Value Store"><meta property="og:description" content="A complete beginner-friendly guide to designing a distributed key-value store — covering CAP theorem, quorum consensus, vector clocks, gossip protocol, Merkle trees, and the write/read paths inspired by DynamoDB and Cassandra."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T20:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T20:00:00+00:00"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Key-Value-Store"><meta property="article:tag" content="Dynamodb"><meta property="article:tag" content="Cassandra"><meta property="article:tag" content="Cap-Theorem"><meta property="article:tag" content="Distributed-Systems"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"Design a Key-Value Store","headline":"Design a Key-Value Store","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/design-a-key-value-store/","description":"A complete beginner-friendly guide to designing a distributed key-value store — covering CAP theorem, quorum consensus, vector clocks, gossip protocol, Merkle trees, and the write/read paths inspired by DynamoDB and Cassandra.","wordCount":"5052","keywords":["system-design","key-value-store","dynamodb","cassandra","cap-theorem","distributed-systems"],"datePublished":"2026-05-30T20:00:00Z","dateModified":"2026-05-30T20:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/design-a-key-value-store/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/design-a-key-value-store/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js defer></script><script src=/assets/js/search.js defer></script><script src=/assets/js/enhancements.js defer></script><script type=module>
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 
       
@@ -173,7 +173,11 @@ get(&#34;session:abc123&#34;)   → &#34;{token: xyz, expires: 1748649600}&#34;
     end
 </pre><p><strong>Why consistent hashing for partitioning?</strong></p><ul><li><strong>Automatic scaling</strong> — add a node → only that node&rsquo;s adjacent keys migrate. Zero manual resharding.</li><li><strong>Heterogeneity</strong> — powerful servers get more virtual nodes → handle more keys automatically.</li><li><strong>Minimal data movement</strong> — removing a node moves only <code>k/n</code> keys on average.</li></ul><hr><h2 id=step-5--data-replication-for-high-availability>Step 5 — Data Replication for High Availability</h2><p>Storing each key on only one server is asking for data loss. Servers crash. Disks fail. Data centers flood.</p><p>The solution: <strong>replicate every key on N servers</strong> (where N is a configurable replication factor, typically 3).</p><p><strong>The replication strategy:</strong> After hashing a key to its position, walk <strong>clockwise</strong> on the ring and store copies on the next <strong>N unique physical servers</strong>.</p><pre class=mermaid>sequenceDiagram
     participant Client
-    participant Coord as "Coordinator (Node 0)"participant N1 as "Node 1 (Primary)"participant N2 as "Node 2 (Replica 1)"participant N3 as "Node 3 (Replica 2)"Client->>Coord: put("user:1001", "Alice")
+    participant Coord as Coordinator (Node 0)
+    participant N1 as Node 1 (Primary)
+    participant N2 as Node 2 (Replica 1)
+    participant N3 as Node 3 (Replica 2)
+    Client->>Coord: put("user:1001", "Alice")
     Note over Coord: Hash key → Node 1 position
     Note over Coord: Walk clockwise for N=3 unique servers
     Coord->>N1: store("user:1001", "Alice")
@@ -188,7 +192,11 @@ get(&#34;session:abc123&#34;)   → &#34;{token: xyz, expires: 1748649600}&#34;
     Note over N1,N3: If N1 crashes, N2 and N3 still have it
 </pre><p><strong>Critical rule with virtual nodes:</strong> If <code>node1_vnode0</code> and <code>node1_vnode1</code> are both virtual nodes for Node 1, we skip the second one during replication — we want N <em>physical</em> servers to hold copies, not N virtual nodes on the same machine.</p><p><strong>For maximum resilience</strong>, replicas should be placed in <strong>different data centers</strong>. A power outage, flood, or natural disaster can take down an entire data center. Having replicas in Virginia, Ireland, and Tokyo means one disaster can never destroy your data.</p><hr><h2 id=step-6--quorum-consensus-tuning-consistency>Step 6 — Quorum Consensus: Tuning Consistency</h2><p>Here&rsquo;s where things get truly interesting. With 3 replicas of every key, how do reads and writes actually work?</p><p><strong>Three variables define your consistency level:</strong></p><ul><li><strong>N</strong> = number of replicas (typically 3)</li><li><strong>W</strong> = write quorum — how many replicas must acknowledge a write before it&rsquo;s considered successful</li><li><strong>R</strong> = read quorum — how many replicas must respond to a read</li></ul><pre class=mermaid>sequenceDiagram
     participant Client
-    participant Coord as "Coordinator"participant S0 as "Server 0"participant S1 as "Server 1"participant S2 as "Server 2"Note over Coord,S2: N=3, W=2 (write quorum)
+    participant Coord as Coordinator
+    participant S0 as Server 0
+    participant S1 as Server 1
+    participant S2 as Server 2
+    Note over Coord,S2: N=3, W=2 (write quorum)
     Client->>Coord: put(key1, val1)
     Coord->>S0: put(key1, val1)
     Coord->>S1: put(key1, val1)
@@ -200,7 +208,9 @@ get(&#34;session:abc123&#34;)   → &#34;{token: xyz, expires: 1748649600}&#34;
     Note over S2: S2 might still be writing... that's OK
 </pre><p><strong>The key insight:</strong> <code>W=2</code> does NOT mean data is only written to 2 servers. It&rsquo;s still sent to all 3. It means we only <em>wait</em> for 2 acknowledgements before declaring success. The third server eventually catches up.</p><h3 id=tuning-the-w-r-n-knobs>Tuning the W, R, N Knobs</h3><pre class=mermaid>quadrantChart
     title Consistency vs Latency Tradeoffs
-    x-axis "Low Latency" --> "High Latency"y-axis "Eventual Consistency" --> "Strong Consistency"quadrant-1 Strong but slow
+    x-axis "Low Latency" --> "High Latency"
+    y-axis "Eventual Consistency" --> "Strong Consistency"
+    quadrant-1 Strong but slow
     quadrant-2 Strong AND fast - impossible
     quadrant-3 Weak and fast - good for reads
     quadrant-4 Medium tradeoff
@@ -228,7 +238,15 @@ get(&#34;session:abc123&#34;)   → &#34;{token: xyz, expires: 1748649600}&#34;
     style EVENTUAL fill:#10B981,stroke:#047857,color:#fff
     style WEAK fill:#F59E0B,stroke:#B45309,color:#fff
 </pre><p>For our key-value store, we recommend <strong>eventual consistency</strong> — the same choice made by Dynamo and Cassandra. Here&rsquo;s the reasoning:</p><ul><li>Blocking writes until all replicas agree (strong consistency) can make the whole system unavailable if just one replica is temporarily slow</li><li>In practice, &ldquo;eventual&rdquo; usually means milliseconds to seconds — barely noticeable to users</li><li>The conflict resolution mechanisms (coming up next) handle the rare cases where replicas diverge</li></ul><hr><h2 id=step-8--inconsistency-resolution-vector-clocks>Step 8 — Inconsistency Resolution: Vector Clocks</h2><p>With eventual consistency, here&rsquo;s the nightmare scenario: two clients update the same key simultaneously on two different replicas. Now the replicas have different values. Which one wins?</p><p><strong>First, let&rsquo;s see the problem:</strong></p><pre class=mermaid>sequenceDiagram
-    participant Client1 as "Client 1"participant Client2 as "Client 2"participant N1 as "Node n1"participant N2 as "Node n2"Note over N1,N2: Initial state — name: "john"Client1->>N1: get("name") → "john"Client2->>N2: get("name") → "john"Note over Client1,Client2: Both read "john". Now both update simultaneously.
+    participant Client1 as Client 1
+    participant Client2 as Client 2
+    participant N1 as Node n1
+    participant N2 as Node n2
+    Note over N1,N2: Initial state — name: "john"
+    Client1->>N1: get("name") → "john"
+    Client2->>N2: get("name") → "john"
+
+    Note over Client1,Client2: Both read "john". Now both update simultaneously.
 
     Client1->>N1: put("name", "johnSanFrancisco")
     Client2->>N2: put("name", "johnNewYork")
@@ -256,10 +274,20 @@ get(&#34;session:abc123&#34;)   → &#34;{token: xyz, expires: 1748649600}&#34;
     D3 --> D5
     D4 --> D5
 </pre><p><strong>How do we detect conflicts?</strong></p><p>Vector clock <code>X</code> is an <strong>ancestor</strong> of <code>Y</code> (no conflict) if every version counter in <code>X</code> is less than or equal to the corresponding counter in <code>Y</code>.</p><ul><li><code>D([s0,1],[s1,1])</code> is an ancestor of <code>D([s0,1],[s1,2])</code> → <strong>no conflict</strong>, D2 supersedes D1</li></ul><p>Vector clock <code>X</code> is a <strong>sibling</strong> of <code>Y</code> (conflict exists) if any counter in <code>X</code> is less than the corresponding in <code>Y</code> AND any counter in <code>X</code> is greater than the corresponding in <code>Y</code>.</p><ul><li><code>D([s0,1],[s1,2])</code> vs <code>D([s0,2],[s1,1])</code> → <strong>CONFLICT</strong> — s0 saw something s1 didn&rsquo;t, and vice versa</li></ul><p><strong>Downsides of vector clocks:</strong></p><ol><li><strong>Client complexity</strong> — the client must implement conflict resolution logic. Not the server.</li><li><strong>Growing clock size</strong> — each write adds a <code>[server, version]</code> pair. Long history = large metadata. Fix: set a length threshold and remove the oldest entries. Dynamo does this in production.</li></ol><hr><h2 id=step-9--failure-detection-gossip-protocol>Step 9 — Failure Detection: Gossip Protocol</h2><p>In a distributed system, you can&rsquo;t trust a single node&rsquo;s report that another node is down. That node might be wrong, or lying, or suffering its own network issues.</p><p><strong>The rule:</strong> A node is only marked offline when at least <strong>two independent sources</strong> confirm it hasn&rsquo;t been heard from.</p><p><strong>All-to-all multicasting</strong> (every node pings every other node) would work but doesn&rsquo;t scale. With 1000 nodes, that&rsquo;s 1,000,000 pings per round. Too much network overhead.</p><p><strong>Gossip protocol</strong> is the elegant alternative — inspired by how rumors spread in real life:</p><pre class=mermaid>sequenceDiagram
-    participant S0 as "Server 0"participant S1 as "Server 1"participant S2 as "Server 2 (suspect)"participant S3 as "Server 3"Note over S0,S3: Each server keeps a membership table
+    participant S0 as Server 0
+    participant S1 as Server 1
+    participant S2 as Server 2 (suspect)
+    participant S3 as Server 3
+    Note over S0,S3: Each server keeps a membership table
     Note over S0: S0's table shows S2's heartbeat stuck at 12:00 old
 
-    S0->>S1: Gossip: "S2 heartbeat hasn't moved!"S0->>S3: Gossip: "S2 heartbeat hasn't moved!"S1->>S3: Gossip: "S0 says S2 looks dead"S3->>S1: Confirm: "I also haven't heard S2 heartbeat"Note over S0,S3: Multiple nodes confirm S2 is silent
+    S0->>S1: Gossip: "S2 heartbeat hasn't moved!"
+    S0->>S3: Gossip: "S2 heartbeat hasn't moved!"
+
+    S1->>S3: Gossip: "S0 says S2 looks dead"
+    S3->>S1: Confirm: "I also haven't heard S2 heartbeat"
+
+    Note over S0,S3: Multiple nodes confirm S2 is silent
     S0->>S0: Mark S2 as OFFLINE
     S1->>S1: Mark S2 as OFFLINE
     S3->>S3: Mark S2 as OFFLINE
@@ -276,7 +304,12 @@ get(&#34;session:abc123&#34;)   → &#34;{token: xyz, expires: 1748649600}&#34;
     end
 </pre><p><strong>Why gossip is brilliant:</strong> Information propagates exponentially. Each round, each node spreads what it knows to random neighbors. Within <code>log(N)</code> rounds, every node knows about every failure. For 1000 nodes, that&rsquo;s just 10 gossip rounds. No central coordinator, no single point of failure — completely decentralized.</p><hr><h2 id=step-10--handling-failures>Step 10 — Handling Failures</h2><p>Once we detect failures, we need strategies to deal with them. Three levels of failure need different solutions.</p><h3 id=temporary-failures-sloppy-quorum--hinted-handoff>Temporary Failures: Sloppy Quorum + Hinted Handoff</h3><p>Imagine server S2 goes offline temporarily. With strict quorum (W=2, N=3), writes would need responses from S0 and S1 — but what if S1 is also slow right now? Do we block the write indefinitely?</p><p><strong>Sloppy quorum</strong> says: instead of requiring the quorum from the &ldquo;correct&rdquo; servers, pick the <strong>first W healthy servers</strong> available on the ring — even if they&rsquo;re not the designated replicas.</p><pre class=mermaid>sequenceDiagram
     participant Client
-    participant Coord as "Coordinator"participant S0 as "Server 0 ✓"participant S1 as "Server 1 ✓"participant S2 as "Server 2 ✗ offline"participant S3 as "Server 3 ✓ (substitute)"Client->>Coord: put(key1, val1)
+    participant Coord as Coordinator
+    participant S0 as Server 0 ✓
+    participant S1 as Server 1 ✓
+    participant S2 as Server 2 ✗ offline
+    participant S3 as Server 3 ✓ (substitute)
+    Client->>Coord: put(key1, val1)
     Note over Coord: Normal replicas: S0, S1, S2
     Note over Coord: S2 is offline! Use sloppy quorum.
     Coord->>S0: put(key1, val1) — normal replica
@@ -287,7 +320,9 @@ get(&#34;session:abc123&#34;)   → &#34;{token: xyz, expires: 1748649600}&#34;
     S3-->>Coord: ACK ✓ (hints: this belongs to S2)
     Coord-->>Client: Write successful ✓
 
-    Note over S3: S3 stores a hint: "this data belongs to S2"Note over S2: Later — S2 comes back online!
+    Note over S3: S3 stores a hint: "this data belongs to S2"
+
+    Note over S2: Later — S2 comes back online!
     S3->>S2: Hinted handoff — send S2's data back
     S2-->>S3: Received, thanks
     S3->>S3: Delete the hint copy
@@ -418,7 +453,11 @@ get(&#34;session:abc123&#34;)   → &#34;{token: xyz, expires: 1748649600}&#34;
     end
 </pre><p>No central coordinator. No master node to be a bottleneck. Any node can serve any request. The system grows by just adding more nodes to the ring — no configuration changes, no downtime, no resharding scripts.</p><hr><h2 id=step-12--the-write-path-how-data-gets-stored>Step 12 — The Write Path: How Data Gets Stored</h2><p>When a client writes <code>put("user:1001", "Alice Chen")</code>, what happens inside the node?</p><pre class=mermaid>sequenceDiagram
     participant Client
-    participant Node as "Node (Coordinator)"participant CommitLog as "Commit Log (disk)"participant MemCache as "Memory Cache (MemTable)"participant SSTable as "SSTable Files (disk)"Client->>Node: put("user:1001", "Alice Chen")
+    participant Node as Node (Coordinator)
+    participant CommitLog as Commit Log (disk)
+    participant MemCache as Memory Cache (MemTable)
+    participant SSTable as SSTable Files (disk)
+    Client->>Node: put("user:1001", "Alice Chen")
 
     Node->>CommitLog: ① Write to commit log first!
     CommitLog-->>Node: written to disk (durable)

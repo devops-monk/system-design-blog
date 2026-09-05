@@ -1,4 +1,4 @@
-<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - A Framework for System Design Interviews: The Complete Playbook"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't."><title>System Design - A Framework for System Design Interviews: The Complete Playbook</title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="A Framework for System Design Interviews: The Complete Playbook"><meta property="og:description" content="Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T06:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T06:00:00+00:00"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Interviews"><meta property="article:tag" content="Architecture"><meta property="article:tag" content="Scalability"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"A Framework for System Design Interviews: The Complete Playbook","headline":"A Framework for System Design Interviews: The Complete Playbook","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/","description":"Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't.","wordCount":"3938","keywords":["system-design","interviews","architecture","scalability"],"datePublished":"2026-05-30T06:00:00Z","dateModified":"2026-05-30T06:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js defer></script><script src=/assets/js/search.js defer></script><script src=/assets/js/enhancements.js defer></script><script type=module>
+<!doctype html><html lang=en-US prefix="og: http://ogp.me/ns#"><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=title property="title" content="System Design - A Framework for System Design Interviews: The Complete Playbook"><meta name=description property="description" content="In-depth system design tutorials — from zero to millions of users. Written for engineers who want to understand how large-scale systems actually work. - Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't."><title>System Design - A Framework for System Design Interviews: The Complete Playbook</title><meta property="og:url" content="https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"><meta property="og:site_name" content="System Design"><meta property="og:title" content="A Framework for System Design Interviews: The Complete Playbook"><meta property="og:description" content="Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-30T06:00:00+00:00"><meta property="article:modified_time" content="2026-05-30T06:00:00+00:00"><meta property="article:tag" content="System-Design"><meta property="article:tag" content="Interviews"><meta property="article:tag" content="Architecture"><meta property="article:tag" content="Scalability"><link rel=stylesheet href=/assets/css/custom-fonts.css type=text/css media=all><link rel=stylesheet href=/assets/css/style.css type=text/css media=all><link rel=stylesheet href=/assets/css/genericons.css type=text/css media=all><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css media=all><link rel=stylesheet href=/assets/css/socicon.css type=text/css media=all><link rel=stylesheet href=/assets/css/social-logos/social-logos.css type=text/css media=all><link rel=stylesheet href=/assets/css/jetpack.css type=text/css media=all><link rel=stylesheet href=/assets/css/custom-styles.css type=text/css media=all><script type=text/javascript src=/assets/js/jquery-1.12.4.min.js></script><script type=text/javascript src=/assets/js/html5shiv.min.js></script><script type=text/javascript src=/assets/js/navigation.js></script><link rel="shortcut icon" href=/favicon.png type=image/x-icon><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","name":"A Framework for System Design Interviews: The Complete Playbook","headline":"A Framework for System Design Interviews: The Complete Playbook","inLanguage":"en-US","url":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/","description":"Master the 4-step framework for any system design interview — from clarifying requirements to deep diving into architecture. Includes worked examples, Mermaid diagrams, time management tips, and the exact dos and don'ts that separate candidates who get hired from those who don't.","wordCount":"3957","keywords":["system-design","interviews","architecture","scalability"],"datePublished":"2026-05-30T06:00:00Z","dateModified":"2026-05-30T06:00:00Z","author":{"@type":"Person","name":"Abhay"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"},"publisher":{"@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/2026/05/framework-for-system-design-interviews/"}},{"@context":"https://schema.org","@type":"Organization","name":"System Design by Abhay","url":"https://system-design.devops-monk.com/","sameAs":["https://twitter.com/","https://github.com/abhi15sep","https://www.linkedin.com/in/abhay-singh-831997b5"]}]}</script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js defer></script><script src=/assets/js/search.js defer></script><script src=/assets/js/enhancements.js defer></script><script type=module>
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 
       
@@ -116,16 +116,16 @@
     axisFormat %M min
 
     section Step 1
-    Understand & Scope (3–10 min)         :active, s1, 00, 10m
+    Understand & Scope (3–10 min) :active, s1, 00, 10m
 
     section Step 2
-    High-Level Design (10–15 min)         :active, s2, 10, 15m
+    High-Level Design (10–15 min) :active, s2, 10, 15m
 
     section Step 3
-    Design Deep Dive (10–25 min)          :active, s3, 25, 15m
+    Design Deep Dive (10–25 min) :active, s3, 25, 15m
 
     section Step 4
-    Wrap Up (3–5 min)                     :active, s4, 40, 5m
+    Wrap Up (3–5 min) :active, s4, 40, 5m
 </pre><pre class=mermaid>flowchart TD
     START(["Question given\n'Design Twitter'"])
 
@@ -286,14 +286,14 @@
     style NFC fill:#EC4899,color:#fff
     style GDB fill:#14B8A6,color:#fff
 </pre><h3 id=high-level-design-news-feed-system--feed-reading>High-level design: News Feed System — Feed Reading</h3><p>When a user opens their app and loads their feed:</p><pre class=mermaid>sequenceDiagram
-    actor U as  User
-    participant LB as  Load Balancer
-    participant WS as  Web Server
-    participant NFS as  News Feed Service
-    participant NFC as  Feed Cache (Redis)
-    participant UC as  User Cache
-    participant PC as  Post Cache
-    participant DB as  Database
+    actor U as User
+    participant LB as Load Balancer
+    participant WS as Web Server
+    participant NFS as News Feed Service
+    participant NFC as Feed Cache (Redis)
+    participant UC as User Cache
+    participant PC as Post Cache
+    participant DB as Database
 
     U->>LB: GET /v1/me/feed
     LB->>WS: route request
@@ -398,7 +398,10 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
         timestamp created_at
     }
 
-    USER ||--o{ POST : "creates"USER ||--o{ FRIENDSHIP : "has"USER ||--o{ NEWSFEED : "sees"POST ||--o{ NEWSFEED : "appears in"
+    USER ||--o{ POST : "creates"
+    USER ||--o{ FRIENDSHIP : "has"
+    USER ||--o{ NEWSFEED : "sees"
+    POST ||--o{ NEWSFEED : "appears in"
 </pre><p>Key design decisions to discuss:</p><ul><li><code>post_id</code> uses <strong>Snowflake ID</strong> (Twitter&rsquo;s algorithm) — a time-sortable 64-bit integer that works across distributed systems without coordination</li><li><code>NEWSFEED</code> table is actually a Redis sorted set in production (score = timestamp), not a SQL table</li><li><code>FRIENDSHIP</code> table needs indexes on both <code>user_id</code> and <code>friend_id</code> for bidirectional lookup</li></ul><hr><h2 id=step-4-wrap-up>Step 4: Wrap Up</h2><p><em>Time: 3–5 minutes</em></p><p>Don&rsquo;t just stop and say &ldquo;I&rsquo;m done.&rdquo; The wrap-up is an opportunity to leave a strong final impression.</p><pre class=mermaid>flowchart LR
     W1["Recap the design\n\nQuickly walk through\nwhat you built.\nHelps interviewer remember\nyour key decisions."]
 
@@ -420,17 +423,36 @@ Conclusion: we need DB sharding later at 100M+ users, not now.
 
     Note over C,I: ⏱ 0:00 — Question given
 
-    I->>C: "Design a news feed system like Facebook"Note over C,I: ⏱ 0:00–0:10 — Step 1: Clarify
+    I->>C: "Design a news feed system like Facebook"
+
+    Note over C,I: ⏱ 0:00–0:10 — Step 1: Clarify
     C->>I: Ask 5–7 targeted questions
     I->>C: Answer each one
-    C->>I: "Let me write down my assumptions..."C->>I: "Recap: 10M DAU, chronological feed, media posts. Correct?"I->>C: "Yes, let's proceed"Note over C,I: ⏱ 0:10–0:25 — Step 2: High-Level Design
-    C->>I: "I'll start with the high-level components..."C->>I: Draws boxes on whiteboard
-    C->>I: "For feed publishing, I'm thinking a Fanout Service..."I->>C: "Interesting, tell me more about the fanout"C->>I: Quick back-of-envelope: "230 write QPS — single DB is fine"I->>C: "Good. What about the read path?"Note over C,I: ⏱ 0:25–0:40 — Step 3: Deep Dive
-    C->>I: "Let me deep dive into the fanout trade-offs..."C->>I: Explains push vs pull vs hybrid
-    I->>C: "How do you handle the celebrity problem?"C->>I: "Great question — for users with 1M+ followers we..."I->>C: "What does your data model look like?"C->>I: Draws schema, discusses indexes and ID generation
+    C->>I: "Let me write down my assumptions..."
+    C->>I: "Recap: 10M DAU, chronological feed, media posts. Correct?"
+    I->>C: "Yes, let's proceed"
+
+    Note over C,I: ⏱ 0:10–0:25 — Step 2: High-Level Design
+    C->>I: "I'll start with the high-level components..."
+    C->>I: Draws boxes on whiteboard
+    C->>I: "For feed publishing, I'm thinking a Fanout Service..."
+    I->>C: "Interesting, tell me more about the fanout"
+    C->>I: Quick back-of-envelope: "230 write QPS — single DB is fine"
+    I->>C: "Good. What about the read path?"
+
+    Note over C,I: ⏱ 0:25–0:40 — Step 3: Deep Dive
+    C->>I: "Let me deep dive into the fanout trade-offs..."
+    C->>I: Explains push vs pull vs hybrid
+    I->>C: "How do you handle the celebrity problem?"
+    C->>I: "Great question — for users with 1M+ followers we..."
+    I->>C: "What does your data model look like?"
+    C->>I: Draws schema, discusses indexes and ID generation
 
     Note over C,I: ⏱ 0:40–0:45 — Step 4: Wrap Up
-    C->>I: "Let me quickly recap what we've built..."C->>I: "Main bottleneck is fanout at scale, here's how I'd handle it..."C->>I: "If we scaled to 100M DAU, first change would be..."I->>C: "Great, thank you — any questions for me?"
+    C->>I: "Let me quickly recap what we've built..."
+    C->>I: "Main bottleneck is fanout at scale, here's how I'd handle it..."
+    C->>I: "If we scaled to 100M DAU, first change would be..."
+    I->>C: "Great, thank you — any questions for me?"
 </pre><hr><h2 id=dos-and-donts-the-complete-list>Dos and Don&rsquo;ts: The Complete List</h2><p>These are the exact behaviours that separate candidates who get offers from those who don&rsquo;t.</p><h3 id=-always-do-these>✅ Always Do These</h3><pre class=mermaid>flowchart TD
     subgraph DOS["✓ DOs"]
         D1["Always ask for clarification\nDon't assume your assumption is correct"]
