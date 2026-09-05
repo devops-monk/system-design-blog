@@ -312,6 +312,36 @@ def art_ledger():
     return f'<svg width="640" height="420" viewBox="0 0 640 420">{"".join(s)}</svg>'
 
 
+
+def art_replay():
+    """An immutable event log with derived state recomputed beneath it."""
+    s = []
+    x0, y, bw, gap = 34, 120, 52, 8
+    labels = ["+100", "+50", "-30", "+20", "-45", "-10", "+25", "+60", "-15", "-5"]
+    for i, lab in enumerate(labels):
+        x = x0 + i * (bw + gap)
+        on = i < 6
+        col = GREEN if on else FAINT
+        s.append(f'<rect x="{x}" y="{y}" width="{bw}" height="58" fill="{col}" opacity="{.75 if on else .35}" rx="4"/>')
+        s.append(f'<text x="{x+bw/2}" y="{y+34}" fill="{"#0b1220" if on else "#94a3b8"}" font-size="14" '
+                 f'font-weight="700" text-anchor="middle">{lab}</text>')
+        s.append(f'<text x="{x+bw/2}" y="{y-12}" fill="{DIM}" font-size="11" text-anchor="middle">e{i+1}</text>')
+    cut = x0 + 6 * (bw + gap) - gap / 2
+    s.append(f'<path d="M{cut} {y-26} V{y+96}" stroke="{PINK}" stroke-width="2.2" stroke-dasharray="5 4"/>')
+    s.append(f'<text x="{cut+8}" y="{y+112}" fill="{PINK}" font-size="13">replay to here</text>')
+    s.append(f'<text x="{x0}" y="{y+112}" fill="{DIM}" font-size="13">immutable log</text>')
+    by = y + 150
+    for i, (acct, amt) in enumerate([("wallet A", "$60"), ("wallet B", "$35"), ("wallet C", "$75")]):
+        bx = x0 + i * 200
+        s.append(f'<rect x="{bx}" y="{by}" width="180" height="58" fill="{BLUE}" opacity=".15" rx="5"/>')
+        s.append(f'<rect x="{bx}" y="{by}" width="180" height="58" fill="none" stroke="{BLUE}" stroke-opacity=".45" stroke-width="1.4" rx="5"/>')
+        s.append(f'<text x="{bx+14}" y="{by+24}" fill="{DIM}" font-size="12">{acct}</text>')
+        s.append(f'<text x="{bx+14}" y="{by+46}" fill="{BLUE}" font-size="18" font-weight="700">{amt}</text>')
+    s.append(f'<text x="{x0}" y="{by-12}" fill="{DIM}" font-size="13">state — computed, never stored</text>')
+    s.append(f'<text x="{x0}" y="404" fill="{DIM}" font-size="15">every past balance is still recoverable</text>')
+    return f'<svg width="640" height="420" viewBox="0 0 640 420">{"".join(s)}</svg>'
+
+
 COVERS = [
     ("proximity-service", "VOLUME 2 · CH 1", "Design a<br>Proximity Service", 58,
      "200 million businesses, 500 metres, under 100ms.", "two B-tree indexes are <i>not</i> a 2D index", art_quadtree),
@@ -335,6 +365,8 @@ COVERS = [
      "Ranking 25 million players, and telling each one where they stand.", "rank belongs to the <i>set</i>, not the row", art_skiplist),
     ("payment-system", "VOLUME 2 · CH 11", "Design a<br>Payment System", 58,
      "Ten transactions per second, and the hardest correctness problem yet.", "a lost cent is <i>structurally</i> impossible", art_ledger),
+    ("digital-wallet", "VOLUME 2 · CH 12", "Design a<br>Digital Wallet", 58,
+     "Four designs, each one fixing what the last one broke.", "store the <i>facts</i>, derive the state", art_replay),
 ]
 
 def build(only=None):

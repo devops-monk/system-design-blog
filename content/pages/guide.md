@@ -79,6 +79,7 @@ Harder problems, and the ones that come up most often for senior roles.
 25. [Design S3-like Object Storage](/2026/06/design-s3-object-storage/) — eleven nines on hardware that fails constantly: immutability, replication versus erasure coding, and why small files waste disks. Includes an interactive durability calculator.
 26. [Design a Real-time Gaming Leaderboard](/2026/06/design-gaming-leaderboard/) — why SQL cannot rank 25 million players, how a skip list makes it logarithmic, and the sharding choice with no clean answer. Includes a live leaderboard.
 27. [Design a Payment System](/2026/06/design-payment-system/) — ten transactions a second and the hardest correctness problem in the series: double-entry bookkeeping, idempotency, and reconciliation as the last line of defence. Includes an interactive ledger.
+28. [Design a Digital Wallet](/2026/06/design-digital-wallet/) — four designs, each fixing what the last one broke: sharding, 2PC, TC/C and Saga, then event sourcing over Raft. Includes an interactive event replay.
 
 ---
 
