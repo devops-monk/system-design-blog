@@ -2076,3 +2076,101 @@ a.cert-card:hover .cert-verify { opacity: 1; }
   .te-num { font-size: 1.2rem; }
   .te-url { font-size: 0.9rem; }
 }
+
+/* ==========================================================================
+   Delivery semantics explorer (posts/2026/design-distributed-message-queue)
+   ========================================================================== */
+
+.sem-explorer {
+  margin: 1.75rem 0;
+  padding: 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.sem-controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem 1.4rem; margin-bottom: 1.3rem; }
+
+.sem-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.sem-opts { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+.sem-opts button {
+  padding: 0.36rem 0.7rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sem-opts button:hover { border-color: var(--primary); color: var(--primary-dark); }
+
+.sem-opts button.on {
+  color: #fff;
+  background: var(--primary);
+  border-color: var(--primary);
+  font-weight: 600;
+}
+
+.sem-result { padding: 1.1rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); }
+
+.sem-verdict {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.7rem;
+  text-align: center;
+}
+
+.sem-best { color: #16a34a; }
+.sem-ok   { color: var(--primary-dark); }
+.sem-warn { color: #d97706; }
+.sem-bad  { color: #dc2626; }
+
+.sem-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-bottom: 0.9rem; }
+
+.sem-badge {
+  padding: 0.28rem 0.7rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.sem-b-good { color: #16a34a; background: rgba(22, 163, 74, 0.09); border-color: rgba(22, 163, 74, 0.3); }
+.sem-b-bad  { color: #dc2626; background: rgba(220, 38, 38, 0.09); border-color: rgba(220, 38, 38, 0.3); }
+
+.sem-why { margin: 0; font-size: 0.85rem; line-height: 1.65; color: var(--text-muted); }
+.sem-why b { color: var(--text); font-weight: 600; }
+
+[data-theme="dark"] .sem-explorer { background: #1e293b !important; border-color: #334155 !important; }
+[data-theme="dark"] .sem-result,
+[data-theme="dark"] .sem-opts button { background: #0f172a !important; border-color: #334155 !important; }
+[data-theme="dark"] .sem-opts button { color: #94a3b8 !important; }
+[data-theme="dark"] .sem-opts button.on { background: var(--primary) !important; border-color: var(--primary) !important; color: #fff !important; }
+[data-theme="dark"] .sem-ok { color: var(--primary-light) !important; }
+[data-theme="dark"] .sem-best { color: #4ade80 !important; }
+[data-theme="dark"] .sem-warn { color: #fbbf24 !important; }
+[data-theme="dark"] .sem-bad { color: #f87171 !important; }
+[data-theme="dark"] .sem-b-good { color: #4ade80 !important; border-color: rgba(74,222,128,0.35) !important; }
+[data-theme="dark"] .sem-b-bad { color: #f87171 !important; border-color: rgba(248,113,113,0.35) !important; }
+[data-theme="dark"] .sem-why b { color: #e2e8f0 !important; }
+
+@media only screen and (max-width: 40em) {
+  .sem-explorer { padding: 1rem; }
+  .sem-controls { grid-template-columns: 1fr; }
+  .sem-verdict { font-size: 1.3rem; }
+}
