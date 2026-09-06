@@ -260,6 +260,27 @@ There is no general solution, which is worth saying plainly rather than inventin
 
 Alongside traps, filter **data noise** — advertisements, spam pages, boilerplate — which costs storage and degrades the index without adding information.
 
+### Freshness: the crawl never finishes
+
+Everything so far describes crawling a page **once**. But the scope said newly added and edited pages matter, and that changes the shape of the system: **a crawler is not a job that completes, it is a loop that never stops.** Pages you fetched last month have changed, and a search index built on stale copies is wrong in a way users notice immediately.
+
+The naive fix — re-crawl everything on a fixed cycle — fails on arithmetic. At 400 QPS a billion pages take about a month. **A monthly cycle means a news homepage is up to a month stale, while an archived page from 2009 gets refetched twelve times a year for nothing.** Uniform treatment is wrong in both directions at once.
+
+So recrawl frequency has to be **per-URL and earned**, from two inputs:
+
+- **Observed update history.** Keep the last-changed timestamps you already have from the `content seen?` check. A page that changed on every one of the last ten visits should be visited far more often than one that has never changed. Your SimHash work is what tells you whether a fetch actually found anything new.
+- **Importance.** A high-PageRank page being stale costs more than a low-PageRank page being stale, because more queries touch it.
+
+Both feed the **prioritizer** in the front queues, which is why `update frequency` sits alongside PageRank in that diagram. **Recrawling is not a separate subsystem — it is the same frontier, with re-enqueued URLs.** A crawled URL is scheduled back into the frontier with a due time rather than being discarded.
+
+Two mechanisms make this much cheaper than it sounds, and both are worth naming:
+
+**Conditional requests.** Send `If-Modified-Since` or `If-None-Match` with the ETag you stored. An unchanged page answers `304 Not Modified` with no body — you spend a round trip and almost no bandwidth to learn nothing has changed. **The expensive part of a recrawl is the part you usually get to skip.**
+
+**Sitemaps, again.** The `Sitemap:` line in robots.txt earned its place above as a *discovery* channel. It pays a second time here: sitemap entries carry a `lastmod` per URL, so one cheap fetch tells you which of a site's pages claim to have changed. It is a hint rather than a guarantee — plenty of sites get it wrong and some simply lie — but as a prior on where to look first it beats guessing.
+
+The honest caveat: **you cannot know a page changed without asking**, so every freshness policy is an estimate that trades bandwidth against staleness. There is no setting that is right for both a news site and a manual page, which is exactly why the frequency is computed per URL rather than configured globally.
+
 ### Robustness and extensibility
 
 - **Consistent hashing** to distribute hosts across downloaders, so capacity changes do not reshuffle the world.
@@ -310,6 +331,7 @@ The honest position: robots.txt is a request, not a control. It excludes polite 
 - **robots.txt is RFC 9309** — longest match wins, and an unreachable file means disallow everything.
 - **Biased selection, not strict priority**, or the long tail starves.
 - **Spider traps have no general solution** — budget per host and cap depth.
+- **A crawler never finishes** — recrawl frequency is per URL, from observed change rate and importance, and `304 Not Modified` makes it cheap.
 
 ---
 
@@ -324,6 +346,7 @@ The honest position: robots.txt is a request, not a control. It excludes polite 
 | Dedup twice, differently | Exact match for URLs, similarity for content |
 | SimHash over MD5 | Near-duplicates are the real duplicates |
 | Cache DNS | It is the bottleneck before bandwidth is |
+| The crawl is a loop, not a job | Freshness is per-URL scheduling back into the same frontier |
 | The web is adversarial | Traps, noise and bot defences are the default condition |
 
 ---
