@@ -339,6 +339,20 @@ blockquote p { margin: 0 !important; }
 .entry-content table tr:nth-child(even) td { background: #f8fafc !important; }
 .entry-content table tr:hover td { background: #f0f9ff !important; }
 
+/* Long code strings in a cell must wrap, not widen the table. The rule above
+   sets overflow:hidden for the rounded corners, so anything that overflows is
+   clipped and lost rather than scrollable — wrapping is the only safe option. */
+.entry-content table { table-layout: auto !important; }
+.entry-content table th,
+.entry-content table td { overflow-wrap: anywhere !important; word-break: normal !important; }
+.entry-content table code { white-space: normal !important; }
+
+@media (max-width: 40em) {
+  .entry-content table { font-size: 0.78rem !important; }
+  .entry-content table th,
+  .entry-content table td { padding: 0.5em 0.55em !important; }
+}
+
 /* ---- Horizontal rule ---- */
 hr {
   border: none !important;

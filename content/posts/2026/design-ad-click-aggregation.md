@@ -58,6 +58,19 @@ Note the shape of this: **50,000 QPS is a serious write load, but 3 TB a month i
 
 ## Step 2 — High-level design
 
+### The query API
+
+The client here is a dashboard, and the requirements name exactly two questions it asks:
+
+| Endpoint | Answers |
+|---|---|
+| `GET /v1/ads/{ad_id}/aggregated_count` | How many clicks did this ad get in the last M minutes? |
+| `GET /v1/ads/popular_ads` | Which N ads were clicked most in the last M minutes? |
+
+Both take `from` and `to` minute bounds — defaulting to the last minute — and both take a **`filter` identifier** rather than free-form filter expressions. `001` might mean "non-US clicks".
+
+That last choice looks like a limitation and is actually the design. **Arbitrary filtering means arbitrary aggregation at query time**, which is what this whole pipeline exists to avoid. A fixed set of filter identifiers means each one can be pre-aggregated, and the query stays a lookup. It reappears as the star schema below.
+
 ### Two kinds of data
 
 **Raw events** — every click, as it happened:

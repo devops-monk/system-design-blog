@@ -45,11 +45,66 @@ Note the 6.5 hours — markets open at 9:30 and close at 16:00. Volume is heavil
 
 ---
 
+## Market data 101
+
+Four pieces of vocabulary, because the rest of the design assumes them.
+
+**A broker sits between you and the exchange.** Robinhood, Fidelity, Interactive Brokers. You never talk to the exchange directly; the broker holds the connection, and the exchange sees the broker.
+
+**Institutional clients are treated differently**, and not as a courtesy. A pension fund buying two million shares cannot send that as one order — it would move the price against itself before filling. So the order is **split** into small pieces released over time, which is why exchanges expose specialised low-latency interfaces alongside the retail path.
+
+**Two order types.** A **limit order** names a price: buy at 100.10 or better. It may not match at all, and it may match partially. A **market order** names no price and executes immediately at whatever the book offers. This design supports limit orders — market orders are the easy case once limit orders work.
+
+**Bid and ask.** The **bid** is the highest price any buyer will pay. The **ask** (or offer) is the lowest price any seller will accept. The gap between them is the **spread**, and it is the exchange's most-watched number.
+
+### The three tiers of price quotes
+
+US markets sell market data at three levels of detail, and the difference is exactly how much of the order book you are allowed to see:
+
+| Tier | What you get | Who uses it |
+|---|---|---|
+| **L1** | Best bid and best ask, with the quantity available at each | Retail apps, price tickers |
+| **L2** | Several price levels deep on both sides | Active traders reading supply and demand |
+| **L3** | Every price level **and the queued orders at each level** | Market makers, the exchange itself |
+
+The tiers are not just a pricing gimmick. **L3 tells you your position in the queue at a price level**, which under FIFO matching determines whether you get filled at all. That information is worth money, which is why it costs money.
+
+### Candlesticks
+
+The other way market data is consumed is aggregated into intervals. A **candlestick** summarises one interval with four prices — **open, close, high, low** — plus the volume traded:
+
+```mermaid
+flowchart LR
+    T["Every execution<br/>in the interval"] --> A["Aggregate"]
+    A --> O["open — first price"]
+    A --> C["close — last price"]
+    A --> H["high — max price"]
+    A --> L["low — min price"]
+    A --> V["volume — total quantity"]
+
+    style A fill:#fef3c7,stroke:#d97706,color:#78350f
+```
+
+One candlestick per minute, per hour, per day — the resolution is a query parameter. This is what every price chart you have ever seen is made of.
+
+### FIX
+
+**FIX** (Financial Information eXchange) is the protocol the industry actually speaks. It is a plain-text, tag-value format that has been in production since 1992:
+
+```text
+8=FIX.4.2 | 9=176 | 35=8 | 49=PHLX | 56=PERS | 52=20071123-05:30:00.000 |
+11=ATOMNOCCC9990900 | 150=E | 39=E | 55=MSFT | 54=1 | 38=15 | 40=2 | 44=15 | 10=128 |
+```
+
+Each number is a field tag: `55` is the symbol, `54` is the side, `38` the quantity, `44` the price. It is not elegant, and it is not going anywhere — when a design decision in this chapter looks strange, FIX compatibility is often the reason.
+
+---
+
 ## The order book
 
 Everything in an exchange revolves around one data structure.
 
-An order book is the list of resting buy and sell orders for a symbol, organised by price level. **Bid** is the highest price a buyer will pay; **ask** is the lowest a seller will accept; the gap between them is the **spread**.
+An order book is the list of resting buy and sell orders for a symbol, organised by price level — the bid and ask from the previous section, expanded into every level behind them.
 
 The requirements are demanding:
 
@@ -163,6 +218,41 @@ Two changes fix it:
 
 **All three operations become O(1)**, and the second one is the interesting trick: a hash map alongside a linked list, each covering the other's weakness. Exactly the pairing behind [Redis sorted sets](/2026/06/design-gaming-leaderboard/), for the same reason.
 
+### FIFO, and the alternatives
+
+Making the operations O(1) settles *how fast* you match. It does not settle *who* you match — and at a busy price level with more resting orders than incoming quantity, something has to choose.
+
+The loop itself is unremarkable:
+
+```java
+Context match(OrderBook book, Order order) {
+    Quantity leaves = order.quantity - order.matchedQuantity;
+    Iterator<Order> it = book.limitMap.get(order.price).orders;
+    while (it.hasNext() && leaves > 0) {
+        Quantity matched = min(it.next.quantity, order.quantity);
+        order.matchedQuantity += matched;
+        leaves = order.quantity - order.matchedQuantity;
+        remove(it.next);
+        generateMatchedFill();
+    }
+    return SUCCESS(MATCH_SUCCESS, order);
+}
+```
+
+**The allocation policy is hiding in the iteration order.** Walking the doubly-linked list from the head means the oldest order at that price fills first — **FIFO**, also called price-time priority. It is the default across equity markets, and it is what makes L3 data valuable: your place in that list is your probability of getting filled.
+
+It is not the only option:
+
+| Policy | Fills go to | Used where |
+|---|---|---|
+| **FIFO / price-time** | Oldest order at the price level | Most equity markets |
+| **Pro-rata** | Split across all orders at the price, proportional to size | Some futures and options markets |
+| **Hybrid** | A slice to the first order, the rest pro-rata | Several derivatives venues |
+
+The choice has real consequences for behaviour. **FIFO rewards being early**, so it pushes participants to race on latency — which is a large part of why this chapter is about microseconds at all. **Pro-rata rewards being large**, so participants inflate order size instead. Neither is neutral; an exchange picks the incentive it prefers.
+
+The handler around the match loop also does two things worth noting: it **rejects out-of-order sequence IDs** outright, and it fails a cancel for an order that has already matched. Both fall out of the sequencer design in the next section.
+
 ---
 
 ## Step 2 — High-level design
@@ -207,6 +297,80 @@ That single act buys three things:
 > **Determinism is the foundation of everything that follows.** High availability, fast recovery, and hot-warm failover all work *because* replaying the log reproduces the state exactly. Without the sequencer, none of it holds.
 
 Crucially there is **exactly one** sequencer per event store. Multiple writers would contend for the right to write, and in a system this hot, lock contention is the whole budget. **A single writer is faster than a lock.**
+
+### The API
+
+Clients reach the exchange through their broker, and the broker talks to the client gateway. **That link is a plain REST API** — the latency budget is spent inside the exchange, not on the retail path. Institutional clients get a proprietary binary protocol instead, for the reasons in the previous section.
+
+Four endpoints cover the chapter:
+
+| Endpoint | Purpose |
+|---|---|
+| `POST /v1/order` | Place an order — `symbol`, `side`, `price`, `orderType`, `quantity` |
+| `GET /execution?symbol=&orderId=&startTime=&endTime=` | Query executions in a time range |
+| `GET /marketdata/orderBook/L2?symbol=&depth=` | The book, `depth` levels per side |
+| `GET /marketdata/candles?symbol=&resolution=&startTime=&endTime=` | Candlesticks at a given resolution |
+
+Two details in the order response are worth pausing on:
+
+```json
+{
+  "id": 1287346512,
+  "creationTime": 1655380800000,
+  "filledQuantity": 300,
+  "remainingQuantity": 700,
+  "status": "new"
+}
+```
+
+**`filledQuantity` and `remainingQuantity` are separate fields**, because partial fills are the normal case, not an edge case. A 1,000-share limit order that finds 300 shares at its price stays live for the rest. And **`status` is one of `new` / `canceled` / `filled`** — there is no "pending", because the sequencer means an order either has a sequence number or does not exist.
+
+Note the market-data endpoints name the tier and resolution explicitly. **`orderBook/L2` is a product decision in a URL**: L1 is cheap, L2 costs more, L3 is sold under contract.
+
+### Data models
+
+Three kinds of data move through the system, and each takes a different path:
+
+| Data | Where it lives |
+|---|---|
+| **Product, order, execution** | In memory on the critical path; written to the database by the reporter |
+| **Order book** | In memory only, rebuilt from the event stream |
+| **Candlestick chart** | Built in the market data service from executions |
+
+**Products** describe a tradable symbol — product type, trading symbol, the symbol shown in a UI, lot size. This data barely changes and is mostly used for rendering.
+
+**Orders** are instructions; **executions** are what came back out. One order produces zero, one, or many executions, and an execution always points back at its order:
+
+```mermaid
+flowchart LR
+    P["PRODUCT<br/>symbol, productType, displaySymbol"]
+    O["ORDER<br/>id, symbol, side, price,<br/>quantity, filledQuantity, status"]
+    E["EXECUTION<br/>id, orderId, symbol,<br/>side, price, quantity"]
+    P -->|"traded as"| O
+    O -->|"produces 0..n"| E
+
+    style P fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    style O fill:#fef3c7,stroke:#d97706,color:#78350f
+    style E fill:#dcfce7,stroke:#16a34a,color:#14532d
+```
+
+The same order and execution objects appear in all three flows, which is the point: **they are processed in memory on the critical path and recovered from the sequencer, written to the database by the reporter, and forwarded to market data** to rebuild the book and the candlesticks. One representation, three consumers, three very different latency requirements.
+
+Candlesticks are computed in the market data service from the execution stream:
+
+```java
+class Candlestick {
+    private long openPrice, closePrice, highPrice, lowPrice;
+    private long volume;
+    private long timestamp;
+    private int  interval;
+}
+class CandlestickChart {
+    private LinkedList<Candlestick> sticks;
+}
+```
+
+Two memory optimisations matter once you keep years of these in a hot path. **Hold the sticks in a pre-allocated ring buffer** rather than allocating each one — the same allocation-free discipline the deep dive is about. And **cap how many stay in memory**, persisting the rest. Real-time analytics runs on an in-memory columnar database such as **kdb+**; after market close the data moves to a historical store.
 
 ---
 
@@ -317,6 +481,22 @@ Multicast uses UDP, which is unreliable, so retransmission schemes like NACK-ori
 **Colocation.** Exchanges rent rack space in their own data centre. Latency then becomes **proportional to cable length**. That sounds like the opposite of fair, and it's generally accepted as legitimate because it's *equally available to anyone who pays* — a VIP service rather than a hidden advantage.
 
 **A design detail as small as "which order do we iterate subscribers in" becomes a fairness question when the data is worth money.** Very few systems have that property.
+
+---
+
+## Network security
+
+The trading path is not on the internet. The market data and reporting services partly are, and that makes **DDoS the security problem an exchange actually has** — an attack that never touches the matching engine can still stop people trading.
+
+Five mitigations, in roughly the order you would apply them:
+
+- **Isolate public services from private ones**, so an attack on the public data endpoints cannot degrade the clients whose orders are in flight. This is the same latency-tier separation as the architecture, applied to blast radius.
+- **Cache anything that does not change often.** Most market data requests are for the same recent window.
+- **Harden URLs for cacheability.** `/data/recent` sits in a cache; `/data?from=123&to=456` gives every attacker a unique key and a cache miss. **An unbounded query parameter is a DDoS amplifier**, which is a good reason to prefer fixed windows in a public API.
+- **Allowlists and blocklists**, maintained and actually used.
+- **Rate limiting** — [Chapter 4](/2026/05/design-a-rate-limiter/) in its original setting.
+
+None of this is exotic. What is unusual is the consequence: for most systems a DDoS is an availability incident, and here it is potentially a **market** incident.
 
 ---
 

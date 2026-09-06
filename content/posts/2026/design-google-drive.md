@@ -71,6 +71,29 @@ Look at the mismatch. **240 QPS is trivial** — a single database could serve t
 
 ## Step 2 — High-Level Design
 
+### The API
+
+Three operations, and only one of them is interesting:
+
+| Endpoint | Notes |
+|---|---|
+| `POST /files/upload?uploadType=simple` | Small files, one request |
+| `POST /files/upload?uploadType=resumable` | Everything else |
+| `GET /files/download` | Fetch a file |
+| `GET /files/list_revisions` | Version history |
+
+**Two upload types is not an optimisation, it is a necessity.** A simple upload is one request that either succeeds or has to start over. On a phone on a train, a 2 GB file will never finish that way.
+
+A resumable upload is three steps:
+
+1. Send an initial request and get back a **resumable URL**.
+2. Upload the data to that URL, monitoring state as it goes.
+3. If the connection drops, ask the URL how far it got and **resume from there**.
+
+The pattern matters beyond this chapter — it is how S3 multipart upload, YouTube's chunked upload and every other large-file API work. **Any upload API without a resume story is broken at the sizes people actually have.**
+
+`list_revisions` is the endpoint that makes versioning visible, and the storage-cost section later explains why keeping those revisions is cheaper than it sounds.
+
 ```mermaid
 flowchart TD
     C["Client<br/>desktop, mobile, web"] --> LB["Load balancer"]

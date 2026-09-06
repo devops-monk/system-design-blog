@@ -50,6 +50,36 @@ Assume a database node handles 1,000 TPS. A million transfers a second therefore
 
 ---
 
+## The API
+
+One endpoint. That is not a simplification for the sake of the chapter — it is what makes the rest of it hard.
+
+```text
+POST /v1/wallet/balance_transfer
+```
+
+| Parameter | Notes |
+|---|---|
+| `from_account`, `to_account` | The two sides of the transfer |
+| `amount` | **A string**, not a float |
+| `currency` | ISO code |
+| `transaction_id` | Client-supplied, for idempotency |
+
+```json
+{
+  "status": "success",
+  "transaction_id": "01589980-2664-11ec-9621-0242ac130002"
+}
+```
+
+Two of those fields carry the whole design.
+
+**`amount` is a string.** Binary floating point cannot represent `0.10` exactly, and a rounding error in a wallet is a rounding error in someone's money. Send the decimal as text and parse it into a fixed-point or arbitrary-precision type at the boundary. Every payments system does this, and the ones that didn't have a story about why they do now.
+
+**`transaction_id` comes from the client**, exactly as the reservation ID does in [the hotel chapter](/2026/06/design-hotel-reservation-system/). A retry after a timeout carries the same ID, so the second attempt is recognised rather than executed. **Without it, "did my transfer go through?" has no safe answer** — and every design below is built on being able to replay commands.
+
+---
+
 ## Design 1 — In-memory sharding
 
 Balances are a map from account to amount. Redis, sharded across nodes by `hash(accountID) % n`, with ZooKeeper holding the shard map. A stateless wallet service applies transfers.

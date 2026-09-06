@@ -54,6 +54,32 @@ Who sets the score — the client or the server?
 
 **Anything a client can assert about itself is something an attacker can assert about themselves.** This is the same instinct that keeps [payment amounts off the client](/2026/06/design-ad-click-aggregation/) — the boundary of trust is the server.
 
+### The API
+
+Three endpoints, and the first one carries the security argument above:
+
+| Endpoint | Purpose |
+|---|---|
+| `POST /v1/scores` | Record a win — `user_id` and `points` |
+| `GET /v1/scores` | The top 10, with rank and score |
+| `GET /v1/scores/{user_id}` | One player's own score and rank |
+
+**`POST /v1/scores` must only be reachable by game servers, never by clients.** That is the whole of the previous section expressed as a deployment rule: put it behind the internal network, not the public gateway.
+
+The two read endpoints return rank alongside score:
+
+```json
+{
+  "data": [
+    { "user_id": "user_id1", "user_name": "alice", "rank": 1, "score": 12543 },
+    { "user_id": "user_id2", "user_name": "bob",   "rank": 2, "score": 11500 }
+  ],
+  "total": 10
+}
+```
+
+**Rank is computed, not stored** — which is the entire difficulty of this chapter, and why the next section starts by failing.
+
 ---
 
 ## Step 2 — Why the obvious solution fails
